@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <ClientOnly>
         <TagList :allPosts="allPosts" v-if="mobile"/>
         <TagListDrawer :allPosts="allPosts" v-else/>
         <Posts :posts="posts" :style="{'margin-right': marginRight + 'px'}"/>
-    </div>
+    </ClientOnly>
 </template>
 
 <script>

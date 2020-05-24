@@ -1,10 +1,13 @@
 <template>
-    <Posts class="v-application" :posts="allPosts"/>
+    <ClientOnly>
+        <Posts class="v-application" :posts="allPosts"/>
+    </ClientOnly>
 </template>
 
 <script>
     import Posts from "./Posts";
     import getPostsByPath from "../utils/htmlUtils";
+
     export default {
         name: "HomeMain",
         data() {
