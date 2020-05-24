@@ -8,10 +8,10 @@ function tagStore() {
     tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
     tagStore.put('MySql', new Tag('MySql', '#00618a'));
     tagStore.put('AWS', new Tag('AWS', '#ff9901'));
-    tagStore.put('Vue', new Tag('Vue.js', '#42b983'));
+    tagStore.put('Vue.js', new Tag('Vue.js', '#42b983'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
     tagStore.put('JPA', new Tag('JPA', '#b9ad86'));
-    tagStore.put('JavaScript', new Tag('JPA', '#b9ad86'));
+    tagStore.put('JavaScript', new Tag('JavaScript', '#b9ad86'));
     return tagStore;
 }
 
@@ -23,4 +23,4 @@ class Tag {
     }
 }
 
-export {tagStore}
+export {tagStore, Tag}

@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'me.sun.TagMdMaker'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it);
+        }
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

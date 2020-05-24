@@ -1,6 +1,7 @@
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import '@mdi/font/css/materialdesignicons.css'
+import TagMain from "./components/TagMain";
 
 export default (
     {
@@ -14,5 +15,5 @@ export default (
         icons: {
             iconfont: 'mdi'
         }
-    })
+    });
 };

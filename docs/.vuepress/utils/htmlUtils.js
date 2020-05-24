@@ -1,9 +1,14 @@
-export default function getHtmlPagesByPath(currentPage, pages) {
-    let onlyHtml = new RegExp(`${currentPage}(?=.*html)`);
-    let htmlPages = pages.filter(page => page.path.match(onlyHtml))
+import {tagStore} from "./tag";
+
+// Tag, Home Main 페이지등을 제외하고 실제 포스트 페이지만 가져온다.
+export default function getPostsByPath(path, pages) {
+    let onlyHtml = new RegExp(`${path}(?=.*html)`);
+    let htmlPosts = pages
+        .filter(page => page.path.match(onlyHtml))
+        .filter(page => filterList(page.path))
         .map(page => addDefaultImgIfNoneHas(page));
-    htmlPages.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
-    return htmlPages;
+    htmlPosts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+    return htmlPosts;
 }
 
 function addDefaultImgIfNoneHas(page) {
@@ -11,4 +16,10 @@ function addDefaultImgIfNoneHas(page) {
         page.frontmatter.img = "default.png";
     }
     return page;
+}
+
+function filterList(path) {
+    const split = String(path).split('/');
+    let targetHtml = split[split.length - 1];
+    return tagStore().notContainsHtml(targetHtml);
 }

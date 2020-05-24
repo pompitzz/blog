@@ -3,29 +3,16 @@
         <v-row style="width: 100%">
             <v-row style="width: 100%">
                 <div class="content-title">
-                    <h1>{{title}}</h1>
+                    <h1 v-if="mobile" style="font-size: 1.5rem">{{title}}</h1>
+                    <h1 v-else>{{title}}</h1>
                 </div>
 
-                <v-row class="px-5">
-                    <v-col class="pb-0">
-                        <v-chip
-                                class="mr-2 font-weight-bold"
-                                v-for="(tag, index) in tags" v-bind:key="index"
-                                :color="'#000000'"
-                                label
-                                small
-                                text-color="white"
-                        >
-                            <v-icon left>mdi-label</v-icon>
-                            {{tag}}
-                        </v-chip>
-                    </v-col>
-                    <v-col class="pb-0">
-                        <div class="text--primary text-right">
-                            <div>작성일: {{date}}</div>
-                        </div>
-                    </v-col>
-                </v-row>
+                <div class="text--primary text-right w-100 mr-5 mt-2">
+                    작성일: {{date}}
+                </div>
+                <div class="w-100 text-center">
+                    <Tag :tags="tags"/>
+                </div>
                 <hr class="content-divider">
             </v-row>
         </v-row>
@@ -33,13 +20,19 @@
 </template>
 
 <script>
+
+    import {tagStore} from "../utils/tag";
+    import Tag from "./Tag";
+
     export default {
         name: "ContentTitle.vue",
+        components: {Tag},
         data() {
             return {
                 title: '',
-                tags: ["SPRING", "ANYTAGS"],
+                tags: [],
                 date: '',
+                mobile: '',
             }
         },
         beforeMount() {
@@ -47,6 +40,17 @@
             this.title = frontmatter.title;
             this.tags = frontmatter.tags;
             this.date = frontmatter.date;
+            this.mobile = window.innerWidth < 1000;
+            window.addEventListener('resize', this.changeTageViewer)
+        },
+        methods: {
+            getColor(tagName) {
+                return tagStore().color(tagName);
+            },
+            changeTageViewer() {
+                this.mobile = window.innerWidth < 1000;
+                console.log(this.mobile)
+            },
         }
     }
 </script>

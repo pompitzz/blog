@@ -1,3 +1,5 @@
+import {Tag} from "./tag";
+
 class Map {
     constructor() {
         this.map = [];
@@ -16,14 +18,27 @@ class Map {
     }
 
     count(posts) {
-        posts.forEach(post =>
-            post.tags.forEach(tagName => {
+        for (let index in posts) {
+            const post = posts[index];
+            if (!post.frontmatter) continue;
+            for (let index in post.frontmatter.tags) {
+                const tagName = post.frontmatter.tags[index];
                 if (this.map[tagName]) {
                     this.map[tagName].count += 1;
                 } else {
                     this.map[tagName] = new Tag(tagName, '#00618a');
                 }
-            }));
+            }
+        }
+    }
+
+    notContainsHtml(targetHtml) {
+        for (let key in this.map) {
+            if(targetHtml.startsWith(key)){
+                return false;
+            }
+        }
+        return true;
     }
 
     color(tagName) {

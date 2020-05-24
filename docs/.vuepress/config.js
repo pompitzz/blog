@@ -9,14 +9,7 @@ module.exports = {
         nav: [
             {text: 'Java', link: '/java/'},
             {text: 'Spring', link: ''},
-            {
-                text: 'Tags',
-                items: [
-                    {text: 'Database', link: '/items'},
-                    {text: 'JAVA', link: '/items2'}
-                ]
-
-            },
+            {text: 'Tags', link: '/tag/'},
         ],
         displayAllHeaders: true,
         sidebar: 'auto',

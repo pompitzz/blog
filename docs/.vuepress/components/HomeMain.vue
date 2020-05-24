@@ -1,10 +1,10 @@
 <template>
-    <Posts :allPosts="allPosts"/>
+    <Posts class="v-application" :posts="allPosts"/>
 </template>
 
 <script>
     import Posts from "./Posts";
-    import getHtmlPagesByPath from "../utils/htmlUtils";
+    import getPostsByPath from "../utils/htmlUtils";
     export default {
         name: "HomeMain",
         data() {
@@ -14,7 +14,7 @@
         },
         components: {Posts},
         beforeMount() {
-            this.allPosts = getHtmlPagesByPath(this.$page.path, this.$site.pages);
+            this.allPosts = getPostsByPath(this.$page.path, this.$site.pages);
         }
     }
 </script>

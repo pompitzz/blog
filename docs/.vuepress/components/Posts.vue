@@ -3,50 +3,40 @@
         <v-row
                 style="width: 100%"
                 justify="center"
-                v-if="showPosts.length"
+                v-if="showPosts.length > 0"
         >
             <v-card
                     class="post-card"
                     v-for="(post, index) in showPosts"
                     :key="index"
+                    v-if="post.frontmatter !== undefined"
                     :to="post.path"
-                    hover
-                    v-if="post.frontmatter"
-            >
+                    hover>
                 <div class="post-card-img-wrapper">
                     <v-img class="post-card-img" :src="/img/ + post.frontmatter.img" alt=""></v-img>
                 </div>
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
                 <v-card-text class=text-center>
-                    <v-chip
-                            class="mr-2 font-weight-bold"
-                            v-for="(tag, index) in post.frontmatter.tags" v-bind:key="index"
-                            :color="getColor(tag)"
-                            label
-                            small
-                            text-color="white"
-                    >
-                        <v-icon left>mdi-label</v-icon>
-                        {{tag}}
-                    </v-chip>
+                        <Tag :tags="post.frontmatter.tags"/>
                 </v-card-text>
             </v-card>
         </v-row>
-    </div>
+    </div class="v-application">
 </template>
 
 <script>
     import "vuetify/dist/vuetify.min.css";
     import "vuetify/dist/vuetify"
     import {tagStore} from "../utils/tag";
+    import Tag from "./Tag";
 
     export default {
-        props: ["allPosts"],
+        props: ["posts"],
+        components: {Tag},
         data() {
             return {
                 showPosts: [],
-                tagStore: tagStore(),
                 pageNumber: 0,
                 pageItemSize: 10,
             }
@@ -54,25 +44,29 @@
         methods: {
             addNextshowPosts() {
                 if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)) {
-                    if (this.showPosts.length === this.allPosts.length) return;
+                    if (this.showPosts.length === this.posts.length) return;
                     this.pageNumber += 1;
                     const start = (this.pageNumber - 1) * this.pageItemSize;
-                    const end = (this.pageNumber * this.pageItemSize) > this.allPosts.length ? this.allPosts.length : (this.pageNumber * this.pageItemSize);
+                    const end = (this.pageNumber * this.pageItemSize) > this.posts.length ? this.posts.length : (this.pageNumber * this.pageItemSize);
                     for (let i = start; i < end; i++) {
-                        this.showPosts.push(this.allPosts[i]);
+                        this.showPosts.push(this.posts[i]);
                     }
                 }
             },
             getColor(tagName) {
-                return this.tagStore.color(tagName);
+                return tagStore().color(tagName);
             },
         },
         beforeMount() {
-            for (let i = 0; i < this.pageItemSize; i++) {
-                this.showPosts.push(this.allPosts[i]);
+            for (let i = 0; i < size(this.posts.length, this.pageItemSize); i++) {
+                this.showPosts.push(this.posts[i]);
             }
             window.addEventListener("scroll", this.addNextshowPosts);
-        }
+        },
+    }
+
+    function size(listLength, size) {
+        return size > listLength ? listLength : size;
     }
 </script>
 
