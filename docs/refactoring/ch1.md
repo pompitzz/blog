@@ -1,6 +1,7 @@
 ---
 title: Chapter 1. 리팩터링 첫 번째 예시
 date: 2020-05-24 01:24
+img: default.png
 tags: 
     - JavaScript
     - Refactoring

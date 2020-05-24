@@ -1,6 +1,7 @@
 ---
 title: 아이템 18. 상속보다는 컴포지션을 사용하라
 date: 2020-05-24 01:22
+img: default.png
 tags:
     - Java
 ---

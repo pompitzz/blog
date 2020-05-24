@@ -1,6 +1,7 @@
 ---
 title: 아이템 17. 변경 가능성을 최소화하라
 date: 2020-05-24 01:22
+img: default.png
 tags:
     - Java
 ---

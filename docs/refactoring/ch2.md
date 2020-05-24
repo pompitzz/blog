@@ -1,6 +1,7 @@
 ---
 title: Chapter 2. 리팩터링 원칙
 date: 2020-05-24 01:24
+img: default.png
 tags: 
     - JavaScript
     - Refactoring

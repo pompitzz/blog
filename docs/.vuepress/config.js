@@ -13,7 +13,7 @@ module.exports = {
                 text: 'Tags',
                 items: [
                     {text: 'Database', link: '/items'},
-                    {text: 'JAVA', link: '/items'}
+                    {text: 'JAVA', link: '/items2'}
                 ]
 
             },

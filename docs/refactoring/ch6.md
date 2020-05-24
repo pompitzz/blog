@@ -1,6 +1,8 @@
 ---
 title: Chapter 6. 기본적인 리팩토링
 date: 2020-05-24 01:25
+img: default.png
+tags:
     - JavaScript
     - Refactoring
 ---

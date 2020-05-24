@@ -1,7 +1,7 @@
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import infiniteScroll from  'vue-infinite-scroll'
-
+import '@mdi/font/css/materialdesignicons.css'
 
 export default (
     {
@@ -12,5 +12,9 @@ export default (
     }) => {
     Vue.use(Vuetify);
     Vue.use(infiniteScroll);
-    options.vuetify = new Vuetify({})
+    options.vuetify = new Vuetify({
+        icons: {
+            iconfont: 'mdi'
+        }
+    })
 };

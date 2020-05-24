@@ -1,6 +1,8 @@
 ---
 title: Chapter 4. 테스트 구축하기
+img: default.png
 date: 2020-05-24 01:25
+tags:
     - JavaScript
     - Refactoring
 ---

@@ -1,6 +1,7 @@
 ---
 title: Chapter 3. 코드에서 나는 악취
 date: 2020-05-24 01:25
+tags:
     - JavaScript
     - Refactoring
 ---

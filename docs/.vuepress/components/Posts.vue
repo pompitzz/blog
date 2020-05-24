@@ -4,24 +4,26 @@
             v-infinite-scroll="addNextPosts"
             infinite-scroll-distance="10">
         <v-row
-                class="posts"
+                style="width: 100%"
+                justify="center"
                 v-if="posts.length"
         >
             <v-card
-                    class="post my-card"
+                    class="post-card"
                     v-for="(post, index) in posts"
                     :key="index"
                     :to="post.path"
                     hover
+                    v-if="post.frontmatter"
             >
-                <div class="img-div">
-                    <v-img class="white--text align-end img" :src="/img/ + post.frontmatter.img" alt=""></v-img>
+                <div class="post-card-img-wrapper">
+                    <v-img class="post-card-img" :src="/img/ + getImgName(post)" alt=""></v-img>
                 </div>
-                <v-card-title>{{post.frontmatter.title}}</v-card-title>
+                <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
                 <v-card-text class=text-center>
                     <v-chip
-                            class="tag"
+                            class="mr-2 font-weight-bold"
                             v-for="(tag, index) in post.frontmatter.tags" v-bind:key="index"
                             :color="colors[index]"
                             label
@@ -56,10 +58,19 @@
         },
         methods: {
             addNextPosts() {
+                if (this.posts.length === this.data.length) return;
                 this.pageNumber += 1;
-                const start = (this.page - 1) * this.pageItemSize;
-                const end = (this.page * this.pageItemSize) > this.data.length ? this.data.length : (this.page * this.pageItemSize);
-                this.posts.push(this.data.slice(start, end));
+                const start = (this.pageNumber - 1) * this.pageItemSize;
+                const end = (this.pageNumber * this.pageItemSize) > this.data.length ? this.data.length : (this.pageNumber * this.pageItemSize);
+                this.data.slice(start, end).forEach(post => this.posts.push(post));
+            },
+            getImgName(post) {
+                let number = Math.random() * 10;
+                console.log(number);
+                if (post.frontmatter && post.frontmatter.img) {
+                    // return post.frontmatter.img
+                }
+                return number < 5 ? "default.png" : "effective.jpeg";
             }
         },
         created() {
@@ -73,12 +84,12 @@
 </script>
 
 <style scoped>
-    .my-card {
+    .post-card {
         width: 20rem;
         margin: 1rem;
     }
 
-    .img {
+    .post-card-img {
         position: absolute;
         top: 0;
         left: 0;
@@ -86,7 +97,7 @@
         width: 100%;
     }
 
-    .img-div {
+    .post-card-img-wrapper {
         position: relative;
         width: 100%;
         height: 0;
@@ -94,12 +105,18 @@
         padding-bottom: 40%;
     }
 
-    .tag {
-        margin-right: 10px;
+    .post-card-title {
+        width: 100%;
+        font-size: 1rem !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline-block;
+        line-height: 1.5rem;
     }
 
     @media (max-width: 740px) {
-        .my-card {
+        .post-card {
             width: 80%;
             margin-left: 10px;
             margin-right: 10px;
@@ -108,7 +125,7 @@
     }
 
     @media (max-width: 500px) {
-        .my-card {
+        .post-card {
             width: 100%;
             margin-left: 10px;
             margin-right: 10px;
