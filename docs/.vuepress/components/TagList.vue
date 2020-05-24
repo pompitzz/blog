@@ -6,8 +6,8 @@
                         class="mr-2 mt-2 font-weight-bold"
                         v-for="(tag, index) in tags" v-bind:key="index"
                         :color="tag.color"
-                        label
                         :to="'/tag/' + tag.tagName"
+                        label
                         text-color="white"
                 >
                     <v-icon left>mdi-label</v-icon>
@@ -34,7 +34,7 @@
             this.tagStore.count(this.allPosts);
             this.tags = this.tagStore.values();
             this.tags.sort((a, b) => b.count - a.count);
-        }
+        },
     }
 </script>
 

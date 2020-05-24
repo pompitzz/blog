@@ -13,7 +13,7 @@
                     :to="post.path"
                     hover>
                 <div class="post-card-img-wrapper">
-                    <v-img class="post-card-img" :src="/img/ + post.frontmatter.img" alt=""></v-img>
+                    <img class="post-card-img" :src="/img/ + post.frontmatter.img" alt=""/>
                 </div>
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>

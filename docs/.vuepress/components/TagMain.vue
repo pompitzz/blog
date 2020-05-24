@@ -37,14 +37,14 @@
         computed: {
             marginRight() {
                 return this.mobile ? 0 : 200;
-            }
+            },
         },
         beforeMount() {
             this.allPosts = getPostsByPath('/', this.$site.pages);
             this.posts = this.tagName ? filterOnlyTagName(this.tagName, this.allPosts) : this.allPosts;
             this.mobile = window.innerWidth < 1000;
-            window.addEventListener('resize', this.changeTageViewer)
-        }
+            window.addEventListener('resize', this.changeTageViewer);
+        },
     }
 
     function filterOnlyTagName(tagName, posts) {
