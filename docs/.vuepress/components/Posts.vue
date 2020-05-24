@@ -1,23 +1,20 @@
 <template>
-    <div
-            class="v-application"
-            v-infinite-scroll="addNextPosts"
-            infinite-scroll-distance="10">
+    <div class="v-application">
         <v-row
                 style="width: 100%"
                 justify="center"
-                v-if="posts.length"
+                v-if="showPosts.length"
         >
             <v-card
                     class="post-card"
-                    v-for="(post, index) in posts"
+                    v-for="(post, index) in showPosts"
                     :key="index"
                     :to="post.path"
                     hover
                     v-if="post.frontmatter"
             >
                 <div class="post-card-img-wrapper">
-                    <v-img class="post-card-img" :src="/img/ + getImgName(post)" alt=""></v-img>
+                    <v-img class="post-card-img" :src="/img/ + post.frontmatter.img" alt=""></v-img>
                 </div>
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
@@ -25,9 +22,8 @@
                     <v-chip
                             class="mr-2 font-weight-bold"
                             v-for="(tag, index) in post.frontmatter.tags" v-bind:key="index"
-                            :color="colors[index]"
+                            :color="getColor(tag)"
                             label
-                            @click="goTagPage(tag)"
                             small
                             text-color="white"
                     >
@@ -41,44 +37,41 @@
 </template>
 
 <script>
-    import html from '../utils/htmlUtils'
     import "vuetify/dist/vuetify.min.css";
     import "vuetify/dist/vuetify"
+    import {tagStore} from "../utils/tag";
 
     export default {
-        props: ["page"],
+        props: ["allPosts"],
         data() {
             return {
-                posts: [],
-                data: [],
-                colors: ['blue', 'green', 'yellow accent-4'],
+                showPosts: [],
+                tagStore: tagStore(),
                 pageNumber: 0,
                 pageItemSize: 10,
             }
         },
         methods: {
-            addNextPosts() {
-                if (this.posts.length === this.data.length) return;
-                this.pageNumber += 1;
-                const start = (this.pageNumber - 1) * this.pageItemSize;
-                const end = (this.pageNumber * this.pageItemSize) > this.data.length ? this.data.length : (this.pageNumber * this.pageItemSize);
-                this.data.slice(start, end).forEach(post => this.posts.push(post));
-            },
-            getImgName(post) {
-                let number = Math.random() * 10;
-                console.log(number);
-                if (post.frontmatter && post.frontmatter.img) {
-                    // return post.frontmatter.img
+            addNextshowPosts() {
+                if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)) {
+                    if (this.showPosts.length === this.allPosts.length) return;
+                    this.pageNumber += 1;
+                    const start = (this.pageNumber - 1) * this.pageItemSize;
+                    const end = (this.pageNumber * this.pageItemSize) > this.allPosts.length ? this.allPosts.length : (this.pageNumber * this.pageItemSize);
+                    for (let i = start; i < end; i++) {
+                        this.showPosts.push(this.allPosts[i]);
+                    }
                 }
-                return number < 5 ? "default.png" : "effective.jpeg";
-            }
+            },
+            getColor(tagName) {
+                return this.tagStore.color(tagName);
+            },
         },
-        created() {
-            let currentPath = this.page ? this.path : this.$page.path;
-            console.log(this.$site.pages);
-            this.data = html(currentPath, this.$site.pages).sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
-            this.pageNumber = 1;
-            this.posts = this.data.slice(0, this.pageItemSize);
+        beforeMount() {
+            for (let i = 0; i < this.pageItemSize; i++) {
+                this.showPosts.push(this.allPosts[i]);
+            }
+            window.addEventListener("scroll", this.addNextshowPosts);
         }
     }
 </script>

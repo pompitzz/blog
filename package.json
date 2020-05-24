@@ -9,12 +9,10 @@
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "vuepress": "^1.4.1"
+    "vuepress": "1.4.1"
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
-    "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.29"
   }
