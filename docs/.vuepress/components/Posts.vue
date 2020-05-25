@@ -22,7 +22,7 @@
                 </v-card-text>
             </v-card>
         </v-row>
-    </div class="v-application">
+    </div>
 </template>
 
 <script>
