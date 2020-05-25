@@ -2,6 +2,7 @@
     <div class="v-application">
         <v-row
                 style="width: 100%"
+                class="posts-row"
                 justify="center"
                 v-if="showPosts.length > 0"
         >
@@ -18,7 +19,7 @@
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
                 <v-card-text class=text-center>
-                        <Tag :tags="post.frontmatter.tags"/>
+                    <Tag :tags="post.frontmatter.tags"/>
                 </v-card-text>
             </v-card>
         </v-row>
@@ -102,21 +103,28 @@
         line-height: 1.5rem;
     }
 
+    .posts-row {
+        display: flex;
+        width: 100%;
+    }
+
     @media (max-width: 740px) {
         .post-card {
             width: 80%;
-            margin-left: 10px;
-            margin-right: 10px;
+            margin-left: auto;
+            margin-right: auto;
             margin-top: 20px;
+        }
+
+
+        .posts-row {
+            display: block;
         }
     }
 
     @media (max-width: 500px) {
         .post-card {
             width: 100%;
-            margin-left: 10px;
-            margin-right: 10px;
-            margin-top: 20px;
         }
     }
 </style>

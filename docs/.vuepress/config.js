@@ -2,7 +2,7 @@ module.exports = {
     base: "/blog/",
     title: "VuePress Blog",
     head: [
-        ['link', { rel: 'icon', href: '/img/favicon.svg' }]
+        ['link', {rel: 'icon', href: '/img/favicon.svg'}]
     ],
     themeConfig: {
         logo: "/img/logo.png",
@@ -11,8 +11,18 @@ module.exports = {
             {text: 'Spring', link: ''},
             {text: 'Tags', link: '/tag/'},
         ],
-        displayAllHeaders: true,
-        sidebar: 'auto',
+        sidebarDepth: 2,
+        sidebar: {
+            '/refactoring/': [{
+                title: '리팩토링',
+                children: [
+                    'ch1',
+                    'ch2',
+                    'ch3',
+                    'ch4'
+                ]
+            }],
+        },
         smoothScroll: true
     },
     markdown: {

@@ -1,8 +1,7 @@
 <template>
-    <div class="v-application">
+    <div class="v-application d-block content-title">
         <v-row style="width: 100%">
-            <v-row style="width: 100%">
-                <div class="content-title">
+                <div class="w-90 mx-auto">
                     <h1 v-if="mobile" style="font-size: 1.5rem">{{title}}</h1>
                     <h1 v-else>{{title}}</h1>
                 </div>
@@ -14,7 +13,6 @@
                     <Tag :tags="tags"/>
                 </div>
                 <hr class="content-divider">
-            </v-row>
         </v-row>
     </div>
 </template>
@@ -59,6 +57,9 @@
     .content-title {
         width: 100%;
         text-align: center;
+        margin-top: 6rem;
+        padding-left: 0.3rem;
+        padding-right: 0.3rem;
     }
 
     .content-divider {
