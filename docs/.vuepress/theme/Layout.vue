@@ -1,29 +1,30 @@
 <template>
     <ParentLayout>
-        <component v-if="this.$frontmatter.title" :is="ContentTitle" slot="page-top"/>
+        <component v-if="this.$frontmatter.title" :is="ContentTitle" :Tag="Tag" slot="page-top"/>
         <Disqus v-if="this.$frontmatter.title" slot="page-bottom"/>
     </ParentLayout>
 </template>
 
 <script>
     import ParentLayout from '@vuepress/theme-default/layouts/Layout.vue'
-    import ContentTitle from '../components/ContentTitle'
+    import ContentTitle from "../components/ContentTitle";
+    import Tag from "../components/Tag";
     import Disqus from '../components/Disqus'
-    import Posts from "../components/Posts";
-    import getPostsByPath from "../utils/htmlUtils";
+
     export default {
         name: "Layout",
         data() {
-            return{
+            return {
                 ContentTitle: null,
+                Tag: null,
             }
         },
-        components: {ContentTitle, ParentLayout, Disqus},
+        components: {ParentLayout, Disqus},
         beforeMount() {
-            import('vuetify/dist/vuetify.min.css').then(module => {
-                this.ContentTitle = ContentTitle;
-            });
-            console.log(this.$page);
+            import('vuetify/dist/vuetify.min.css').then(() => {
+                    this.ContentTitle = ContentTitle;
+                    this.Tag = Tag;
+            })
         },
     }
 </script>

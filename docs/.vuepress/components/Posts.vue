@@ -10,8 +10,8 @@
                     class="post-card"
                     v-for="(post, index) in showPosts"
                     :key="index"
-                    v-if="post.frontmatter !== undefined"
                     :to="post.path"
+                    v-if="post.frontmatter !== undefined"
                     hover>
                 <div class="post-card-img-wrapper">
                     <img class="post-card-img" :src="'/blog/img/' + post.frontmatter.img" alt=""/>
@@ -19,7 +19,7 @@
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
                 <v-card-text class=text-center>
-                    <Tag :tags="post.frontmatter.tags"/>
+                    <component v-if="Tag" :is="Tag" :noneRouing="true" :tags="post.frontmatter.tags"/>
                 </v-card-text>
             </v-card>
         </v-row>
@@ -27,14 +27,10 @@
 </template>
 
 <script>
-    import "vuetify/dist/vuetify.min.css";
-    import "vuetify/dist/vuetify"
-    import {tagStore} from "../utils/tag";
-    import Tag from "./Tag";
+    import {getTagStore} from "../utils/tag";
 
     export default {
-        props: ["posts"],
-        components: {Tag},
+        props: ["posts", 'Tag'],
         data() {
             return {
                 showPosts: [],
@@ -55,7 +51,7 @@
                 }
             },
             getColor(tagName) {
-                return tagStore().color(tagName);
+                return getTagStore().color(tagName);
             },
         },
         beforeMount() {
@@ -64,7 +60,7 @@
             }
             window.addEventListener("scroll", this.addNextshowPosts);
         },
-    }
+    };
 
     function size(listLength, size) {
         return size > listLength ? listLength : size;
@@ -75,6 +71,7 @@
     .post-card {
         width: 20rem;
         margin: 1rem;
+        display: block;
     }
 
     .post-card-img {

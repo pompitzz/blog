@@ -4,7 +4,7 @@
                 class="mr-2 font-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
-                :to="'/tag/' + tag"
+                @click="moveToTag('/tag/' + tag)"
                 label
                 small
                 text-color="white"
@@ -16,14 +16,18 @@
 </template>
 
 <script>
-    import {tagStore} from "../utils/tag";
+    import {getTagStore} from "../utils/tag";
 
     export default {
         name: "Tag",
-        props: ['tags'],
+        props: ['tags', 'noneRouing'],
         methods: {
             getColor(tag) {
-                return tagStore().color(tag);
+                return getTagStore().color(tag);
+            },
+            moveToTag(path) {
+                if (this.noneRouing === false) return;
+                this.$router.push(path).catch(() => {});
             }
         }
     }

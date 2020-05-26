@@ -18,23 +18,9 @@
     </div>
 </template>
 <script>
-    import {tagStore} from "../utils/tag";
-    import getPostsByPath from "../utils/htmlUtils";
-
     export default {
         name: "TagList",
-        data() {
-            return {
-                tags:[],
-                tagStore: tagStore()
-            }
-        },
-        props: ["allPosts"],
-        beforeMount() {
-            this.tagStore.count(this.allPosts);
-            this.tags = this.tagStore.values();
-            this.tags.sort((a, b) => b.count - a.count);
-        },
+        props: ['tags']
     }
 </script>
 

@@ -11,8 +11,5 @@ export default (
     }) => {
     Vue.use(Vuetify);
     options.vuetify = new Vuetify({
-        icons: {
-            iconfont: 'mdi'
-        }
     });
 };

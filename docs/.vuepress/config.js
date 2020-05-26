@@ -2,7 +2,7 @@ module.exports = {
     base: "/blog/",
     title: "VuePress Blog",
     head: [
-        ['link', {rel: 'icon', href: '/img/favicon.svg'}]
+        ['link', {rel: 'icon', href: '/img/favicon.svg'}],
     ],
     themeConfig: {
         logo: "/img/logo.png",

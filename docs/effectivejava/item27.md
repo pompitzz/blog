@@ -2,6 +2,7 @@
 title: 아이템 27. 비검사 경고를 제거하라
 date: 2020-05-24 01:24
 img: default.png
+sidebar: auto
 tags:
     - Java
 ---

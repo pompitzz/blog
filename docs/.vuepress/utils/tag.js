@@ -1,6 +1,6 @@
 import {Map} from './map.js';
 
-function tagStore() {
+function getTagStore() {
     const tagStore = new Map();
     tagStore.put('Java', new Tag('Java', '#eb2025'));
     tagStore.put('Jvm', new Tag('Jvm', '#0261a7'));
@@ -23,4 +23,4 @@ class Tag {
     }
 }
 
-export {tagStore, Tag}
+export {getTagStore, Tag}

@@ -1,4 +1,4 @@
-import {tagStore} from "./tag";
+import {getTagStore} from "./tag";
 
 // Tag, Home Main 페이지등을 제외하고 실제 포스트 페이지만 가져온다.
 export default function getPostsByPath(path, pages) {
@@ -21,5 +21,5 @@ function addDefaultImgIfNoneHas(page) {
 function filterList(path) {
     const split = String(path).split('/');
     let targetHtml = split[split.length - 1];
-    return tagStore().notContainsHtml(targetHtml);
+    return getTagStore().notContainsHtml(targetHtml);
 }
