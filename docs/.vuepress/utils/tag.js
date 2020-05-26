@@ -1,7 +1,7 @@
-import {Map} from './map.js';
+import {TagMap} from './map.js';
 
 function getTagStore() {
-    const tagStore = new Map();
+    const tagStore = new TagMap();
     tagStore.put('Java', new Tag('Java', '#eb2025'));
     tagStore.put('Jvm', new Tag('Jvm', '#0261a7'));
     tagStore.put('Database', new Tag('Database', '#38749b'));

@@ -57,13 +57,9 @@
             });
 
             const allPosts = getPostsByPath('/', this.$site.pages);
-            const tagStore = getTagStore();
-            console.log(tagStore);
-            tagStore.count(allPosts);
-            this.tags = tagStore.values();
+            this.tags = getTagStore().getTagsWithCouting(allPosts);
             this.tags.sort((a, b) => b.count - a.count);
             this.posts = this.tagName ? filterOnlyTagName(this.tagName, allPosts) : allPosts;
-
             this.mobile = window.innerWidth < 1000;
             window.addEventListener('resize', this.changeTageViewer);
         }
