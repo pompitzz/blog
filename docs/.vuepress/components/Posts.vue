@@ -13,12 +13,12 @@
                     :to="post.path"
                     v-if="post.frontmatter !== undefined"
                     hover>
-                <div class="post-card-img-wrapper">
+                <div class="post-card-img-wrapper elevation-2">
                     <img class="post-card-img" :src="'/blog/img/' + post.frontmatter.img" alt=""/>
                 </div>
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
-                <v-card-subtitle class="text--primary text-right">{{post.frontmatter.date}}</v-card-subtitle>
-                <v-card-text class=text-center>
+                <v-card-subtitle class="text--primary text-right pb-0 pt-0">{{post.frontmatter.date}}</v-card-subtitle>
+                <v-card-text class="text-center pb-2 pt-0">
                     <component v-if="Tag" :is="Tag" :noneRouing="true" :tags="post.frontmatter.tags"/>
                 </v-card-text>
             </v-card>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import {getTagStore} from "../utils/tag";
+    import {getTagStore} from "../store/tag";
 
     export default {
         props: ["posts", 'Tag'],

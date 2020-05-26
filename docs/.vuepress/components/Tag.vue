@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-chip
-                class="mr-2 font-weight-bold"
+                class="mr-2 mt-2 mtfont-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
                 @click="moveToTag('/tag/' + tag)"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import {getTagStore} from "../utils/tag";
+    import {getTagStore} from "../store/tag";
 
     export default {
         name: "Tag",

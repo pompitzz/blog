@@ -4,12 +4,12 @@ export default function getPostsByPath(path, pages) {
     let htmlPosts = pages
         .filter(page => page.path.match(onlyHtml))
         .filter(page => !!page.title)
-        .map(page => addDefaultImgIfNoneHas(page));
+        .map(page => setDefaultImgIfNoneHas(page));
     htmlPosts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
     return htmlPosts;
 }
 
-function addDefaultImgIfNoneHas(page) {
+function setDefaultImgIfNoneHas(page) {
     if (!page.frontmatter.img) {
         page.frontmatter.img = "default.png";
     }

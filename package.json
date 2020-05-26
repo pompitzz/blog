@@ -9,6 +9,7 @@
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"
   },
   "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.5.0",
     "vuepress": "1.4.1"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import {Tag} from "./tag";
+import {Tag} from "../store/tag";
 
 class Map {
     constructor() {

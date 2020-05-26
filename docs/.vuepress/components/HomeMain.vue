@@ -5,7 +5,7 @@
 <script>
     import Posts from "./Posts";
     import Tag from "./Tag";
-    import getPostsByPath from "../utils/htmlUtils";
+    import getPostsByPath from "../utils/htmlUtil";
 
     export default {
         name: "HomeMain",

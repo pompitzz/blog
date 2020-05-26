@@ -6,7 +6,7 @@
                 <h1 v-else>{{post.title}}</h1>
             </div>
 
-            <div class="text--primary text-right w-100 mr-5 mt-2">
+            <div class="text--primary text-right w-95 mr-5 my-2">
                 작성일: {{post.date}}
             </div>
             <div class="w-100 text-center">
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {getTagStore} from "../utils/tag";
+    import {getTagStore} from "../store/tag";
 
     export default {
         name: "ContentTitle.vue",

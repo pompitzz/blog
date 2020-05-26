@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toSet;
 
 public class TagMdMaker {
   public static void main(String[] args) throws IOException {
-    final String targetTagPath = "/Users/dongmyeonglee/Procjects/vuepress-blog/docs/.vuepress/utils/tag.js";
+    final String targetTagPath = "/Users/dongmyeonglee/Procjects/vuepress-blog/docs/.vuepress/store/tag.js";
     final String saveMdPath = "/Users/dongmyeonglee/Procjects/vuepress-blog/docs/tag";
     final String key = "tagStore.put";
     final Set<String> alreadyExistFiles = Arrays.stream(Objects.requireNonNull(new File(saveMdPath).listFiles())).map(File::getName).collect(toSet());

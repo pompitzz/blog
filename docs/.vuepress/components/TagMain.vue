@@ -15,9 +15,9 @@
     import TagList from "./TagList";
     import Posts from "./Posts";
     import Tag from "./Tag";
-    import getPostsByPath from "../utils/htmlUtils";
-    import {toArray} from "../utils/arrays";
-    import {getTagStore} from "../utils/tag";
+    import getPostsByPath from "../utils/htmlUtil";
+    import {toArray} from "../utils/arrayUtil";
+    import {getTagStore} from "../store/tag";
 
     export default {
         props: ['tagName'],
