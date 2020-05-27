@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-chip
-                class="mr-2 mt-2 mtfont-weight-bold"
+                class="mr-2 mt-2 font-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
                 @click="moveToTag('/tag/' + tag)"

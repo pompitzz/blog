@@ -8,6 +8,7 @@ function getTagStore() {
     tagStore.put('Vuetify', new Tag('Vue.js', '#1b69c2'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
     tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
+    tagStore.put('VuePress', new Tag('VuePress', '#e06717'));
     return tagStore;
 }
 

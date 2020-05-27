@@ -34,5 +34,11 @@ function sidebarConfig() {
                 'ch4'
             ]
         }],
+        '/vue/vuepress/': [{
+            title: 'VuePress로 나만의 블로그 만들기',
+            children: [
+                'ch1',
+            ],
+        }]
     };
 }
