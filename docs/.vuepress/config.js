@@ -1,6 +1,6 @@
 module.exports = {
     base: "/blog/",
-    title: "Jayden`s Blog",
+    title: "Pompitz`s Blog",
     head: [['link', {rel: 'icon', href: '/img/favicon.svg'}]],
     themeConfig: {
         smoothScroll: true,
