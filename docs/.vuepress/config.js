@@ -1,7 +1,7 @@
 module.exports = {
     base: "/blog/",
     title: "Pompitz`s Blog",
-    head: [['link', {rel: 'icon', href: '/img/favicon.svg'}]],
+    head: headConfig(),
     themeConfig: {
         smoothScroll: true,
         logo: "/img/logo.png",
@@ -20,6 +20,13 @@ function navConfigs() {
         {text: 'Java', link: '/tag/Java.html'},
         {text: 'Spring', link: '/tag/Spring.html'},
         {text: 'Tags', link: '/tag/'},
+    ];
+}
+
+function headConfig() {
+    return [
+        ['link', {rel: 'icon', href: '/img/favicon.svg'}],
+        ['meta', {name: 'google-site-verification', content: '5Yx4T6uI30XHP7CaIBllI-z_pTFiIF9H73JCnPtoqu0'}]
     ];
 }
 
