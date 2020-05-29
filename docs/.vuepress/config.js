@@ -12,6 +12,12 @@ module.exports = {
     markdown: {
         lineNumbers: true,
     },
+    plugins: {
+        'sitemap': {
+            hostname: 'https://pompitzz.github.io/blog',
+            exclude: ['/404.html']
+        },
+    }
 };
 
 
