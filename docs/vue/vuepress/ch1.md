@@ -1,5 +1,5 @@
 ---
-title: 1) VuePress 시작하기
+title: VuePress로 블로그 만들기 1) 시작하기
 date: 2020-05-28 01:00
 img: default.png
 tags: 
@@ -7,7 +7,7 @@ tags:
     - VuePress
 ---
 - VuePress를 이용하면 마크다운 파일들을 정적 html로 만들어 깃헙에 배포할 수 있습니다.
-- VuePress는 일반적인 Vue와 다르게 build 시 마크다운 파일들을 모두 html로 변환하여 빌드하기 때문에 검색엔진에 초치적화 되어 있습니다.
+- VuePress는 일반적인 Vue와 다르게 build 시 마크다운 파일들을 모두 html로 변환하여 빌드하기 때문에 검색엔진에 최적화 되어 있습니다.
 - VuePress에서 기본으로 제공해주는 테마와 필요한 부분들을 커스텀하여 나만의 블로그를 빠르고 쉽게 만들 수 있습니다.
 
 
@@ -94,7 +94,7 @@ drwxr-xr-x  5 XXX  staff   160B  5 28 01:22 assets
 ```js
 // .vuepress/config.js
 module.exports = {
-    base: '/', // base url을 설정합니다.
+    base: '/vuepress/', // base url을 설정합니다.
     title: 'VuePress 블로그',
     head: [['link', {rel: 'icon', href: 'img.png'}]], // html head에 넣을 값들을 설정할 수 있습니다.
     themeConfig: { // VuePress 기본 테마에 필요한 설정을을 추가합니다.
@@ -115,7 +115,7 @@ module.exports = {
 
 <img src="./settingConfig.png" width="800" height="200"/>
 
-- config 적용 후 변경된 화면을 보면 다음과 같이 모두 정상적으로 적용되어 있습니다.
+- config 적용 후 base url을 설정하였으므로 localhost:8080/vuepress/에 접속하면 변경된 화면을 확인할 수 있습니다.
 - [VuePress Docs](https://vuepress.vuejs.org/theme/default-theme-config.html)를 참고하시면 더 많은 설정들을 확인할 수 있습니다.
 
 <br>

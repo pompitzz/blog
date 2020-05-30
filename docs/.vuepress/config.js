@@ -1,6 +1,6 @@
 module.exports = {
     base: "/blog/",
-    title: "Pompitz`s Blog",
+    title: "Blog",
     head: headConfig(),
     themeConfig: {
         smoothScroll: true,
@@ -48,9 +48,10 @@ function sidebarConfig() {
             ]
         }],
         '/vue/vuepress/': [{
-            title: 'VuePress로 나만의 블로그 만들기',
+            title: 'VuePress',
             children: [
                 'ch1',
+                'ch2',
             ],
         }]
     };
