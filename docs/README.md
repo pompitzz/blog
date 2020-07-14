@@ -1,4 +1,4 @@
 ---
 sidebar: false
 ---
-<HomeMain/>
+<TagMain/>

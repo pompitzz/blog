@@ -1,6 +1,6 @@
 module.exports = {
     base: "/blog/",
-    title: "Blog",
+    title: "BLOG",
     head: headConfig(),
     themeConfig: {
         smoothScroll: true,
@@ -23,9 +23,9 @@ module.exports = {
 
 function navConfigs() {
     return [
-        {text: 'Java', link: '/tag/Java.html'},
-        {text: 'Spring', link: '/tag/Spring.html'},
-        {text: 'Tags', link: '/tag/'},
+        {text: 'JAVA', link: '/tag/JAVA.html'},
+        {text: 'Vue.js', link: '/tag/Vue.js.html'},
+        // {text: 'Spring', link: '/tag/Spring.html'}
     ];
 }
 

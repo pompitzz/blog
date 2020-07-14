@@ -1,5 +1,13 @@
 <template>
-    <component v-if="Posts" :is="Posts" class="v-application my_home" :Tag="Tag" :posts="allPosts"/>
+    <div class="my_home">
+        <div v-if="mobile">
+            <component v-if="TagList" :is="TagList" :tags="tags"/>
+        </div>
+        <div v-else>
+            <component v-if="TagListDrawer" :is="TagListDrawer" :tags="tags"/>
+        </div>
+        <component v-if="Posts" :is="Posts" :posts="allPosts" :Tag="Tag" :style="{'margin-right': marginRight + 'px'}"/>
+    </div>
 </template>
 
 <script>
