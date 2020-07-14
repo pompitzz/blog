@@ -1,6 +1,6 @@
 <template>
     <div class="v-application d-block content-title">
-        <VRow class="w-100">
+        <v-row style="width: 100%">
             <div class="w-90 mx-auto">
                 <h1 :class="mobile ? 'mobile-post-title' : ''">{{post.title}}</h1>
             </div>
@@ -9,21 +9,17 @@
                 작성일: {{post.date}}
             </div>
             <div class="w-100 text-center">
-                <Tag :tags="post.tags"/>
+                <component v-if="Tag" :is="Tag" :tags="post.tags"/>
             </div>
             <hr class="content-divider">
-        </VRow>
+        </v-row>
     </div>
 </template>
 
 <script>
-    import Tag from "./Tag";
-
     export default {
-        name: "ContentTitle",
-        components: {
-            Tag,
-        },
+        name: "ContentTitle.vue",
+        props: ['Tag'],
         data() {
             return {
                 tags: [],

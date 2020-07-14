@@ -1,6 +1,6 @@
 <template>
     <div>
-        <VChip
+        <v-chip
                 class="mr-2 mt-2 font-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
@@ -9,9 +9,9 @@
                 small
                 text-color="white"
         >
-            <VIcon left>mdi-label</VIcon>
+            <v-icon left>mdi-label</v-icon>
             {{tag}}
-        </VChip>
+        </v-chip>
     </div>
 </template>
 
@@ -27,7 +27,7 @@
             },
             moveToTag(path) {
                 if (this.canRouting) {
-                    this.$router.push(path).catch(() => {});
+                    this.$router.push(path)
                 }
             }
         }

@@ -1,17 +1,17 @@
 <template>
     <div class="v-application">
-        <VNavigationDrawer
+        <v-navigation-drawer
                 app
                 right
                 width="200"
                 permanent
         >
-            <VRow class="w-100; h-100 text-center"
+            <v-row class="w-100; h-100 text-center"
                    align="center"
             >
-                <VCol class="col-12">
+                <v-col class="col-12">
                     <div v-for="(tag, index) in tags" v-bind:key="index">
-                        <VChip
+                        <v-chip
                                 style="width: 150px"
                                 class="mt-3 font-weight-bold"
                                 :color="tag.color"
@@ -19,13 +19,13 @@
                                 :to="'/tag/' + tag.tagName"
                                 text-color="white"
                         >
-                            <VIcon left>mdi-label</VIcon>
+                            <v-icon left>mdi-label</v-icon>
                             {{tag.tagName}} ({{tag.count}})
-                        </VChip>
+                        </v-chip>
                     </div>
-                </VCol>
-            </VRow>
-        </VNavigationDrawer>
+                </v-col>
+            </v-row>
+        </v-navigation-drawer>
     </div>
 </template>
 <script>
