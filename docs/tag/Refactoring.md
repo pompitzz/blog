@@ -1,6 +1,6 @@
 ---
 sidebar: false
 sitemap:
-    exclude: true
+   exclude: true
 ---
 <TagMain tagName="Refactoring"/>

@@ -10,10 +10,10 @@
   font-size: 17px !important;
 }
 
-.theme-default-content {
+.theme-default-content, #disqus_thread {
   max-width: 100% !important;
-  margin-right: 40px !important;
-  margin-left: 40px !important;
+  margin-right: 10% !important;
+  margin-left: 10% !important;
 }
 
 a {
@@ -21,9 +21,9 @@ a {
 }
 
 @media (max-width: 1350px) {
-  .theme-default-content {
-    margin-right: 10px !important;
-    margin-left: 10px !important;
+  .theme-default-content, #disqus_thread {
+    margin-right: 5% !important;
+    margin-left: 5% !important;
   }
 }
 
@@ -79,4 +79,11 @@ a.sidebar-link {
 
 pre[class*="language-"] {
   margin-top: 30px !important;
+}
+
+// post 사진
+.post-card-img {
+  left: 50% !important;
+  width: auto !important;
+  transform: translate(-50%);
 }

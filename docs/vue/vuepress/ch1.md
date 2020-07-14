@@ -1,7 +1,7 @@
 ---
 title: VuePress로 블로그 만들기 1) 시작하기
 date: 2020-05-28 01:00
-img: default.png
+img: vue.png
 tags: 
     - Vue.js
     - VuePress
@@ -9,7 +9,6 @@ tags:
 - VuePress를 이용하면 마크다운 파일들을 정적 html로 만들어 깃헙에 배포할 수 있습니다.
 - VuePress는 일반적인 Vue와 다르게 build 시 마크다운 파일들을 모두 html로 변환하여 빌드하기 때문에 검색엔진에 최적화 되어 있습니다.
 - VuePress에서 기본으로 제공해주는 테마와 필요한 부분들을 커스텀하여 나만의 블로그를 빠르고 쉽게 만들 수 있습니다.
-
 
 ## VuePress 설치 후 실행하기
 ```shell script

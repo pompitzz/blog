@@ -11,7 +11,7 @@ export default function getPostsByPath(path, pages) {
 
 function setDefaultImgIfNoneHas(page) {
     if (!page.frontmatter.img) {
-        page.frontmatter.img = "default.png";
+        page.frontmatter.img = "vue.png";
     }
     return page;
 }

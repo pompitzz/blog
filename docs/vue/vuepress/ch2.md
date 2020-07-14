@@ -1,7 +1,7 @@
 ---
 title: VuePress로 블로그 만들기 2) 자동 배포 구하기
 date: 2020-05-30 21:07
-img: default.png
+img: vue.png
 tags: 
     - Vue.js
     - VuePress

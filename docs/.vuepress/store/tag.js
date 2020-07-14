@@ -2,13 +2,15 @@ import {TagMap} from '../utils/map.js';
 
 function getTagStore() {
     const tagStore = new TagMap();
-    tagStore.put('Java', new Tag('Java', '#eb2025'));
+    tagStore.put('JAVA', new Tag('Java', '#eb2025'));
     tagStore.put('JavaScript', new Tag('JavaScript', '#b9ad86'));
-    tagStore.put('Vue.js', new Tag('Vue.js', '#42b983'));
+    tagStore.put('Vue.js', new Tag('Vue.js', '#42b882'));
     tagStore.put('Vuetify', new Tag('Vue.js', '#1b69c2'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
+    tagStore.put('AWS', new Tag('Refactoring', '#ec912e'));
     tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
     tagStore.put('VuePress', new Tag('VuePress', '#e06717'));
+    tagStore.put('Gradle', new Tag('VuePress', '#046231'));
     return tagStore;
 }
 
