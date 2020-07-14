@@ -1,48 +1,47 @@
 <template>
     <div class="v-application d-block content-title">
-        <v-row style="width: 100%">
+        <VRow class="w-100">
             <div class="w-90 mx-auto">
-                <h1 v-if="mobile" style="font-size: 1.5rem">{{post.title}}</h1>
-                <h1 v-else>{{post.title}}</h1>
+                <h1 :class="mobile ? 'mobile-post-title' : ''">{{post.title}}</h1>
             </div>
 
             <div class="text--primary text-right w-95 mr-5 my-2">
                 작성일: {{post.date}}
             </div>
             <div class="w-100 text-center">
-                <component v-if="Tag" :is="Tag" :tags="post.tags"/>
+                <Tag :tags="post.tags"/>
             </div>
             <hr class="content-divider">
-        </v-row>
+        </VRow>
     </div>
 </template>
 
 <script>
-    import {getTagStore} from "../store/tag";
+    import Tag from "./Tag";
 
     export default {
-        name: "ContentTitle.vue",
-        props: ['Tag'],
+        name: "ContentTitle",
+        components: {
+            Tag,
+        },
         data() {
             return {
                 tags: [],
+                mobile: false,
             }
         },
         computed: {
             post() {
-                return Object.assign({}, this.$page.frontmatter);
+                return Object.assign({post: ''}, this.$page.frontmatter);
             }
         },
         beforeMount() {
-            this.mobile = window.innerWidth < 1000;
-            window.addEventListener('resize', this.changeTageViewer)
+            this.changePageViewer();
+            window.addEventListener('resize', this.changePageViewer)
         },
         methods: {
-            getColor(tagName) {
-                return getTagStore().color(tagName);
-            },
-            changeTageViewer() {
-                this.mobile = window.innerWidth < 1000;
+            changePageViewer() {
+                this.mobile = window.innerWidth < 1200;
             },
         }
     }
@@ -61,5 +60,9 @@
         width: 100%;
         margin-top: 1rem;
         margin-bottom: 1rem;
+    }
+
+    .mobile-post-title {
+        font-size: 1.5rem;
     }
 </style>

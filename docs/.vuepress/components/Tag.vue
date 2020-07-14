@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-chip
+        <VChip
                 class="mr-2 mt-2 font-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
@@ -9,9 +9,9 @@
                 small
                 text-color="white"
         >
-            <v-icon left>mdi-label</v-icon>
+            <VIcon left>mdi-label</VIcon>
             {{tag}}
-        </v-chip>
+        </VChip>
     </div>
 </template>
 
@@ -20,14 +20,15 @@
 
     export default {
         name: "Tag",
-        props: ['tags', 'noneRouing'],
+        props: ['tags', 'canRouting'],
         methods: {
             getColor(tag) {
                 return getTagStore().color(tag);
             },
             moveToTag(path) {
-                if (this.noneRouing === false) return;
-                this.$router.push(path).catch(() => {});
+                if (this.canRouting) {
+                    this.$router.push(path).catch(() => {});
+                }
             }
         }
     }

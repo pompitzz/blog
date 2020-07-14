@@ -1,8 +1,8 @@
 <template>
     <div class="v-application">
-        <v-container>
-            <v-row class="w-100 mx-auto">
-                <v-chip
+        <VContainer>
+            <VRow class="w-100 mx-auto">
+                <VChip
                         class="mr-2 mt-2 font-weight-bold"
                         v-for="(tag, index) in tags" v-bind:key="index"
                         :color="tag.color"
@@ -10,11 +10,11 @@
                         label
                         text-color="white"
                 >
-                    <v-icon left>mdi-label</v-icon>
+                    <VIcon left>mdi-label</VIcon>
                     {{tag.tagName}} ({{tag.count}})
-                </v-chip>
-            </v-row>
-        </v-container>
+                </VChip>
+            </VRow>
+        </VContainer>
     </div>
 </template>
 <script>

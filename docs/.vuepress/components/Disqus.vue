@@ -17,7 +17,7 @@
             (function () { // DON'T EDIT BELOW THIS LINE
                 const d = document, s = d.createElement('script');
                 s.src = 'https://vuepress-blog.disqus.com/embed.js';
-                s.setAttribute('data-timestamp', +new Date());
+                s.setAttribute('data-timestamp', String(new Date()));
                 (d.head || d.body).appendChild(s);
             })();
         }
@@ -28,7 +28,5 @@
     #disqus_thread {
         padding-left: 40px;
         padding-right: 40px;
-        margin-right: 10px;
-        margin-left: 10px;
     }
 </style>

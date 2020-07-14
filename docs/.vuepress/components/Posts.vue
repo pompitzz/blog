@@ -1,36 +1,43 @@
 <template>
     <div class="v-application">
-        <v-row
+        <VRow
                 style="width: 100%"
                 class="posts-row"
                 justify="center"
                 v-if="showPosts.length > 0"
         >
-            <v-card
+            <VCard
                     class="post-card"
                     v-for="(post, index) in showPosts"
                     :key="index"
-                    :to="post.path"
+                    @click="moveTo(post.path)"
                     v-if="post.frontmatter !== undefined"
                     hover>
                 <div class="post-card-img-wrapper elevation-2">
                     <img class="post-card-img" :src="'/blog/img/' + post.frontmatter.img" alt=""/>
                 </div>
-                <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
-                <v-card-subtitle class="text--primary text-right pb-0 pt-0">{{post.frontmatter.date}}</v-card-subtitle>
-                <v-card-text class="text-center pb-2 pt-0">
-                    <component v-if="Tag" :is="Tag" :noneRouing="true" :tags="post.frontmatter.tags"/>
-                </v-card-text>
-            </v-card>
-        </v-row>
+                <VCardTitle class="post-card-title">{{post.frontmatter.title}}</VCardTitle>
+                <VCardSubtitle class="text--primary text-right pb-0 pt-0">{{post.frontmatter.date}}</VCardSubtitle>
+                <VCardText class="text-center pb-2 pt-0">
+                    <Tag :canRouting="true"
+                         :tags="post.frontmatter.tags"
+                    />
+                </VCardText>
+            </VCard>
+        </VRow>
     </div>
 </template>
 
 <script>
     import {getTagStore} from "../store/tag";
+    import Tag from "./Tag";
 
     export default {
-        props: ["posts", 'Tag'],
+        name: 'Posts',
+        components: {
+            Tag,
+        },
+        props: ["posts"],
         data() {
             return {
                 showPosts: [],
@@ -53,6 +60,9 @@
             getColor(tagName) {
                 return getTagStore().color(tagName);
             },
+            moveTo(path){
+                this.$router.push(path);
+            }
         },
         beforeMount() {
             for (let i = 0; i < size(this.posts.length, this.pageItemSize); i++) {
