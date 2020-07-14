@@ -4,7 +4,7 @@
                 class="mr-2 mt-2 font-weight-bold"
                 v-for="(tag, index) in tags" v-bind:key="index"
                 :color="getColor(tag)"
-                @click="moveToTag('/tag/' + tag)"
+                @click="moveTo('/tag/' + tag)"
                 label
                 small
                 text-color="white"
@@ -25,7 +25,7 @@
             getColor(tag) {
                 return getTagStore().color(tag);
             },
-            moveToTag(path) {
+            moveTo(path) {
                 if (this.canRouting) {
                     this.$router.push(path)
                 }

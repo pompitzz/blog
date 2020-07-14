@@ -6,8 +6,9 @@
                         class="mr-2 mt-2 font-weight-bold"
                         v-for="(tag, index) in tags" v-bind:key="index"
                         :color="tag.color"
-                        :to="'/tag/' + tag.tagName"
+                        @click="moveTo('/tag/' + tag.tagName)"
                         label
+                        small
                         text-color="white"
                 >
                     <v-icon left>mdi-label</v-icon>
@@ -20,7 +21,12 @@
 <script>
     export default {
         name: "TagList",
-        props: ['tags']
+        props: ['tags'],
+        methods: {
+            moveTo(path){
+                this.$router.push(path);
+            }
+        }
     }
 </script>
 
