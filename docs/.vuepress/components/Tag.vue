@@ -17,6 +17,7 @@
 
 <script>
     import {getTagStore} from "../store/tag";
+    import {errorLogging} from "../utils/error";
 
     export default {
         name: "Tag",
@@ -27,7 +28,7 @@
             },
             moveTo(path) {
                 if (this.canRouting) {
-                    this.$router.push(path)
+                    this.$router.push(path).catch(errorLogging)
                 }
             }
         }

@@ -9,7 +9,7 @@
                 작성일: {{post.date}}
             </div>
             <div class="w-100 text-center">
-                <component v-if="Tag" :is="Tag" :tags="post.tags"/>
+                <component v-if="Tag" :is="Tag" :canRouting=true :tags="post.tags"/>
             </div>
             <hr class="content-divider">
         </v-row>

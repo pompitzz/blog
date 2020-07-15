@@ -19,12 +19,14 @@
     </div>
 </template>
 <script>
+    import {errorLogging} from "../utils/error";
+
     export default {
         name: "TagList",
         props: ['tags'],
         methods: {
             moveTo(path){
-                this.$router.push(path);
+                this.$router.push(path).catch(errorLogging)
             }
         }
     }

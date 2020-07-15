@@ -16,7 +16,7 @@
                                 class="mt-3 font-weight-bold"
                                 :color="tag.color"
                                 label
-                                :to="'/tag/' + tag.tagName"
+                                @click="moveTo('/tag/' + tag.tagName)"
                                 text-color="white"
                         >
                             <v-icon left>mdi-label</v-icon>
@@ -29,9 +29,16 @@
     </div>
 </template>
 <script>
+    import {errorLogging} from "../utils/error";
+
     export default {
         name: "TagListDrawer",
-        props: ['tags']
+        props: ['tags'],
+        methods: {
+            moveTo(path){
+                this.$router.push(path).catch(errorLogging)
+            }
+        }
     }
 </script>
 

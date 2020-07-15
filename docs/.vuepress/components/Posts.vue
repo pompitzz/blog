@@ -19,7 +19,7 @@
                 <v-card-title class="post-card-title">{{post.frontmatter.title}}</v-card-title>
                 <v-card-subtitle class="text--primary text-right pb-0 pt-0">{{post.frontmatter.date}}</v-card-subtitle>
                 <v-card-text class="text-center pb-2 pt-0">
-                    <component v-if="Tag" :is="Tag" :canRouting="true" :tags="post.frontmatter.tags"/>
+                    <component v-if="Tag" :is="Tag" :canRouting="false" :tags="post.frontmatter.tags"/>
                 </v-card-text>
             </v-card>
         </v-row>
@@ -28,6 +28,7 @@
 
 <script>
     import {getTagStore} from "../store/tag";
+    import {errorLogging} from "../utils/error";
 
     export default {
         props: ["posts", 'Tag'],
@@ -54,7 +55,7 @@
                 return getTagStore().color(tagName);
             },
             moveTo(path) {
-                this.$router.push(path);
+                this.$router.push(path).catch(errorLogging)
             }
         },
         beforeMount() {
