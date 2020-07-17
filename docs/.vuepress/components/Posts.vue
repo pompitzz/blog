@@ -73,7 +73,7 @@
 
 <style scoped>
     .post-card {
-        width: 20rem;
+        width: 18rem;
         margin: 1rem;
         display: block;
     }
