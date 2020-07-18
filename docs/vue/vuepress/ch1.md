@@ -79,8 +79,8 @@ drwxr-xr-x  5 XXX  staff   160B  5 28 01:22 assets
 -rw-r--r--  1 XXX  staff   2.2K  5 28 01:22 sample.html
 ```
 - 빌드를하면 blog폴더에 .vuepress/dist가 생성되고 해당 위치에 빌드 파일들이 나타나며 빌드 된 파일을 위와 같습니다.
-- 여여서 서  index.html을 보시면 처음 만들었던 README.md가 랜더링되어 있으며 smaple.md는 sample.html로 랜더링되어 있습니다.
-- **즉 README.md의 경우 index.html이 되며 그렇지 않을경우 해당 파일명과 동일한 html을 생성해주게 됩니다.**
+- index.html을 보시면 처음 만들었던 README.md가 랜더링되어 있으며 smaple.md는 sample.html로 랜더링되어 있습니다.
+- **README.md의 경우 index.html이 되며 그렇지 않을경우 해당 파일명과 동일한 html을 생성해주게 됩니다.**
 
 <br>
 
@@ -105,9 +105,10 @@ module.exports = {
     },
 };
 ```
-- 빌드된 폴더가 생성되는 .vuepress폴더에 config.js를 만든 후 위와 같이 작성해줍니다.
+- 이전에 빌드 시 .vuepress 폴더 이하에 dist가 생성되었습니다. .vuepress폴더에 커스텀으로 설정할 값, 컴포넌트, 스타일등을 정의할 수 있습니다.
+- 기본 테마에 커스텀 설정들을 추가하기 위해 .vuepress폴더에 config.js를 만든 후 위와 같이 작성해줍니다.
 - title, head뿐만아니라 logo, nav설정들을 간단하게 추가할 수 있습니다.
-- logo의 사진같은경우 .vuepress/public 폴더를 생성 후 해당 path에 저장하면 됩니다.
+- logo의 사진같은경우 .vuepress/public 폴더를 생성 후 해당 위치에 저장하면 됩니다.
 
 <br>
 <br>

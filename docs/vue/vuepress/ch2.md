@@ -13,12 +13,12 @@ tags:
 - 깃허브에서 저장소를 하나 생성한 후 저장소를 등록합니다.
 
 ### Travis CI 연동하기
-- [Travis CI](https://travis-ci.org/) 공식 홈페이지에 들어가 github 아이디로 로그인을 진행합니다.
+- [Travis CI](https://travis-ci.org/) 공식 홈페이지에서 github 아이디로 로그인을 진행합니다.
 
 <img src="./travisRepo.png"/>
 
-- 그 후 우측 상단에 Setting을 클릭하면 사진과 같이 자신의 저장소 목록이 나타나며 빨간 박스로 표시된 버튼을 클릭하면 연동이 완료됩니다.
-- 연동 후 메인 홈페이지로 다시 돌아가면 왼쪽 리스트에 연동된 저장소가 나타나면 정상적으로 연동이 완료된 것입니다.
+- 그 후 메인페이지에서 우측 상단에 위치하는 Setting을 클릭하면 사진과 같이 자신의 저장소 목록이 나타나며 빨간 박스로 표시된 버튼을 클릭하면 연동이 완료됩니다.
+- 연동 후 메인 페이지로 다시 돌아가면 왼쪽 리스트에 연동된 저장소목록이 나타납니다.
 
 ### Gitgub Token 생성하기
 - Travis CI에서 블로그를 배포하기 위해선 Travis CI에게 자신의 리포지토리에 배포할 권한을 부여해야 합니다.
@@ -29,7 +29,7 @@ tags:
 - 위와 같이 같이 체크를 한 후 생성하기 버튼을 누르면 중앙에 초록색으로 토큰이 나타나는데 이를 복사합니다.
 
 ### Travis CI에 토큰 등록하기
-- [Travis CI](https://travis-ci.org/)에 다시 접속하여 왼쪽 리스트에서 이전에 연동한 저장소를 클릭한 후 위와 같이 오른쪽에 More options 버튼을 클릭하여 Setting에 들어갑니다.
+- [Travis CI](https://travis-ci.org/)에 다시 접속하여 왼쪽 리스트에서 이전에 연동한 저장소를 클릭한 후 우측 상단의 More options 버튼을 클릭하여 Setting에 들어갑니다.
 
 <img src="./tokenRegister.png"/>
 
@@ -57,19 +57,18 @@ deploy:
   github_token: $GITHUB_TOKEN # Travis CI에 등록한 토큰을 가져와 사용한다.
   keep_history: true
   on:
-    branch: master
+    branch: master # master 브랜치에서만 동작하도록 설정
 ```
 - 프로젝트 가장 최상위 폴더에 .travis.yml을 생성한 후 위의 코드를 작성해줍니다.
-- 각 코드의 자세한 설명은 travis 홈페이지에서 알 수 있습니다. 
-- 간단히 보면 master 브랜치로 push할 때만 Travis CI가 동작하며 Vuepress 프로젝트를 build한 후 깃허브에 배포하는 것입니다.
+- 사용할 언어를 선택하고 yarn을 설치하고 Vuepress 프로젝트를 빌드한 후 배포하는 간단한 travis 스크립트입니다.
 
 ### Base Url 수정
 ```js
 module.exports = {
-    base: '/blog_code/', // base url을 설정합니다.
+    base: '/blog_code/', // github repository 이름으로 변경!
     title: 'VuePress 블로그',
-    head: [['link', {rel: 'icon', href: 'img.png'}]], // html head에 넣을 값들을 설정할 수 있습니다.
-    themeConfig: { // VuePress 기본 테마에 필요한 설정을을 추가합니다.
+    head: [['link', {rel: 'icon', href: 'img.png'}]],
+    themeConfig: {
         logo: '/vue.png',
         nav: [
             {text: 'Home', link: '/'},
