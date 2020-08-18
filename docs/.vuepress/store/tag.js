@@ -4,7 +4,7 @@ function getTagStore() {
     const tagStore = new TagMap();
     tagStore.put('JAVA', new Tag('Java', '#eb2025'));
     // tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
-    // tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
+    tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
     tagStore.put('AWS', new Tag('AWS', '#ec912e'));
     tagStore.put('Vue.js', new Tag('Vue.js', '#42b882'));
     // tagStore.put('Vuetify', new Tag('Vue.js', '#1b69c2'));

@@ -1,23 +1,21 @@
 ---
 sidebar: auto
-title: [Java, Spring] 의존성 주입(DI)? 제어의 역전(IoC)?
+title: Java, Spring 의존성 주입(DI), 제어의 역전(IoC)
 date: 2020-08-16 17:29
-img: default.png
+img: java.png
 tags: 
+    - JAVA
     - Spring
-    - Java
 ---
-- 의존성 주입과 제어의 역전은 스프링 철학에 중심이 되는 개념이며, 스프링 공부를 하게되면 반드시 접하게되는 개념이지만 처음 접하면 쉽게 이해하지 못하는 개념들 중 하나입니다.
-- 최근에는 애노테이션과 스프링 부트를 이용하면 의존성 주입과 제어의 역전에 대한 개념을 이해하지 않더라도 약속된 규칙만을 지키면서 개발이 가능하며 실제로 저 또한 이 둘의 개념들을 이해하지 못한 채 개발을 했었던 적이 있습니다.
+- 의존성 주입과 제어의 역전은 스프링 공부를 하게 되면 반드시 접하게 되는 개념입니다. 
+- 사실 이 개념들은 스프링 철학에 중심이 되는 개념일 뿐 스프링에만 속하는 특정한 개념들이 아니지만, 저의 경우 스프링 공부를 하면서 처음 접했고 단번에 이해하기 쉽지 않은 개념들인거 같습니다.
   
-
 ## 1. 의존성 주입(Dependency Injection)
 - 의존성 주입을 알아보기 전에 **의존성**이 무엇인지에 대해 알아보겠습니다.
 
 ### 의존성
 ```java
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class User {
     private Long userId;
@@ -43,19 +41,19 @@ public class UserService {
 }
 ```
 - UserService.register가 호출되면 userRepository에 해당 user를 저장하고 회원가입이 완료되는 간단한 로직입니다.
-- 자바에서 어떤 대상에게 의존성을 가지는 방법은 다양하며 UserService와 같이 필드 변수에 다른 객체를 가지고 있는 경우도 그 중 하나입니다.
-- 즉 UserService class에서 **UserService**는 **UserRepository**에 대해 의존하고 있기때문에 **의존성**을 가진다고 할 수 있습니다.
+- 자바에서 어떤 대상에게 의존성을 가지는 방법은 다양하며 UserService와 같이 필드 변수에 다른 객체를 가지고 있는 경우도 그중 하나입니다.
+- 즉 UserService class에서 **UserService**는 **UserRepository**에 대해 의존하고 있기 때문에 **의존성**을 가진다고 할 수 있습니다.
 
 ```java
 public class Main {
     public static void main(String[] args) {
         UserService userService = new UserService();
-        userService.register(new User());
+        userService.register(new User(1L, "Jayden", "qwe@gmail.com", "010-1234-1234"));
     }
 }
 ```
 - 위의 코드를 실행시켜보면 어떤 일이 발생할까요?
-- 현재 userService에는 userRepository가 필드에 정의만 되어있을 뿐 어디에서도 인스턴스화 하지 않았기 때문에 userRepository는 Null이므로 NullPointerExcpetion(NPE)가 발생할 것입니다.
+- 현재 userService에는 userRepository가 필드에 정의만 되어있을 뿐 어디에서도 인스턴스화 하지 않았기 때문에 userRepository는 Null이므로 NullPointerExcpetion가 발생할 것입니다.
   
 
 ```java
@@ -67,7 +65,7 @@ public class UserService {
     }
 }
 ```
-- 가장 단순한 방법으로는 필드를 정의함과 동시에 UserRepository() 객체를 생성해주면 정상적으로 동작할 것입니다.
+- 가장 단순한 방법으로는 필드를 정의함과 동시에 UserRepository 객체를 생성해주면 정상적으로 동작할 것입니다.
 - 즉 해당 코드를 동작시키기 위해서는 어떻게든 의존하고 있는 대상(UserRepository)에 대해 실제 객체를 정의해줘야 합니다.
 - 지금과 같이 필드에서 객체를 직접 생성하지 않고 userRepository를 사용하기 위해선 또 어떤 방법이 있을까요?
 
@@ -99,8 +97,30 @@ public class UserService {
   - 이는 인터페이스가 아닌 단일 클래스에 의존하더라도 프록시를 활용하여 UserRepsitory의 프록시 객체를 주입해줄 수 있습니다.
   - **컴파일 타임이 아닌 런타임에 의존 관계를 결정하면 코드의 변경없이 기능을 확장할 수 있습니다.**
 
+#### 생성과 사용의 책임 분리
+```java
+public class ObjectFactory {
+    public UserService userService() {
+        return new UserService(userRepository());
+    }
 
-### 런타임에 의존 관계를 결정한다?
+    public UserRepository userRepository() {
+        return new UserRepository();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ObjectFactory objectFactory = new ObjectFactory();
+        UserService userService = objectFactory.userService();
+        userService.register(new User(1L, "Jayden", "qwe@gmail.com", "010-1234-1234"));
+    }
+}
+```
+- 의존성 주입을 활용하면 ObjectFactory와 같이 객체의 생성만을 담당하는 Factory를 만들 수 있습니다.
+- Factory에서는 오직 객체의 생성만을 담당하기 때문에 객체 생성에 대한 변경이 필요할 때는 Factory만 살펴보면 되고, 해당 객체들을 사용하는 측에서는 어떻게 객체가 생성되는지 신경쓰지 않아도 됩니다.
+
+#### 런타임에 의존 관계를 결정
 ```java
 public interface NotificationService {
     void notify(User user, String message);
@@ -141,9 +161,24 @@ public class MailNotificationService implements NotificationService{
     }
 }
 
+public class ObjectFactory {
+    public UserService userService() {
+        return new UserService(userRepository(), smsNotificationService());
+    }
+
+    public UserRepository userRepository() {
+        return new UserRepository();
+    }
+    
+    public NotificationService smsNotificationService() {
+        return new SMSNotificationService();
+    }
+}
+
 public class Main {
     public static void main(String[] args) {
-        UserService userService = new UserService(new UserRepository(), new SMSNotificationService());
+        ObjectFactory objectFactory = new ObjectFactory();
+        UserService userService = objectFactory.userService();
         userService.register(new User(1L, "Jayden", "qwe@gmail.com", "010-1234-1234"));
     }
 }
@@ -152,8 +187,19 @@ public class Main {
 - UserService는 단지 NotificationService에서만 의존하지만 런타임에 따라 실제 의존하는 대상들을 다르게 주입해줄 수 있기 때문에 **UserService의 코드를 변경하지 않고도 기능을 확장할 수 있게 됩니다.**
   - 만약 제가 UserService를 생성할 때 MailNotificationService 객체를 주입해줬다면 UserService의 코드는 아무런 변경없이 SMS에서 Mail로 알림을 변경할 수 있게 됩니다.
   - 사실 이는 널리 알러진 디자인 패턴 중 하나인 **전략(Strategy) 패턴**입니다.
-
+- main 메서드에서는 ObjectFactory를 통해 UserService를 사용할 뿐 생성에 대해 어떠한 책임도 없기 때문에 NotificationService가 추가되어도 코드의 변경이 필요 없었습니다.
 
 ## 2. 제어의 역전(Inversion of Control)
-- 제어의 역전은 말 그대로 제어가 역전되었다는 의미 입니다.
-- 그럼 여기서 의미하는 제어는 무엇일까요?
+- 제어의 역전이라는 용어는 다양한 곳에서 사용되는 용어입니다. 
+- 어떤 객체가 의존하는 객체들을 스스로 선택한다면 해당 객체는 자신에 대한 제어권을 가진다고 할 수 있습니다.
+- 그러므로, 이러한 제어권이 역전되어 어떤 객체가 의존하는 객체들을 스스로 선택하는게 아닌 외부에 의해 결정되는 것도 제어의 역전이라고 할 수 있습니다.
+  - 현재 ObjectFactory에서 의존성 주입을 통해 객체들이 의존하는 객체들을 결정해주고 있습니다.
+- **이를 통해 의존성 주입은 제어의 역전을 이루기위해 사용할 수 있는 하나의 방법인것을 알 수 있습니다.**
+  - 스프링을 공부하면 의존성 주입과 제어의 역전라는 용어는 언제나 함께 나오는 이유가 스프링에서는 의존성 역전을 위해 가장 많이 사용되는 방법이 의존성 주입이기 때문입니다.
+
+
+### 스프링의 IoC
+- 스프링에는 ObjectFactory와 같은 역할을 하는 ApplicationContext가 존재하며 이를 IoC 컨테이너, DI 컨테이너라고 부릅니다.
+- ApplicationContext에서는 스프링 빈으로 등록된 객체들의 관리해줍니다.
+  - 스프링 빈이란 ApplicationContext가 제어권을 가질 수 있는 객체들을 의미합니다.
+- ObjectFactory에서는 단지 객체들의 생성을 관리해주지만, ApplicationContext에서는 객체의 생성 뿐만아니라 생명주기 및 스코프등 설정에 따라 수많은 기능을 제공해줍니다.
