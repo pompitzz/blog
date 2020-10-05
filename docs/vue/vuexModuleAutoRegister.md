@@ -215,7 +215,7 @@ export default store;
 - **Vuex에 새로운 모듈을 정의하더라도 직접 모듈을 등록할 필요가 없어졌습니다.**
 
 ## 정리
-- Vuex의 모듈을 등록은 단순히 반복되는 작업으로 자동화를 할 수 있습니다.
+- Vuex의 모듈 등록은 단순히 반복되는 작업으로 자동화를 할 수 있습니다.
 - webpack에서 제공하는 require.context를 활용하면 js파일을 탐색하여 export 값들을 가져올 수 있고 이를 통해 모듈을 자동으로 생성할 수 있습니다.
 
 > Vuex 중첩 모듈을 자동으로 등록하는 방법은 [GitHub 코드](https://github.com/pompitzz/blog_code/blob/master/vuex_module_register/src/store/module/index.js)를 참고하시면 확인할 수 있습니다.

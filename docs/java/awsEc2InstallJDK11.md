@@ -41,7 +41,7 @@ rm -rf jdk11.rpm
 
 ## 이전 버전 제거하기
 ```shell script
-yum list installed | grep "java" # yum 설치 리스트 확
+yum list installed | grep "java" # yum 설치 리스트 확인
 # java-1.8.0-openjdk-headless.x86_64    1:1.8.0.222.b10-0.47.amzn1   @amzn-updates
 # java-11-amazon-corretto-devel.x86_64  1:11.0.7.10-1                installed
 
