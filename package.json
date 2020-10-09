@@ -5,11 +5,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "vuepress dev docs",
-    "build": "vuepress build docs",
+    "build": "./build.sh",
+    "test": "babel-node tagMDMaker.js",
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"
   },
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.5.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
     "vuepress": "1.4.1"
   },
   "dependencies": {
