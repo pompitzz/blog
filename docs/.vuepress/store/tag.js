@@ -14,12 +14,22 @@ function getTagStore() {
     return tagStore;
 }
 
+function buildAllTag(tags) {
+    console.log(tags);
+    const allPostCount = tags.map(tag => tag.count).reduce((count, curCount) => count + curCount);
+    return new Tag("ALL", "#b9ad86", allPostCount)
+}
+
 class Tag {
-    constructor(tagName, color) {
+    constructor(tagName, color, count=0) {
         this.tagName = tagName;
         this.color = color;
-        this.count = 0;
+        this.count = count;
     }
 }
 
-export {getTagStore, Tag}
+export {
+    getTagStore,
+    buildAllTag,
+    Tag
+}

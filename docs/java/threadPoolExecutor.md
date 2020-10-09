@@ -209,7 +209,7 @@ void testCustomThreadPoolWithThirtyTasks() throws Exception {
     });
 }
 ```
-- 30개의 작업이 동시에 수행되면 maximumPoolSize + queueSize = 20개 이기때문에 스레드 풀이 수용할 수 있는 최대 작업수를 초과하게되어 RejectedExecutionHandler가 동작하게 됩니다.
+- 30개의 작업이 동시에 수행되면 maximumPoolSize + queueSize = 20개이므로 스레드 풀이 수용할 수 있는 최대 작업수를 초과하게되어 RejectedExecutionHandler가 동작하게 됩니다.
 - ThreadPoolExecutor 생성 시 따로 RejectedExecutionHandler를 정의하지 않으면 DefaultHandler로 ThreadPoolExecutor.AbortPolicy가 사용되며 해당 핸들러는 RejectedExecutionException를 발생시킵니다. 
 
 

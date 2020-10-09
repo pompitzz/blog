@@ -1,35 +1,39 @@
 <template>
-    <div class="v-application">
-        <v-container>
-            <v-row class="w-100 mx-auto">
-                <v-chip
-                        class="mr-2 mt-2 font-weight-bold"
-                        v-for="(tag, index) in tags" v-bind:key="index"
-                        :color="tag.color"
-                        @click="moveTo('/tag/' + tag.tagName)"
-                        label
-                        small
-                        text-color="white"
-                >
-                    <v-icon left>mdi-label</v-icon>
-                    {{tag.tagName}} ({{tag.count}})
-                </v-chip>
-            </v-row>
-        </v-container>
-    </div>
+  <div class="v-application">
+    <v-container>
+      <v-row class="w-100 mx-auto">
+        <v-chip
+            class="mr-2 mt-2 font-weight-bold"
+            v-for="(tag, index) in tags" v-bind:key="index"
+            :color="tag.color"
+            @click="moveTo('/tag/' + tag.tagName)"
+            label
+            small
+            text-color="white"
+        >
+          <v-icon left>mdi-label</v-icon>
+          {{ tag.tagName }} ({{ tag.count }})
+        </v-chip>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 <script>
-    import {errorLogging} from "../utils/error";
+import {errorLogging} from "../utils/error";
 
-    export default {
-        name: "TagList",
-        props: ['tags'],
-        methods: {
-            moveTo(path){
-                this.$router.push(path).catch(errorLogging)
-            }
-        }
+export default {
+  name: "TagList",
+  props: ['tags'],
+  methods: {
+    moveTo(path) {
+      if (path === '/tag/ALL') {
+        this.$router.push('/');
+      }else {
+        this.$router.push(path).catch(errorLogging);
+      }
     }
+  }
+}
 </script>
 
 <style scoped>
