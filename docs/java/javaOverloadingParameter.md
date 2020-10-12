@@ -12,6 +12,8 @@ tags:
 
 ## 오버로딩과 오버라이딩의 특징
 - 오버로딩 메서드와 오버라이딩 메서드는 해당 메서드가 사용되는 시점의 차이가 존재하기 때문에 혼란이 생길 수 있습니다.
+
+### 오버로딩 메서드 정의
 ```java
 class Parent {
 }
@@ -46,13 +48,14 @@ void printTest2() throws Exception {
             new Child()
     );
 
-    parents.forEach(this::print);
+    parents.forEach(parent -> this.print(parent));
 }
 ```
 - 하지만 해당 코드의 출력은 어떻게 될까요?
-- 결과는 Parent가 두 번 출력됩니다.
+- **결과는 Parent가 두 번 출력됩니다.**
 - 그렇다면 오버라이딩 메서드는 어떻게 동작할까요?
 
+### 오버라이딩 메서드 정의
 ```java
 class Parent {
     void print() {
@@ -74,7 +77,7 @@ void printTest3() throws Exception {
             new Child()
     );
 
-    parents.forEach(Parent::print);
+    parents.forEach(parent -> parent.print());
 }
 ```
 - 이번엔 위와같이 print 메서드를 오버라이딩한 후 결과를 확인해보면 Parent, Child가 각각 출력됩니다.
