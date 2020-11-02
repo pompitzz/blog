@@ -1,0 +1,23 @@
+name: VUE-CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install and build
+        run: |
+          yarn install
+          yarn build
+
+      - name: push to ph-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.REPO_HOOK_KEY }}
+          publish_dir: docs/.vuepress/dist
