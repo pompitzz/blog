@@ -2,7 +2,8 @@
 sidebar: auto
 title: JAVA 제네릭 배열을 생성하지 못하는 이유
 date: 2020-07-18 14:28
-img: java.png
+img: 
+    - java.png
 tags: 
     - JAVA
 ---

@@ -38,17 +38,8 @@ function headConfig() {
 
 function sidebarConfig() {
     return {
-        '/refactoring/': [{
-            title: '리팩토링',
-            children: [
-                'ch1',
-                'ch2',
-                'ch3',
-                'ch4'
-            ]
-        }],
         '/vue/vuepress/': [{
-            title: 'VuePress',
+            title: 'VuePres로 블로그 제작',
             children: [
                 'ch1',
                 'ch2',

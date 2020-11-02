@@ -2,7 +2,7 @@ import {TagMap} from '../utils/map.js';
 
 function getTagStore() {
     const tagStore = new TagMap();
-    tagStore.put('JAVA', new Tag('Java', '#eb2025'));
+    tagStore.put('JAVA', new Tag('JAVA', '#eb2025'));
     // tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
     tagStore.put('AWS', new Tag('AWS', '#ec912e'));
@@ -12,12 +12,6 @@ function getTagStore() {
     // tagStore.put('JavaScript', new Tag('JavaScript', '#b9ad86'));
     // tagStore.put('Gradle', new Tag('Gradle', '#046231'));
     return tagStore;
-}
-
-function buildAllTag(tags) {
-    console.log(tags);
-    const allPostCount = tags.map(tag => tag.count).reduce((count, curCount) => count + curCount);
-    return new Tag("ALL", "#b9ad86", allPostCount)
 }
 
 class Tag {
@@ -30,6 +24,5 @@ class Tag {
 
 export {
     getTagStore,
-    buildAllTag,
     Tag
 }

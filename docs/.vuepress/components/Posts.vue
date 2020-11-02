@@ -13,9 +13,22 @@
           @click="moveTo(post.path)"
           v-if="post.frontmatter !== undefined"
           hover>
-        <div class="post-card-img-wrapper elevation-2">
-          <img class="post-card-img" :src="'/blog/img/' + post.frontmatter.img" alt=""/>
+
+        <div v-if="post.frontmatter.img.length === 1"
+             class="post-card-img-wrapper elevation-2">
+          <img :src="'/blog/img/' + post.frontmatter.img[0]" alt="" class="post-card-img"/>
         </div>
+        <div v-else
+             class="post-card-img-wrapper elevation-2">
+          <div class="post-card-img-half-wrapper float-left">
+            <img :src="'/blog/img/' + post.frontmatter.img[0]" alt="" class="post-card-img"/>
+          </div>
+          <div class="post-card-img-half-wrapper float-right">
+            <img :src="'/blog/img/' + post.frontmatter.img[1]" alt="" class="post-card-img"/>
+          </div>
+        </div>
+
+
         <v-card-title class="post-card-title">{{ post.frontmatter.title }}</v-card-title>
         <v-card-subtitle class="text--primary text-right pb-0 pt-0">{{ post.frontmatter.date }}</v-card-subtitle>
         <v-card-text class="text-center pb-2 pt-0">
@@ -78,20 +91,26 @@ function size(listLength, size) {
   display: block;
 }
 
-.post-card-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+.post-card-img-half-wrapper {
+  position: relative;
+  width: 50%;
+  height: 0;
+  padding-bottom: 40%;
 }
 
 .post-card-img-wrapper {
   position: relative;
   width: 100%;
   height: 0;
-  overflow: hidden;
   padding-bottom: 40%;
+}
+
+.post-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .post-card-title {

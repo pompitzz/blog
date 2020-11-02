@@ -17,7 +17,7 @@ import Posts from "./Posts";
 import Tag from "./Tag";
 import getPostsByPath from "../utils/htmlUtil";
 import {toArray} from "../utils/arrayUtil";
-import {buildAllTag, getTagStore} from "../store/tag";
+import {getTagStore} from "../store/tag";
 
 export default {
   props: ['tagName'],
@@ -57,8 +57,10 @@ export default {
     });
 
     const allPosts = getPostsByPath('/', this.$site.pages);
-    this.tags = getTags(allPosts);
+    this.tags = getTagStore().getTagsWithCouting(allPosts);
     this.tags.sort((a, b) => b.count - a.count);
+
+    // 태그전용 페이지면 태그 post만 보여준다.
     this.posts = this.tagName ? filterOnlyTagName(this.tagName, allPosts) : allPosts;
     this.mobile = window.innerWidth < 1000;
     window.addEventListener('resize', this.changeTageViewer);
@@ -78,11 +80,6 @@ function changePostTagArr(post, tag) {
   return post;
 }
 
-function getTags(allPosts) {
-  const tags = getTagStore().getTagsWithCouting(allPosts);
-  tags.unshift(buildAllTag(tags))
-  return tags;
-}
 </script>
 
 <style scoped>

@@ -2,7 +2,9 @@
 sidebar: auto
 title: Java의 ThreadPoolExecutor, Spring의 ThreadPoolTaskExecutor
 date: 2020-09-20 16:55
-img: java.png
+img: 
+    - java.png
+    - spring.png
 tags: 
     - JAVA
     - Spring

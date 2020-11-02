@@ -2,7 +2,8 @@
 sidebar: auto
 title: JAVA 매개변수(Parameter)수가 같은 오버로딩 메서드가 위험한 이유
 date: 2020-07-15 22:41
-img: java.png
+img: 
+    - java.png
 tags: 
     - JAVA
 ---

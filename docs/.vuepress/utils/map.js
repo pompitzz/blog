@@ -60,6 +60,7 @@ class TagMap {
 
     getTagsWithCouting(posts) {
         this.countingPosts(posts);
+        this.put("ALL", new Tag("ALL", "#b9ad86", posts.length))
         return this.values();
     }
 

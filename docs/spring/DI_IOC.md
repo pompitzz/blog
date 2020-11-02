@@ -2,7 +2,8 @@
 sidebar: auto
 title: Java, Spring 의존성 주입(DI), 제어의 역전(IoC)
 date: 2020-08-16 17:29
-img: java.png
+img: 
+    - java.png
 tags: 
     - JAVA
     - Spring
