@@ -82,7 +82,7 @@ const store = new Vuex.Store({
 export default store;
 ```
 - export한 모듈들은 Vuex를 등록하는 곳에서 import하여 modules 내부에 넣어주면 모듈을 등록할 수 있습니다.
-- 하지만 보통 모듈을 사용하면 namespaced를 활용하기 떄문에 아래와 같이 namespaced를 true로 등록해주어야 합니다.
+- 하지만 보통 모듈을 사용하면 namespaced를 활용하기 때문에 아래와 같이 namespaced를 true로 등록해주어야 합니다.
 
 ```js
 // index.js
@@ -108,7 +108,7 @@ const store = new Vuex.Store({
 
 export default store;
 ```
-- Vuex를 사용할 떄 Vuex 모듈에 정의한 네 가지 속성에 필요한 기능을 구현하는 것이 중요하며 모듈을 등록하는건 단순히 반복적인 작업입니다.
+- Vuex를 사용할 때 Vuex 모듈에 정의한 네 가지 속성에 필요한 기능을 구현하는 것이 중요하며 모듈을 등록하는건 단순히 반복적인 작업입니다.
 - 모듈 등록을 자동화 해놓으면 귀찮고 반복적인 작업을 하지도 않고 모듈 등록을 까먹을 일도 없을 것입니다.
 
 ## 자동으로 Vuex 모듈 등록하기

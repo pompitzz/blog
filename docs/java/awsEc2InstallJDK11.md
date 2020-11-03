@@ -10,10 +10,8 @@ tags:
     - JAVA
 ---
 
-- EC2 JDK 버전을 로컬 환경과 맞추기 위해 JDK11로 업그레이드 할 필요가 생겼습니다.
-- yum으로 설치하려고 했으나 아래와 같이 설치 가능한 jdk 목록에 jdk11은 존재하지 않았습니다.
-- Amazon에서 제공하는 OpenJDK인 Amazon Coretto를 curl로 다운받아 간편하게 설치할 수 있습니다. 
-
+- yum에는 설치가능한 JDK가 1.8까지만 존재하기 때문에 JDK 11을 설치하기 위해선 다른 방법을 이용해야합니다.
+    - Amazon에서 제공하는 OpenJDK인 Amazon Coretto를 다운받아 간편하게 설치할 수 있습니다. 
 
 ```shell script
 yum list java*jdk-devel # 설치 가능한 jdk 확인

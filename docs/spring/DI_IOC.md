@@ -184,7 +184,7 @@ public class Main {
     }
 }
 ```
-- SMS, Mail 알림 서비스가 있을 떄 UserService의 NotificationService는 UserService를 생성할 때 넘겨주는 실체 구현 객체에 따라 UserService에서 사용하는 NotificationService는 달라질 것입니다.
+- SMS, Mail 알림 서비스가 있을 때 UserService의 NotificationService는 UserService를 생성할 때 넘겨주는 실체 구현 객체에 따라 UserService에서 사용하는 NotificationService는 달라질 것입니다.
 - UserService는 단지 NotificationService에서만 의존하지만 런타임에 따라 실제 의존하는 대상들을 다르게 주입해줄 수 있기 때문에 **UserService의 코드를 변경하지 않고도 기능을 확장할 수 있게 됩니다.**
   - 만약 제가 UserService를 생성할 때 MailNotificationService 객체를 주입해줬다면 UserService의 코드는 아무런 변경없이 SMS에서 Mail로 알림을 변경할 수 있게 됩니다.
   - 사실 이는 널리 알러진 디자인 패턴 중 하나인 **전략(Strategy) 패턴**입니다.
