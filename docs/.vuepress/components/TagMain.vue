@@ -1,25 +1,28 @@
 <template>
   <div class="my_home">
     <div v-if="mobile">
-      <component v-if="TagList" :is="TagList" :tags="tags"/>
+      <TagList :tags="tags" />
     </div>
     <div v-else>
-      <component v-if="TagListDrawer" :is="TagListDrawer" :tags="tags"/>
+      <TagListDrawer :tags="tags" />
     </div>
-    <component v-if="Posts" :is="Posts" :posts="posts" :Tag="Tag" :style="{'margin-right': marginRight + 'px'}"/>
+    <Posts :Tag="Tag"
+           :posts="posts"
+           :style="{'margin-right': marginRight + 'px'}"
+    />
   </div>
 </template>
 
 <script>
-import TagListDrawer from "./TagListDrawer";
-import TagList from "./TagList";
-import Posts from "./Posts";
-import Tag from "./Tag";
 import getPostsByPath from "../utils/htmlUtil";
 import {toArray} from "../utils/arrayUtil";
 import {getTagStore} from "../store/tag";
+import TagList from "./TagList.vue";
+import TagListDrawer from "./TagListDrawer.vue";
+import Posts from "./Posts.vue";
 
 export default {
+  components: { Posts, TagListDrawer, TagList },
   props: ['tagName'],
   name: "TagMain",
   data() {
@@ -49,13 +52,6 @@ export default {
     },
   },
   beforeMount() {
-    import('vuetify/dist/vuetify.min.css').then(() => {
-      this.TagListDrawer = TagListDrawer;
-      this.TagList = TagList;
-      this.Posts = Posts;
-      this.Tag = Tag;
-    });
-
     const allPosts = getPostsByPath('/', this.$site.pages);
     this.tags = getTagStore().getTagsWithCouting(allPosts);
     this.tags.sort((a, b) => b.count - a.count);

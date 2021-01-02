@@ -4,7 +4,8 @@
       <v-row class="w-100 mx-auto">
         <v-chip
             class="mr-2 mt-2 font-weight-bold"
-            v-for="(tag, index) in tags" v-bind:key="index"
+            v-for="(tag, index) in tags"
+            v-bind:key="index"
             :color="tag.color"
             @click="moveTo('/tag/' + tag.tagName)"
             label
@@ -28,7 +29,7 @@ export default {
     moveTo(path) {
       if (path === '/tag/ALL') {
         this.$router.push('/');
-      }else {
+      } else {
         this.$router.push(path).catch(errorLogging);
       }
     }

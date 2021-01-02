@@ -9,7 +9,9 @@
         작성일: {{ post.date }}
       </div>
       <div class="w-100 text-center">
-        <component v-if="Tag" :is="Tag" :canRouting=true :tags="post.tags"/>
+        <Tag :canRouting=true
+             :tags="post.tags"
+        />
       </div>
       <hr class="content-divider">
     </v-row>
@@ -17,9 +19,11 @@
 </template>
 
 <script>
+import Tag from "./Tag";
+
 export default {
-  name: "ContentTitle.vue",
-  props: ['Tag'],
+  name: "ContentTitle",
+  components: { Tag },
   data() {
     return {
       tags: [],
@@ -28,7 +32,7 @@ export default {
   },
   computed: {
     post() {
-      return Object.assign({post: ''}, this.$page.frontmatter);
+      return Object.assign({ post: '' }, this.$page.frontmatter);
     }
   },
   beforeMount() {

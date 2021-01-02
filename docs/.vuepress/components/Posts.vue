@@ -1,30 +1,40 @@
 <template>
   <div class="v-application">
-    <v-row
-        style="width: 100%"
-        class="posts-row"
-        justify="center"
-        v-if="showPosts.length > 0"
+    <v-row v-if="showPosts.length > 0"
+           class="posts-row"
+           justify="center"
+           style="width: 100%"
     >
-      <v-card
-          class="post-card"
-          v-for="(post, index) in showPosts"
-          :key="index"
-          @click="moveTo(post.path)"
-          v-if="post.frontmatter !== undefined"
-          hover>
+      <v-card v-for="(post, index) in showPosts"
+              v-if="post.frontmatter !== undefined"
+              :key="index"
+              class="post-card"
+              hover
+              @click="moveTo(post.path)"
+      >
 
         <div v-if="post.frontmatter.img.length === 1"
-             class="post-card-img-wrapper elevation-2">
-          <img :src="'/blog/img/' + post.frontmatter.img[0]" alt="" class="post-card-img"/>
+             class="post-card-img-wrapper elevation-2"
+        >
+          <img :src="'/blog/img/' + post.frontmatter.img[0]"
+               alt=""
+               class="post-card-img"
+          />
         </div>
         <div v-else
-             class="post-card-img-wrapper elevation-2">
+             class="post-card-img-wrapper elevation-2"
+        >
           <div class="post-card-img-half-wrapper float-left">
-            <img :src="'/blog/img/' + post.frontmatter.img[0]" alt="" class="post-card-img"/>
+            <img :src="'/blog/img/' + post.frontmatter.img[0]"
+                 alt=""
+                 class="post-card-img"
+            />
           </div>
           <div class="post-card-img-half-wrapper float-right">
-            <img :src="'/blog/img/' + post.frontmatter.img[1]" alt="" class="post-card-img"/>
+            <img :src="'/blog/img/' + post.frontmatter.img[1]"
+                 alt=""
+                 class="post-card-img"
+            />
           </div>
         </div>
 
@@ -32,7 +42,9 @@
         <v-card-title class="post-card-title">{{ post.frontmatter.title }}</v-card-title>
         <v-card-subtitle class="text--primary text-right pb-0 pt-0">{{ post.frontmatter.date }}</v-card-subtitle>
         <v-card-text class="text-center pb-2 pt-0">
-          <component v-if="Tag" :is="Tag" :canRouting="false" :tags="post.frontmatter.tags"/>
+          <Tag :canRouting="false"
+               :tags="post.frontmatter.tags"
+          />
         </v-card-text>
       </v-card>
     </v-row>
@@ -42,9 +54,11 @@
 <script>
 import {getTagStore} from "../store/tag";
 import {errorLogging} from "../utils/error";
+import Tag from "./Tag.vue";
 
 export default {
-  props: ["posts", 'Tag'],
+  components: { Tag },
+  props: ["posts"],
   data() {
     return {
       showPosts: [],
