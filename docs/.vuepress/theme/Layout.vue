@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <ParentLayout>
+    <ParentLayout v-if="!loading">
       <PostTitle v-if="$frontmatter.title"
                  slot="page-top"
       />
@@ -18,7 +18,15 @@ import PostTitle from "../components/PostTitle.vue";
 
 export default {
   name: "Layout",
+  data() {
+    return {
+      loading: true,
+    }
+  },
   components: { PostTitle, ParentLayout, Disqus },
+  beforeMount() {
+    import("vuetify/dist/vuetify.min.css").then(() => this.loading = false);
+  }
 }
 </script>
 

@@ -23,7 +23,7 @@ export default {
       type: String,
       required: true,
     },
-    canRouting: {
+    routing: {
       type: Boolean,
       default: false,
     },
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     move() {
-      if (this.canRouting) {
+      if (this.routing) {
         this.$router.push(`/tag/${this.tagName}`).catch(errorLogging)
       }
     },

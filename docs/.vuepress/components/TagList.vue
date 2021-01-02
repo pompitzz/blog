@@ -6,6 +6,7 @@
          :count="tag.count"
          :tagName="tag.tagName"
          class="mt-2"
+         routing
     />
   </div>
 </template>

@@ -42,8 +42,8 @@
           <div class="text-center pb-2 pt-0">
             <Tag v-for="(tagName, index) in post.frontmatter.tags"
                  :key="index"
-                 :canRouting="false"
                  :tagName="tagName"
+                 routing
                  small
             />
           </div>

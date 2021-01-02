@@ -11,8 +11,8 @@
       <div class="w-100 text-center">
         <Tag v-for="(tagName, index) in post.tags"
              :key="index"
-             :canRouting=true
              :tagName="tagName"
+             routing
              small
         />
       </div>

@@ -15,9 +15,10 @@
                class="mt-3"
           >
             <Tag :count="tag.count"
-                 :color="tag.color"
                  :tagName="tag.tagName"
+                 :color="tag.color"
                  style="width: 150px; height: 32px"
+                 routing
             />
           </div>
         </v-col>
