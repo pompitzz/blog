@@ -55,7 +55,8 @@ export default {
   methods: {
     move() {
       if (this.routing) {
-        this.$router.push(`/tag/${this.tagName}`).catch(errorLogging)
+        const path = this.tagName === 'ALL' ? '/' : `/tag/${this.tagName}`;
+        this.$router.push(path).catch(errorLogging)
       }
     },
   }

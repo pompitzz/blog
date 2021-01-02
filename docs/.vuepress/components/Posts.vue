@@ -11,7 +11,7 @@
              @click="moveTo(post.path)"
         >
 
-          <div v-if="post.frontmatter.img.length === 1"
+          <div v-if="post.frontmatter.img.length >= 1"
                class="post-card-img-wrapper elevation-2"
           >
             <img :src="'/blog/img/' + post.frontmatter.img[0]"
@@ -19,22 +19,22 @@
                  class="post-card-img"
             />
           </div>
-          <div v-else
-               class="post-card-img-wrapper elevation-2"
-          >
-            <div class="post-card-img-half-wrapper float-left">
-              <img :src="'/blog/img/' + post.frontmatter.img[0]"
-                   alt=""
-                   class="post-card-img"
-              />
-            </div>
-            <div class="post-card-img-half-wrapper float-right">
-              <img :src="'/blog/img/' + post.frontmatter.img[1]"
-                   alt=""
-                   class="post-card-img"
-              />
-            </div>
-          </div>
+          <!--          <div v-else-->
+          <!--               class="post-card-img-wrapper elevation-2"-->
+          <!--          >-->
+          <!--            <div class="post-card-img-half-wrapper">-->
+          <!--              <img :src="'/blog/img/' + post.frontmatter.img[0]"-->
+          <!--                   alt=""-->
+          <!--                   class="post-card-img"-->
+          <!--              />-->
+          <!--            </div>-->
+          <!--            <div class="post-card-img-half-wrapper">-->
+          <!--              <img :src="'/blog/img/' + post.frontmatter.img[1]"-->
+          <!--                   alt=""-->
+          <!--                   class="post-card-img"-->
+          <!--              />-->
+          <!--            </div>-->
+          <!--          </div>-->
 
 
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
@@ -114,8 +114,7 @@ function size(listLength, size) {
 
 .post-card-img-half-wrapper {
   position: relative;
-  width: 50%;
-  height: 0;
+  flex-grow: 1;
   padding-bottom: 40%;
 }
 
