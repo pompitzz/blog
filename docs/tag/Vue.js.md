@@ -1,6 +1,6 @@
 ---
 sidebar: false
+tagMain: Vue.js
 sitemap:
    exclude: true
 ---
-<HomeMain tagName="Vue.js" />

@@ -63,23 +63,27 @@ export default {
   props: ["posts"],
   data() {
     return {
-      showPosts: [],
       pageNumber: 0,
       pageItemSize: 10,
     }
   },
+  computed: {
+    showPosts() {
+      return this.posts;
+    }
+  },
   methods: {
-    addNextshowPosts() {
-      if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)) {
-        if (this.showPosts.length === this.posts.length) return;
-        this.pageNumber += 1;
-        const start = (this.pageNumber - 1) * this.pageItemSize;
-        const end = (this.pageNumber * this.pageItemSize) > this.posts.length ? this.posts.length : (this.pageNumber * this.pageItemSize);
-        for (let i = start; i < end; i++) {
-          this.showPosts.push(this.posts[i]);
-        }
-      }
-    },
+    // addNextshowPosts() {
+    //   if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)) {
+    //     if (this.showPosts.length === this.posts.length) return;
+    //     this.pageNumber += 1;
+    //     const start = (this.pageNumber - 1) * this.pageItemSize;
+    //     const end = (this.pageNumber * this.pageItemSize) > this.posts.length ? this.posts.length : (this.pageNumber * this.pageItemSize);
+    //     for (let i = start; i < end; i++) {
+    //       this.showPosts.push(this.posts[i]);
+    //     }
+    //   }
+    // },
     getColor(tagName) {
       return getTagStore().color(tagName);
     },
@@ -88,10 +92,10 @@ export default {
     }
   },
   beforeMount() {
-    for (let i = 0; i < size(this.posts.length, this.pageItemSize); i++) {
-      this.showPosts.push(this.posts[i]);
-    }
-    window.addEventListener("scroll", this.addNextshowPosts);
+    // for (let i = 0; i < size(this.posts.length, this.pageItemSize); i++) {
+    //   this.showPosts.push(this.posts[i]);
+    // }
+    // window.addEventListener("scroll", this.addNextshowPosts);
   },
 };
 
@@ -159,7 +163,7 @@ function size(listLength, size) {
 
 @media (max-width: 740px) {
   .post-card {
-    width: 80%;
+    width: 60%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
@@ -173,7 +177,7 @@ function size(listLength, size) {
 
 @media (max-width: 500px) {
   .post-card {
-    width: 100%;
+    width: 80%;
   }
 }
 </style>

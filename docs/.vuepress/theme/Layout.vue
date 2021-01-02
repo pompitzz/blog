@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <ParentLayout>
-      <PostTitle v-if="this.$frontmatter.title"
+      <PostTitle v-if="$frontmatter.title"
                  slot="page-top"
       />
-      <Disqus v-if="this.$frontmatter.title"
+      <Disqus v-if="$frontmatter.title"
               slot="page-bottom"
       />
     </ParentLayout>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ParentLayout from '@vuepress/theme-default/layouts/Layout.vue'
+import ParentLayout from './ParentLayout.vue'
 import Disqus from '../components/Disqus'
 import PostTitle from "../components/PostTitle.vue";
 

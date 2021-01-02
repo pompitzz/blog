@@ -1,6 +1,6 @@
 ---
 sidebar: false
+tagMain: JAVA
 sitemap:
    exclude: true
 ---
-<HomeMain tagName="JAVA" />

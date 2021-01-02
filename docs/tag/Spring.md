@@ -1,6 +1,6 @@
 ---
 sidebar: false
+tagMain: Spring
 sitemap:
    exclude: true
 ---
-<HomeMain tagName="Spring" />

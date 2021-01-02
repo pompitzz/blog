@@ -1,5 +1,5 @@
 <template>
-  <v-app class="my_home">
+  <div class="tag-main">
     <div v-if="mobile">
       <TagList :tags="tags" />
     </div>
@@ -9,7 +9,7 @@
     <Posts :posts="posts"
            :style="{'margin-right': marginRight + 'px'}"
     />
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -32,38 +32,31 @@ export default {
   data() {
     return {
       tags: [],
-      posts: [],
+      allPosts: [],
       mobile: false,
     }
   },
   methods: {
     changeTageViewer() {
-      this.mobile = window.innerWidth < 1000;
+      this.mobile = window.innerWidth < 740;
     },
-    setMargin() {
-      return {
-        'margin-right': this.mobile ? '0' : '200px'
-      }
-    }
   },
-  // watch: {
-  //   posts() {
-  //     console.log(this.posts);
-  //   }
-  // },
   computed: {
     marginRight() {
       return this.mobile ? 0 : 200;
     },
-  },
-  beforeMount() {
-    const allPosts = getPostsByPath('/', this.$site.pages);
-    this.tags = getTagStore().getTagsWithCouting(allPosts);
-    this.tags.sort((a, b) => b.count - a.count);
 
     // 태그전용 페이지면 태그 post만 보여준다.
-    this.posts = this.tagName ? filterOnlyTagName(this.tagName, allPosts) : allPosts;
-    this.mobile = window.innerWidth < 1000;
+    posts() {
+      return this.tagName ? filterOnlyTagName(this.tagName, this.allPosts) : this.allPosts;
+    },
+  },
+  beforeMount() {
+    this.allPosts = getPostsByPath('/', this.$site.pages);
+    this.tags = getTagStore().getTagsWithCouting(this.allPosts);
+    this.tags.sort((a, b) => b.count - a.count);
+
+    this.changeTageViewer();
     window.addEventListener('resize', this.changeTageViewer);
   }
 }
@@ -84,5 +77,7 @@ function changePostTagArr(post, tag) {
 </script>
 
 <style scoped>
-
+.tag-main {
+  padding-top: 65px;
+}
 </style>

@@ -1,4 +1,4 @@
 ---
 sidebar: false
+home: true
 ---
-<HomeMain/>

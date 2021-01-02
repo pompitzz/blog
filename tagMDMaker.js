@@ -7,10 +7,10 @@ function getTemplate(tagName) {
     const lines = [
         '---',
         'sidebar: false',
+        `tagMain: ${tagName}`,
         'sitemap:',
         '   exclude: true',
         '---',
-        `<HomeMain tagName=\"${tagName}\" />`,
     ]
     return lines.reduce((line, curLine) => line + '\n' + curLine)
 }
