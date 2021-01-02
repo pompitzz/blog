@@ -1,5 +1,5 @@
 <template>
-  <div class="my_home">
+  <v-app class="my_home">
     <div v-if="mobile">
       <TagList :tags="tags" />
     </div>
@@ -10,7 +10,7 @@
            :posts="posts"
            :style="{'margin-right': marginRight + 'px'}"
     />
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -30,10 +30,6 @@ export default {
       tags: [],
       posts: [],
       mobile: false,
-      TagListDrawer: null,
-      TagList: null,
-      Posts: null,
-      Tag: null,
     }
   },
   methods: {
@@ -44,6 +40,11 @@ export default {
       return {
         'margin-right': this.mobile ? '0' : '200px'
       }
+    }
+  },
+  watch: {
+    posts() {
+      console.log(this.posts);
     }
   },
   computed: {
