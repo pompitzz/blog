@@ -46,11 +46,11 @@ export default {
       }
     }
   },
-  watch: {
-    posts() {
-      console.log(this.posts);
-    }
-  },
+  // watch: {
+  //   posts() {
+  //     console.log(this.posts);
+  //   }
+  // },
   computed: {
     marginRight() {
       return this.mobile ? 0 : 200;

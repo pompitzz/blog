@@ -7,7 +7,7 @@
       <v-icon class="white--text mr-2">mdi-label</v-icon>
     </div>
     <div class="my-auto">
-      {{ tag }} <span v-if="count">({{ count }})</span>
+      {{ tagName }} <span v-if="count">({{ count }})</span>
     </div>
   </div>
 </template>
@@ -19,7 +19,7 @@ import {errorLogging} from "../utils/error";
 export default {
   name: "Tag",
   props: {
-    tag: {
+    tagName: {
       type: String,
       required: true,
     },
@@ -31,6 +31,10 @@ export default {
       type: Number,
       required: false,
     },
+    color: {
+      type: String,
+      required: false,
+    },
     small: {
       type: Boolean,
       default: false,
@@ -38,8 +42,8 @@ export default {
   },
   computed: {
     resolveStyle() {
-      if (!this.tag) return;
-      const color = getTagStore().color(this.tag);
+      if (!this.tagName) return;
+      const color = this.color || getTagStore().color(this.tagName);
       const fontSize = this.small ? 12 : 14;
       return {
         'background-color': color,
@@ -51,7 +55,7 @@ export default {
   methods: {
     move() {
       if (this.canRouting) {
-        this.$router.push(`/tag/${this.tag}`).catch(errorLogging)
+        this.$router.push(`/tag/${this.tagName}`).catch(errorLogging)
       }
     },
   }

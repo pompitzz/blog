@@ -1,14 +1,14 @@
 <template>
   <div>
-    <component :is="TagMain"
-               v-if="TagMain"
-               :tagName="tagName"
-    />
+    <!--    <component :is="TagMain"-->
+    <!--               v-if="TagMain"-->
+    <!--               :tagName="tagName"-->
+    <!--    />-->
+    <TagMain :tagName="tagName" />
   </div>
 </template>
 
 <script>
-import TagMain from "./TagMain.vue";
 
 export default {
   name: "HomeMain",
@@ -18,17 +18,19 @@ export default {
       required: false,
     },
   },
-  data() {
-    return {
-      TagMain: null,
-    }
+  // data() {
+  //   return {
+  //     TagMain: null,
+  //   }
+  // },
+  components: {
+    TagMain: () => import('./TagMain.vue')
   },
-  components: { TagMain },
-  beforeMount() {
-    import('vuetify/dist/vuetify.min.css').then(() => {
-      this.TagMain = TagMain;
-    })
-  },
+  // beforeMount() {
+  //   import('vuetify/dist/vuetify.min.css').then(() => {
+  //     this.TagMain = TagMain;
+  //   })
+  // },
 }
 </script>
 

@@ -9,10 +9,10 @@
         작성일: {{ post.date }}
       </div>
       <div class="w-100 text-center">
-        <Tag v-for="(tag, index) in post.tags"
+        <Tag v-for="(tagName, index) in post.tags"
              :key="index"
              :canRouting=true
-             :tag="tag"
+             :tagName="tagName"
              small
         />
       </div>
@@ -25,7 +25,7 @@
 import Tag from "./Tag";
 
 export default {
-  name: "ContentTitle",
+  name: "PostTitle",
   components: { Tag },
   data() {
     return {

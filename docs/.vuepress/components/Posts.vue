@@ -40,10 +40,10 @@
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
           <div class="text-center pb-2 pt-0">
-            <Tag v-for="(tag, index) in post.frontmatter.tags"
+            <Tag v-for="(tagName, index) in post.frontmatter.tags"
                  :key="index"
                  :canRouting="false"
-                 :tag="tag"
+                 :tagName="tagName"
                  small
             />
           </div>

@@ -15,7 +15,8 @@
                class="mt-3"
           >
             <Tag :count="tag.count"
-                 :tag="tag.tagName"
+                 :color="tag.color"
+                 :tagName="tag.tagName"
                  style="width: 150px; height: 32px"
             />
           </div>

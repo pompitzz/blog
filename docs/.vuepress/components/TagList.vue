@@ -4,8 +4,9 @@
       <v-row class="w-100 mx-auto">
         <Tag v-for="(tag, index) in tags"
              :key="index"
+             :color="tag.color"
              :count="tag.count"
-             :tag="tag.tagName"
+             :tagName="tag.tagName"
              class="mt-2"
         />
       </v-row>
