@@ -1,5 +1,5 @@
 <template>
-  <div class="v-application">
+  <div>
     <v-navigation-drawer
         app
         right

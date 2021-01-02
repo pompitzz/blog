@@ -1,12 +1,14 @@
 <template>
-  <ParentLayout>
-    <PostTitle v-if="this.$frontmatter.title"
-               slot="page-top"
-    />
-    <Disqus v-if="this.$frontmatter.title"
-            slot="page-bottom"
-    />
-  </ParentLayout>
+  <v-app>
+    <ParentLayout>
+      <PostTitle v-if="this.$frontmatter.title"
+                 slot="page-top"
+      />
+      <Disqus v-if="this.$frontmatter.title"
+              slot="page-bottom"
+      />
+    </ParentLayout>
+  </v-app>
 </template>
 
 <script>
