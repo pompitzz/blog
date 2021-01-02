@@ -5,7 +5,6 @@
     >
       <div v-for="(post, index) in showPosts"
            :key="index"
-           class="mx-auto"
       >
         <div v-if="post.frontmatter !== undefined"
              class="post-card v-card v-card--hover"
@@ -41,8 +40,11 @@
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
           <div class="text-center pb-2 pt-0">
-            <Tag :canRouting="false"
-                 :tags="post.frontmatter.tags"
+            <Tag v-for="(tag, index) in post.frontmatter.tags"
+                 :key="index"
+                 :canRouting="false"
+                 :tag="tag"
+                 small
             />
           </div>
         </div>
@@ -151,6 +153,7 @@ function size(listLength, size) {
 .posts-row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   width: 100%;
 }
 

@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <v-chip
-        class="mr-2 mt-2 font-weight-bold"
-        v-for="(tag, index) in tags" v-bind:key="index"
-        :color="getColor(tag)"
-        @click="moveTo('/tag/' + tag)"
-        label
-        small
-        text-color="white"
-    >
-      <v-icon left>mdi-label</v-icon>
-      {{ tag }}
-    </v-chip>
+  <div :style="resolveStyle"
+       class="tag"
+       @click="move"
+  >
+    <div class="my-auto">
+      <v-icon class="white--text mr-2">mdi-label</v-icon>
+    </div>
+    <div class="my-auto">
+      {{ tag }} <span v-if="count">({{ count }})</span>
+    </div>
   </div>
 </template>
 
@@ -21,20 +18,55 @@ import {errorLogging} from "../utils/error";
 
 export default {
   name: "Tag",
-  props: ['tags', 'canRouting'],
-  methods: {
-    getColor(tag) {
-      return getTagStore().color(tag);
+  props: {
+    tag: {
+      type: String,
+      required: true,
     },
-    moveTo(path) {
-      if (this.canRouting) {
-        this.$router.push(path).catch(errorLogging)
-      }
+    canRouting: {
+      type: Boolean,
+      default: false,
+    },
+    count: {
+      type: Number,
+      required: false,
+    },
+    small: {
+      type: Boolean,
+      default: false,
     }
+  },
+  computed: {
+    resolveStyle() {
+      if (!this.tag) return;
+      const color = getTagStore().color(this.tag);
+      const fontSize = this.small ? 12 : 14;
+      return {
+        'background-color': color,
+        'border-color': color,
+        'font-size': `${fontSize}px`,
+      }
+    },
+  },
+  methods: {
+    move() {
+      if (this.canRouting) {
+        this.$router.push(`/tag/${this.tag}`).catch(errorLogging)
+      }
+    },
   }
 }
 </script>
 
 <style scoped>
-
+.tag {
+  display: inline-flex;
+  margin-right: 8px;
+  padding: 0 12px;
+  color: white;
+  height: 24px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+}
 </style>

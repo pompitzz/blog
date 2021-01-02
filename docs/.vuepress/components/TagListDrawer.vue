@@ -10,18 +10,14 @@
              align="center"
       >
         <v-col class="col-12">
-          <div v-for="(tag, index) in tags" v-bind:key="index">
-            <v-chip
-                style="width: 150px"
-                class="mt-3 font-weight-bold"
-                :color="tag.color"
-                label
-                @click="moveTo('/tag/' + tag.tagName)"
-                text-color="white"
-            >
-              <v-icon left>mdi-label</v-icon>
-              {{ tag.tagName }} ({{ tag.count }})
-            </v-chip>
+          <div v-for="(tag, index) in tags"
+               :key="index"
+               class="mt-3"
+          >
+            <Tag :count="tag.count"
+                 :tag="tag.tagName"
+                 style="width: 150px; height: 32px"
+            />
           </div>
         </v-col>
       </v-row>
@@ -30,15 +26,17 @@
 </template>
 <script>
 import {errorLogging} from "../utils/error";
+import Tag from "./Tag.vue";
 
 export default {
   name: "TagListDrawer",
+  components: { Tag },
   props: ['tags'],
   methods: {
     moveTo(path) {
       if (path === '/tag/ALL') {
         this.$router.push('/');
-      }else {
+      } else {
         this.$router.push(path).catch(errorLogging);
       }
     }

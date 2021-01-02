@@ -10,7 +10,7 @@ function getTemplate(tagName) {
         'sitemap:',
         '   exclude: true',
         '---',
-        `<TagMain tagName=\"${tagName}\" />`,
+        `<HomeMain tagName=\"${tagName}\" />`,
     ]
     return lines.reduce((line, curLine) => line + '\n' + curLine)
 }

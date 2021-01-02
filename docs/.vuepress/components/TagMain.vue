@@ -6,8 +6,7 @@
     <div v-else>
       <TagListDrawer :tags="tags" />
     </div>
-    <Posts :Tag="Tag"
-           :posts="posts"
+    <Posts :posts="posts"
            :style="{'margin-right': marginRight + 'px'}"
     />
   </v-app>
@@ -23,7 +22,12 @@ import Posts from "./Posts.vue";
 
 export default {
   components: { Posts, TagListDrawer, TagList },
-  props: ['tagName'],
+  props: {
+    tagName: {
+      type: String,
+      required: false,
+    },
+  },
   name: "TagMain",
   data() {
     return {

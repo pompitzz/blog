@@ -9,8 +9,11 @@
         작성일: {{ post.date }}
       </div>
       <div class="w-100 text-center">
-        <Tag :canRouting=true
-             :tags="post.tags"
+        <Tag v-for="(tag, index) in post.tags"
+             :key="index"
+             :canRouting=true
+             :tag="tag"
+             small
         />
       </div>
       <hr class="content-divider">

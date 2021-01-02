@@ -2,28 +2,23 @@
   <div class="v-application">
     <v-container>
       <v-row class="w-100 mx-auto">
-        <v-chip
-            class="mr-2 mt-2 font-weight-bold"
-            v-for="(tag, index) in tags"
-            v-bind:key="index"
-            :color="tag.color"
-            @click="moveTo('/tag/' + tag.tagName)"
-            label
-            small
-            text-color="white"
-        >
-          <v-icon left>mdi-label</v-icon>
-          {{ tag.tagName }} ({{ tag.count }})
-        </v-chip>
+        <Tag v-for="(tag, index) in tags"
+             :key="index"
+             :count="tag.count"
+             :tag="tag.tagName"
+             class="mt-2"
+        />
       </v-row>
     </v-container>
   </div>
 </template>
 <script>
 import {errorLogging} from "../utils/error";
+import Tag from "./Tag.vue";
 
 export default {
   name: "TagList",
+  components: { Tag },
   props: ['tags'],
   methods: {
     moveTo(path) {

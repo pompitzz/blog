@@ -3,4 +3,4 @@ sidebar: false
 sitemap:
    exclude: true
 ---
-<TagMain tagName="Spring" />
+<HomeMain tagName="Spring" />
