@@ -1,5 +1,4 @@
 ---
-sidebar: auto
 title: Spock 사용 시 주의해야 할 것들
 date: 2020-11-23 23:27
 img: 

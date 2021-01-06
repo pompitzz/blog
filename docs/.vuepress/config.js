@@ -23,27 +23,68 @@ module.exports = {
 
 function navConfigs() {
     return [
-        {text: 'JAVA', link: '/tag/JAVA.html'},
-        {text: 'Vue.js', link: '/tag/Vue.js.html'},
+        { text: 'JAVA', link: '/tag/JAVA.html' },
+        { text: 'Vue.js', link: '/tag/Vue.js.html' },
         // {text: 'Spring', link: '/tag/Spring.html'}
     ];
 }
 
 function headConfig() {
     return [
-        ['link', {rel: 'icon', href: '/img/favicon.svg'}],
-        ['meta', {name: 'google-site-verification', content: '5Yx4T6uI30XHP7CaIBllI-z_pTFiIF9H73JCnPtoqu0'}]
+        ['link', { rel: 'icon', href: '/img/favicon.svg' }],
+        ['meta', { name: 'google-site-verification', content: '5Yx4T6uI30XHP7CaIBllI-z_pTFiIF9H73JCnPtoqu0' }]
     ];
 }
 
 function sidebarConfig() {
     return {
-        '/vue/vuepress/': [{
-            title: 'VuePres로 블로그 제작',
-            children: [
-                'ch1',
-                'ch2',
-            ],
-        }]
-    };
+        '/': [
+
+            {
+                title: 'java',
+                children: [
+                    '/java/awsEc2InstallJDK11.md', '/java/javaOverloadingParameter.md', '/java/threadPoolExecutor.md', '/java/whyCantCreateGenericsArray.md',
+                ]
+            },
+
+
+            {
+                title: 'spock',
+                children: [
+                    '/spock/spock-summary.md',
+                ]
+            },
+
+
+            {
+                title: 'spring',
+                children: [
+                    '/spring/DI_IOC.md', '/spring/SpringBoot_Custom_Config_Properties.md',
+                    {
+                        title: 'scheduler',
+                        children: [
+                            '/spring/scheduler/Scheduler.md',
+                        ]
+                    },
+
+                ]
+            },
+
+
+            {
+                title: 'vue',
+                children: [
+
+                    {
+                        title: 'vuepress',
+                        children: [
+                            '/vue/vuepress/ch1.md', '/vue/vuepress/ch2.md',
+                        ]
+                    },
+                    '/vue/vuexModuleAutoRegister.md',
+                ]
+            },
+
+        ]
+    }
 }

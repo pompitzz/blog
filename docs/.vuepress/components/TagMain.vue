@@ -1,13 +1,16 @@
 <template>
   <div class="tag-main">
     <div v-if="mobile">
-      <TagList :tags="tags" />
+      <TagList :tags="tags"
+               class="mt-3"
+      />
     </div>
     <div v-else>
       <TagListDrawer :tags="tags" />
     </div>
     <Posts :posts="posts"
            :style="{'margin-right': marginRight + 'px'}"
+           class="mt-3"
     />
   </div>
 </template>
@@ -38,7 +41,7 @@ export default {
   },
   methods: {
     changeTageViewer() {
-      this.mobile = window.innerWidth < 740;
+      this.mobile = window.innerWidth < 2500;
     },
   },
   computed: {
@@ -79,5 +82,6 @@ function changePostTagArr(post, tag) {
 <style scoped>
 .tag-main {
   padding-top: 65px;
+  padding-left: 20rem;
 }
 </style>

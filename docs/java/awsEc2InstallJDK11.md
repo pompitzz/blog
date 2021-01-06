@@ -1,5 +1,4 @@
 ---
-sidebar: auto
 title: AWS EC2에 JDK 11 설치하기
 date: 2020-07-05 17:44
 img: 

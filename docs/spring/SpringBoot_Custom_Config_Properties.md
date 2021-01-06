@@ -1,5 +1,4 @@
 ---
-sidebar: auto
 title: SpringBoot Type-Safe하게 Property 설정하기
 date: 2020-12-05 22:53
 img: 

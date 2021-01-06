@@ -6,7 +6,6 @@ const tags = getTagStore().values();
 function getTemplate(tagName) {
     const lines = [
         '---',
-        'sidebar: false',
         `tagMain: ${tagName}`,
         'sitemap:',
         '   exclude: true',

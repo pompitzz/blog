@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vuepress dev docs",
     "build": "./build.sh",
-    "test": "babel-node tagMDMaker.js",
+    "test": "babel-node sidebarConfigMaker.js",
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"
   },
   "devDependencies": {

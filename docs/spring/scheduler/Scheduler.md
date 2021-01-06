@@ -1,5 +1,4 @@
 ---
-sidebar: auto
 title: 스프링 TaskScheduler DeepDive(@EnableScheduling, @Scheduled)
 date: 2020-12-22 23:50
 img: 

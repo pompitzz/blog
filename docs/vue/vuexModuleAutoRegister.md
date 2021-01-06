@@ -1,5 +1,4 @@
 ---
-sidebar: auto
 title: Vuex 모듈 등록 자동화하기
 date: 2020-09-05 13:29
 img: 
