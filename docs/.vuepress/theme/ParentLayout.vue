@@ -47,7 +47,7 @@
 import Home from '@theme/components/Home.vue'
 import Navbar from '@theme/components/Navbar.vue'
 import Page from '@theme/components/Page.vue'
-import Sidebar from '@theme/components/Sidebar.vue'
+import Sidebar from '../components/default/Sidebar.vue'
 import {resolveSidebarItems} from '@vuepress/theme-default/util/index.js'
 import TagMain from "../components/TagMain.vue";
 
@@ -88,20 +88,18 @@ export default {
 
     shouldShowSidebar() {
       const { frontmatter } = this.$page
-      return (
-          !frontmatter.home
-          && frontmatter.sidebar !== false
-          && this.sidebarItems.length
-      )
+      return (frontmatter.sidebar !== false && this.sidebarItems.length)
     },
 
     sidebarItems() {
-      return resolveSidebarItems(
+      const resolveSidebarItems1 = resolveSidebarItems(
           this.$page,
           this.$page.regularPath,
           this.$site,
           this.$localePath
-      )
+      );
+      console.log('resolveSidebarItems1', resolveSidebarItems1);
+      return resolveSidebarItems1
     },
 
     pageClasses() {
