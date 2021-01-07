@@ -1,19 +1,16 @@
 <template>
-  <ul
-      v-if="items.length"
+  <ul v-if="items.length"
       class="sidebar-links"
   >
-    <li
-        v-for="(item, i) in items"
+    <li v-for="(item, i) in items"
         :key="i"
     >
-      <SidebarGroup
-          v-if="item.type === 'group'"
-          :collapsable="item.collapsable || item.collapsible"
-          :depth="depth"
-          :item="item"
-          :open="i === openGroupIndex"
-          @toggle="toggleGroup(i)"
+      <SidebarGroup v-if="item.type === 'group'"
+                    :collapsable="item.collapsable || item.collapsible"
+                    :depth="depth"
+                    :item="item"
+                    :open="openIndexMap[i]"
+                    @toggle="toggleGroup(i)"
       />
       <SidebarLink v-else
                    :item="item"
@@ -41,7 +38,8 @@ export default {
 
   data() {
     return {
-      openGroupIndex: 0
+      openGroupIndex: 0,
+      openIndexMap: {},
     }
   },
 
@@ -61,13 +59,17 @@ export default {
           this.$route,
           this.items
       )
+      this.openIndexMap = {};
       if (index > -1) {
-        this.openGroupIndex = index
+        this.openIndexMap[index] = true;
       }
     },
 
     toggleGroup(index) {
-      this.openGroupIndex = index === this.openGroupIndex ? -1 : index
+      this.openIndexMap = {
+        ...this.openIndexMap,
+        [index]: !this.openIndexMap[index],
+      }
     },
 
     isActive(page) {

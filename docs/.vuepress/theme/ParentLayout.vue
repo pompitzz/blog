@@ -92,14 +92,12 @@ export default {
     },
 
     sidebarItems() {
-      const resolveSidebarItems1 = resolveSidebarItems(
+      return resolveSidebarItems(
           this.$page,
           this.$page.regularPath,
           this.$site,
           this.$localePath
-      );
-      console.log('resolveSidebarItems1', resolveSidebarItems1);
-      return resolveSidebarItems1
+      )
     },
 
     pageClasses() {
