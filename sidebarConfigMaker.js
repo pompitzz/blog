@@ -72,6 +72,13 @@ const reulst = File.readdir('./docs')
     .map(sidebarConfig => sidebarConfig.parseToString())
     .reduce((prev, cur) => prev + cur);
 
-const str = `{ '/': [ ${reulst} ] }`
+const sidebarConfig = ` module.exports = { '/': [ ${reulst} ] } `
 
-console.log(str)
+fs.writeFile('./docs/.vuepress/sidebarConfig.js', sidebarConfig, 'utf8', (err => {
+    if (err) {
+        console.log('### fail sidbarConfigMaker', err);
+        process.exit();
+    }
+}))
+console.log('### success sidbarConfigMaker')
+
