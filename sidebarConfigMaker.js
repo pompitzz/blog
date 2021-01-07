@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const filterNames = ['.vuepress', 'README.md', 'tag']
+const filterNames = ['.vuepress', 'README.md', 'TAG']
 
 class File {
     constructor(path, name, isDirectory, isFile) {
@@ -35,14 +35,7 @@ class SidebarConfig {
             return '';
         }
 
-        return `
-            {
-                title: '${this.title}',
-                children: [
-                            ${this.getChildrenText()}
-                          ]
-            },
-        `
+        return ` { title: '${this.title}', children: [ ${this.getChildrenText()} ] }, `
     }
 
     getChildrenText() {
@@ -77,14 +70,8 @@ const reulst = File.readdir('./docs')
     .filter(file => file.isDirectory)
     .map(resolveToSidebarConfig)
     .map(sidebarConfig => sidebarConfig.parseToString())
-    .reduce((prev, cur) => prev + '\n' + cur);
+    .reduce((prev, cur) => prev + cur);
 
-const str = `
-    {
-       '/': [
-                ${reulst}
-            ]
-    }
-`
+const str = `{ '/': [ ${reulst} ] }`
 
 console.log(str)

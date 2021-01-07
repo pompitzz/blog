@@ -39,52 +39,18 @@ function headConfig() {
 function sidebarConfig() {
     return {
         '/': [
-
-            {
-                title: 'java',
-                children: [
-                    '/java/awsEc2InstallJDK11.md', '/java/javaOverloadingParameter.md', '/java/threadPoolExecutor.md', '/java/whyCantCreateGenericsArray.md',
-                ]
-            },
-
-
-            {
-                title: 'spock',
-                children: [
-                    '/spock/spock-summary.md',
-                ]
-            },
-
-
-            {
-                title: 'spring',
-                children: [
-                    '/spring/DI_IOC.md', '/spring/SpringBoot_Custom_Config_Properties.md',
-                    {
-                        title: 'scheduler',
-                        children: [
-                            '/spring/scheduler/Scheduler.md',
-                        ]
-                    },
-
-                ]
-            },
-
-
-            {
-                title: 'vue',
-                children: [
-
-                    {
-                        title: 'vuepress',
-                        children: [
-                            '/vue/vuepress/ch1.md', '/vue/vuepress/ch2.md',
-                        ]
-                    },
-                    '/vue/vuexModuleAutoRegister.md',
-                ]
-            },
-
-        ]
+            { title: 'Groovy', children: ['/Groovy/spock-summary.md',] }, {
+                title: 'Java',
+                children: ['/Java/awsEc2InstallJDK11.md', '/Java/javaOverloadingParameter.md', '/Java/threadPoolExecutor.md', '/Java/whyCantCreateGenericsArray.md',]
+            }, {
+                title: 'Spring',
+                children: ['/Spring/DI_IOC.md', '/Spring/Scheduler.md', '/Spring/SpringBoot_Custom_Config_Properties.md',]
+            }, {
+                title: 'Vue',
+                children: [{
+                    title: 'VuePress',
+                    children: ['/Vue/VuePress/ch1.md', '/Vue/VuePress/ch2.md',]
+                }, '/Vue/vuexModuleAutoRegister.md',]
+            },]
     }
 }

@@ -1,4 +1,0 @@
-[] sidebarConfig 생성 스크립트
-    [] 순서 잘 정해질 수 있도록 만들어줘야함
-[] sidebarlinks 로직 파악 후 적용
-[] sidebar style 변경

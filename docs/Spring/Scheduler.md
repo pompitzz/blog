@@ -51,7 +51,7 @@ public interface Trigger {
  
 <br>
 
-![0_diagram.png](./0_diagram.png)
+![0_diagram.png](docs/Spring/scheduler/0_diagram.png)
 - 스프링이 기본으로 제공하는 구현체는 위와 같습니다.
 - TaskScheduler의 경우 따로 스케줄러를 등록하지 않으면 ConcurrentTaskScheduler를 사용하게 됩니다.
     - 커스텀하게 ThreadPoolTaskScheduler를 빈으로 등록하면 해당 빈을 사용하게 됩니다.
@@ -84,12 +84,12 @@ public class SchedulingConfiguration {
     - 실제 ScheduledAnnotationBeanPostProcessor에서 스케줄링에 필요한 작업을 수행합니다. 
 
 ### 2) PostProcessor에서 @Scheduled 메서드 작업을 스케줄러에 등록
-![1_PostProcessor_post_method.png](./1_PostProcessor_post_method.png)
+![1_PostProcessor_post_method.png](./scheduler/1_PostProcessor_post_method.png)
 - PostProcessor.postProcessAfterInitialization에서 bean에 @Scheduled가 선언된 메서드들을 찾아 postScheduled를 호출합니다.
 
 <br>
 
-![2_PostProcessor_postScheduled_method.png](./2_PostProcessor_postScheduled_method.png)
+![2_PostProcessor_postScheduled_method.png](./scheduler/2_PostProcessor_postScheduled_method.png)
 - PostProcessor.postScheduled에서 @Scheduled에 설정된 fixedDelay, fixedRate, cron등에 맞는 Task를 생성하여 ScheduledTaskRegistrar에 등록합니다.
     - cron 표기법을 사용하였으니 CronTask와 위에서 보았던 CronTrigger가 사용됩니다.    
 
@@ -97,17 +97,17 @@ public class SchedulingConfiguration {
 >
 <br>
 
-![3_Registrar.png](./3_Registrar.png)
+![3_Registrar.png](./scheduler/3_Registrar.png)
 - ScheduledTaskRegistrar에서 taskScheduler에 작업을 스케줄링하게 됩니다.
 - taskScheduler.schedule 메서드를 Runnable(@Scheduled 메서드 작업), Trigger(CronTrigger)와 함께 호출합니다.  
 
 
 ### 3) TaskScheduler에서 작업을 스케줄링
-![4_TaskScheduler.png](./4_TaskScheduler.png)
+![4_TaskScheduler.png](./scheduler/4_TaskScheduler.png)
 - TaskScheduler.schedule에서는 task, trigger, executor, errorhandler로 ReschedulingRunnable를 생성하고 schedule을 호출합니다.
 - **실제로 수행할 작업은 Trigger를 통해 특정한 주기에 맞게 반복적으로 수행되어야 하는데 이러한 처리를 담당하는 곳이 ReschedulingRunnable입니다.** 
 
 <br>
 
-![5_RechedulingRuunable.png](./5_RechedulingRuunable.png)
+![5_RechedulingRuunable.png](./scheduler/5_RechedulingRuunable.png)
 - RechedulingRuunable에서 Trigger를 통해 nextExecutionTime을 계산하여 schedule -> run -> schedule가 재귀적으로 호출되면서 스케줄링된 작업이 실제로 수행됩니다.   
