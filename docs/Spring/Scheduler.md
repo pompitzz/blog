@@ -51,7 +51,8 @@ public interface Trigger {
  
 <br>
 
-![0_diagram.png](docs/Spring/scheduler/0_diagram.png)
+![0_diagram.png](./scheduler/0_diagram.png)
+
 - 스프링이 기본으로 제공하는 구현체는 위와 같습니다.
 - TaskScheduler의 경우 따로 스케줄러를 등록하지 않으면 ConcurrentTaskScheduler를 사용하게 됩니다.
     - 커스텀하게 ThreadPoolTaskScheduler를 빈으로 등록하면 해당 빈을 사용하게 됩니다.
