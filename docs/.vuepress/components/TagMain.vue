@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-main">
+  <div class="page tag-main">
     <div v-if="mobile">
       <TagList :tags="tags"
                class="mt-3"
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import getPostsByPath from "../utils/htmlUtil";
-import {toArray} from "../utils/arrayUtil";
-import {getTagStore} from "../store/tag";
-import TagList from "./TagList.vue";
-import TagListDrawer from "./TagListDrawer.vue";
-import Posts from "./Posts.vue";
+import getPostsByPath from '../utils/htmlUtil';
+import { toArray } from '../utils/arrayUtil';
+import { getTagStore } from '../store/tag';
+import TagList from './TagList.vue';
+import TagListDrawer from './TagListDrawer.vue';
+import Posts from './Posts.vue';
 
 export default {
   components: { Posts, TagListDrawer, TagList },
@@ -31,13 +31,13 @@ export default {
       required: false,
     },
   },
-  name: "TagMain",
+  name: 'TagMain',
   data() {
     return {
       tags: [],
       allPosts: [],
       mobile: false,
-    }
+    };
   },
   methods: {
     changeTageViewer() {
@@ -61,8 +61,8 @@ export default {
 
     this.changeTageViewer();
     window.addEventListener('resize', this.changeTageViewer);
-  }
-}
+  },
+};
 
 function filterOnlyTagName(tagName, posts) {
   return toArray(posts)
@@ -79,9 +79,10 @@ function changePostTagArr(post, tag) {
 
 </script>
 
-<style scoped>
+<style lang="stylus"
+       scoped
+>
 .tag-main {
   padding-top: 65px;
-  padding-left: 20rem;
 }
 </style>

@@ -4,7 +4,9 @@
        @click="move"
   >
     <div class="my-auto">
-      <v-icon class="white--text mr-2">mdi-label</v-icon>
+      <v-icon class="white--text mr-2"
+              v-text="'$label'"
+      />
     </div>
     <div class="my-auto">
       {{ tagName }} <span v-if="count">({{ count }})</span>
@@ -13,11 +15,11 @@
 </template>
 
 <script>
-import {getTagStore} from "../store/tag";
-import {errorLogging} from "../utils/error";
+import { getTagStore } from '../store/tag';
+import { errorLogging } from '../utils/error';
 
 export default {
-  name: "Tag",
+  name: 'Tag',
   props: {
     tagName: {
       type: String,
