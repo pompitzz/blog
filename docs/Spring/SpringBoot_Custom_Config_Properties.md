@@ -38,7 +38,7 @@ dependencies {
     - [관련 문서](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-format) 
 
 ### 2. Property 클래스 추가
-```
+```java
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "my.server")
@@ -51,7 +51,7 @@ public class MyServerProperties {
 - 일반적으로 스프링이 프로퍼티 값을 세팅할 때 빈 생성자, 세터를 활용하므로 세터 메서드가 필요합니다.
 
 #### 생성자 바인딩 활용
-```
+```java
 @Getter
 @ConstructorBinding // 추가
 @RequiredArgsConstructor
