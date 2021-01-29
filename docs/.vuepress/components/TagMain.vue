@@ -62,7 +62,6 @@ function changePostTagArr(post, tag) {
 <style lang="stylus"
        scoped
 >
-.tag-main {
-  padding-top: 65px;
-}
+.tag-main
+  padding-top 65px
 </style>

@@ -25,7 +25,6 @@ function navConfigs() {
     return [
         { text: 'JAVA', link: '/tag/JAVA.html' },
         { text: 'Vue.js', link: '/tag/Vue.js.html' },
-        // {text: 'Spring', link: '/tag/Spring.html'}
     ];
 }
 

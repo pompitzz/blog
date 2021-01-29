@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "Disqus",
+  name: 'Disqus',
   mounted() {
     /**
      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -15,18 +15,21 @@ export default {
       this.page.identifier = location.pathname; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function () { // DON'T EDIT BELOW THIS LINE
-      const d = document, s = d.createElement('script');
+      const d = document,
+          s = d.createElement('script');
       s.src = 'https://vuepress-blog.disqus.com/embed.js';
       s.setAttribute('data-timestamp', String(new Date()));
       (d.head || d.body).appendChild(s);
     })();
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-#disqus_thread {
-  padding-left: 40px;
-  padding-right: 40px;
-}
+<style lang="stylus"
+       scoped
+>
+#disqus_thread
+  padding-left 40px
+  padding-right 40px
+
 </style>

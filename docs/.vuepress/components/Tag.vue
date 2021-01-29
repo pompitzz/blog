@@ -65,15 +65,17 @@ export default {
 };
 </script>
 
-<style scoped>
-.tag {
-  display: inline-flex;
-  margin-right: 8px;
-  padding: 0 12px;
-  color: white;
-  height: 24px;
-  font-weight: 700;
-  border-radius: 4px;
-  cursor: pointer;
-}
+<style lang="stylus"
+       scoped
+>
+.tag
+  display inline-flex
+  margin-right 8px
+  padding 0 12px
+  color white
+  height 24px
+  font-weight 700
+  border-radius 4px
+  cursor pointer
+
 </style>

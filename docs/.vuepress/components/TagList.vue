@@ -11,11 +11,11 @@
   </div>
 </template>
 <script>
-import {errorLogging} from "../utils/error";
-import Tag from "./Tag.vue";
+import { errorLogging } from '../utils/error';
+import Tag from './Tag.vue';
 
 export default {
-  name: "TagList",
+  name: 'TagList',
   components: { Tag },
   props: ['tags'],
   methods: {
@@ -29,7 +29,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

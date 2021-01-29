@@ -54,30 +54,30 @@
 </template>
 
 <script>
-import {isActive} from '@vuepress/theme-default/util/index.js'
-import DropdownTransition from '@theme/components/DropdownTransition.vue'
+import { isActive } from '@vuepress/theme-default/util/index.js';
+import DropdownTransition from '@theme/components/DropdownTransition.vue';
 
 export default {
   name: 'SidebarGroup',
 
   components: {
-    DropdownTransition
+    DropdownTransition,
   },
 
   props: [
     'item',
     'open',
     'collapsable',
-    'depth'
+    'depth',
   ],
 
   // ref: https://vuejs.org/v2/guide/components-edge-cases.html#Circular-References-Between-Components
   beforeCreate() {
-    this.$options.components.SidebarLinks = require('@theme/components/SidebarLinks.vue').default
+    this.$options.components.SidebarLinks = require('@theme/components/SidebarLinks.vue').default;
   },
 
-  methods: { isActive }
-}
+  methods: { isActive },
+};
 </script>
 
 <style lang="stylus">
