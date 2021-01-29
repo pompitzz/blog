@@ -1,15 +1,9 @@
 <template>
   <v-app class="page tag-main">
-    <div v-if="mobile">
-      <TagList :tags="tags"
-               class="mt-3"
-      />
-    </div>
-    <div v-else>
-      <TagListDrawer :tags="tags" />
-    </div>
+    <TagList :tags="tags"
+             class="mt-3"
+    />
     <Posts :posts="posts"
-           :style="{'margin-right': marginRight + 'px'}"
            class="mt-3"
     />
   </v-app>
@@ -20,11 +14,10 @@ import getPostsByPath from '../utils/htmlUtil';
 import { toArray } from '../utils/arrayUtil';
 import { getTagStore } from '../store/tag';
 import TagList from './TagList.vue';
-import TagListDrawer from './TagListDrawer.vue';
 import Posts from './Posts.vue';
 
 export default {
-  components: { Posts, TagListDrawer, TagList },
+  components: { Posts, TagList },
   props: {
     tagName: {
       type: String,
@@ -36,19 +29,9 @@ export default {
     return {
       tags: [],
       allPosts: [],
-      mobile: false,
     };
   },
-  methods: {
-    changeTageViewer() {
-      this.mobile = window.innerWidth < 2500;
-    },
-  },
   computed: {
-    marginRight() {
-      return this.mobile ? 0 : 200;
-    },
-
     // 태그전용 페이지면 태그 post만 보여준다.
     posts() {
       return this.tagName ? filterOnlyTagName(this.tagName, this.allPosts) : this.allPosts;
@@ -58,9 +41,6 @@ export default {
     this.allPosts = getPostsByPath('/', this.$site.pages);
     this.tags = getTagStore().getTagsWithCouting(this.allPosts);
     this.tags.sort((a, b) => b.count - a.count);
-
-    this.changeTageViewer();
-    window.addEventListener('resize', this.changeTageViewer);
   },
 };
 

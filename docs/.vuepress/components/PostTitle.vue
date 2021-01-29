@@ -1,6 +1,6 @@
 <template>
   <div class="d-block content-title">
-    <v-row style="width: 100%">
+    <div style="width: 100%">
       <div class="w-90 mx-auto">
         <h1 :class="mobile ? 'mobile-post-title' : ''">{{ post.title }}</h1>
       </div>
@@ -17,7 +17,7 @@
         />
       </div>
       <hr class="content-divider">
-    </v-row>
+    </div>
   </div>
 </template>
 
