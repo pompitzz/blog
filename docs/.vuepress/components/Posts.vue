@@ -19,24 +19,6 @@
                  class="post-card-img"
             />
           </div>
-          <!--          <div v-else-->
-          <!--               class="post-card-img-wrapper elevation-2"-->
-          <!--          >-->
-          <!--            <div class="post-card-img-half-wrapper">-->
-          <!--              <img :src="'/blog/img/' + post.frontmatter.img[0]"-->
-          <!--                   alt=""-->
-          <!--                   class="post-card-img"-->
-          <!--              />-->
-          <!--            </div>-->
-          <!--            <div class="post-card-img-half-wrapper">-->
-          <!--              <img :src="'/blog/img/' + post.frontmatter.img[1]"-->
-          <!--                   alt=""-->
-          <!--                   class="post-card-img"-->
-          <!--              />-->
-          <!--            </div>-->
-          <!--          </div>-->
-
-
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
           <div class="text-center pb-2 pt-0">

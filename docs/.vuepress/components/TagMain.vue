@@ -1,5 +1,5 @@
 <template>
-  <div class="page tag-main">
+  <v-app class="page tag-main">
     <div v-if="mobile">
       <TagList :tags="tags"
                class="mt-3"
@@ -12,7 +12,7 @@
            :style="{'margin-right': marginRight + 'px'}"
            class="mt-3"
     />
-  </div>
+  </v-app>
 </template>
 
 <script>

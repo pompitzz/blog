@@ -3,6 +3,7 @@ import {Map} from '../utils/map.js';
 function getTagStore() {
     const tagStore = new TagMap();
     tagStore.put('JAVA', new Tag('JAVA', '#eb2025'));
+    tagStore.put('Kotlin', new Tag('Kotlin', '#7882e3'));
     tagStore.put('Groovy', new Tag('Groovy', '#6398aa'));
     // tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));

@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "vuepress dev docs",
+    "serve": "vuepress dev docs",
     "build": "./build.sh",
     "test": "babel-node sidebarConfigMaker.js",
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"

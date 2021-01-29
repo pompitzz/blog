@@ -40,7 +40,7 @@ export default {
     small: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     resolveStyle() {
@@ -51,18 +51,18 @@ export default {
         'background-color': color,
         'border-color': color,
         'font-size': `${fontSize}px`,
-      }
+      };
     },
   },
   methods: {
     move() {
       if (this.routing) {
         const path = this.tagName === 'ALL' ? '/' : `/tag/${this.tagName}`;
-        this.$router.push(path).catch(errorLogging)
+        this.$router.push(path).catch(errorLogging);
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

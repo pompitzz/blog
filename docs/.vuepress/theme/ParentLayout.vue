@@ -24,24 +24,22 @@
       </template>
     </Sidebar>
 
-    <v-app>
-      <TagMain v-if="$page.frontmatter.home"
-               :tagName="tagName"
-      />
-      <TagMain v-else-if="$page.frontmatter.tagMain"
-               :tagName="$page.frontmatter.tagMain"
-      />
-      <Page v-else
-            :sidebar-items="sidebarItems"
-      >
-        <template #top>
-          <slot name="page-top" />
-        </template>
-        <template #bottom>
-          <slot name="page-bottom" />
-        </template>
-      </Page>
-    </v-app>
+    <TagMain v-if="$page.frontmatter.home"
+             :tagName="tagName"
+    />
+    <TagMain v-else-if="$page.frontmatter.tagMain"
+             :tagName="$page.frontmatter.tagMain"
+    />
+    <Page v-else
+          :sidebar-items="sidebarItems"
+    >
+      <template #top>
+        <slot name="page-top" />
+      </template>
+      <template #bottom>
+        <slot name="page-bottom" />
+      </template>
+    </Page>
   </div>
 </template>
 
