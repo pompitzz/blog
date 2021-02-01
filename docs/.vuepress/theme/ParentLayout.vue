@@ -46,7 +46,7 @@
 <script>
 import Home from '@theme/components/Home.vue';
 import Navbar from '@theme/components/Navbar.vue';
-import Page from '@theme/components/Page.vue';
+import Page from '../components/default/Page.vue';
 import Sidebar from '../components/default/Sidebar.vue';
 import { resolveSidebarItems } from '@vuepress/theme-default/util/index.js';
 import TagMain from '../components/TagMain.vue';

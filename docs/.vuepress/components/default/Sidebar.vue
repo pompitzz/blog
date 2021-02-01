@@ -1,5 +1,7 @@
 <template>
-  <aside class="sidebar">
+  <aside :class="$route.query.open ? 'hide' : ''"
+         class="sidebar"
+  >
     <NavLinks />
 
     <slot name="top" />
@@ -13,16 +15,14 @@
 </template>
 
 <script>
-import SidebarLinks from './SidebarLinks.vue'
-import NavLinks from '@theme/components/NavLinks.vue'
+import SidebarLinks from './SidebarLinks.vue';
+import NavLinks from '@theme/components/NavLinks.vue';
 
 export default {
   name: 'Sidebar',
-
   components: { SidebarLinks, NavLinks },
-
-  props: ['items']
-}
+  props: ['items'],
+};
 </script>
 
 <style lang="stylus">
@@ -59,6 +59,9 @@ export default {
 
     & > li:not(:first-child)
       margin-top .75rem
+
+.hide
+  transform translateX(-100%)
 
 @media (max-width: $MQMobile)
   .sidebar
