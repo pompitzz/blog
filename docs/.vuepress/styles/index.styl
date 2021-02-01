@@ -1,4 +1,8 @@
-@import "config.styl"
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+@import "palette.styl"
+
+body
+    font-family "Nanum Gothic", "Roboto", sans-serif
 
 .nav-links
     .nav-item
@@ -27,7 +31,6 @@ a
 
 h4
     font-size 1.1rem !important
-    margin-top 1rem !important
 
 .custom-block.details h4
     margin-top .5rem
@@ -113,7 +116,6 @@ a.sidebar-link
     font-size 1em
     font-weight 400
     display inline-block
-    color #2c3e50 !important
     border-left .25rem solid transparent
     padding .35rem 1rem .35rem 1.25rem
     line-height 1.4
@@ -144,3 +146,19 @@ a.sidebar-link
 
     &::-webkit-scrollbar-track
         background-color rgba(0, 0, 0, .1)
+
+.sidebar-links > li
+    > .sidebar-link
+        font-size 0.95em
+
+
+.sidebar-link-wrapper
+    display flex
+    padding 0.2rem 0
+
+    span
+        margin auto .5rem auto 0.2rem
+
+    > a.sidebar-link
+        padding-right 0 !important
+
