@@ -24,6 +24,8 @@ export default {
     if (this.$route.query.open) {
       const detailsElements = document.querySelectorAll('details');
       detailsElements.forEach(it => it.open = true);
+      const preElements = document.querySelectorAll('pre');
+      preElements.forEach(it => it.style.whiteSpace = 'pre-wrap');
     }
   },
 };
