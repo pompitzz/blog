@@ -1884,4 +1884,570 @@ fun lookForAlice3(people: List<Person2>) {
 > 람다 함수는 기본적으로 논로컬 리턴을 특징으로 하고 익명 함수는 자기 자신을 로컬 리턴을 특징으로 한다.
 > - 람다는 label을 통해 로컬 리턴이 가능하지만 익명 함수는 논로컬 리턴이 불가능하다.
 > - 익명 함수는 일반 함수와 같아보이지만 사실 람다 식의 문법적 편의일 뿐이다.  
-    :::
+:::
+
+## 9장. 제네릭스
+### 제네릭 타입 파라미터
+::: details 자세히
+- **자바와 다르게 코틀린은 raw 타입을 허용하지 않으므로 제네릭 타입의 타입인자를 컴파일러가 알 수 있게 해줘야 한다.**
+- 제네릭의 기본적인 특징은 자바랑 대부분 동일하다.
+
+```kotlin
+// 타입 파라미터에 여러 제약을 가할 수 있다.
+// T 타입은 반드시 CharSequence와 Appendable을 구현한 구현체여야 한다.
+fun <T> ensureTrailingRerioid(seq: T)
+        where T : CharSequence, T : Appendable {
+    if (!seq.endsWith('.')) {
+        seq.append('.')
+    }
+}
+
+// 타입파라미터는 nullable하므로 null 불가능하게 막을 수 있다.
+fun <T: Any> test(t: T): Nothing = TODO()
+```
+:::
+
+
+### 런타임의 제네릭: 타임 검사와 캐스트
+::: details 자세히
+- 코틀린도 자바와 동일하게 런타임엔 타입 파라미터 정보는 제거딘다.
+- 즉, 런타임에 타입 정보가 제거되므로 런타임에 제네릭 타입에 대한 검사는 불가능하다.
+- 예를들어 자바에선 타입을 검사할 때`stringList is List`와 같이 제네릭 타입을 제외하고 검사 하지만 **코틀린은 제네릭 클래스에 반드시 제네릭 타입을 명시해야 한다.**
+- `stringList is List<*>`와 같이 star projection을 활용할 수 있으며 런타임에 타입 정보를 알수있도록 **inline, reified**를 활용하면 `stringList is List<String>`와 같이 타입 검사가 가능하다.
+
+#### 실체화한 타입 파라미터를 사용한 함수 선언
+- 제네릭 클래스건 함수건 런타임엔 타입이 소거되어 확인이 불가능하지만, 인라인 함수의 타입 파라미터는 실체화시킬 수 있다.
+
+```kotlin
+// inline 함수와 reified를 활용하면 실체화된 타입으로 취급할 수 있다.
+inline fun <reified T> isA(value: Any) = value is T
+
+fun main() {
+    println(isA<String>(1)) // false
+    println(isA<String>("1")) // true
+
+    // 실체화된 타입을 활용할 수 있는 예(원하는 타입의 원소만 가져옴)
+    val items = listOf(1, "2", 3)
+    println(items.filterIsInstance<Int>())
+}
+```
+
+#### 왜 인라인 함수에서만 실체화된 타입을 쓸 수 있을까?
+- 컴파일러는 인라인 함수의 바이트코드를 해당 함수를 호출한 모든 곳에 복사하여 삽입하는데 이 때 컴파일러는 실체화된 타입 인자를 통해 함수를 호출하는 곳에서의 정확한 타입을 알 수 있게 해준다.
+  - **자바에서는 inline 함수도 보통의 함수처럼 호출하므로 reified를 사용하는 inline 함수를 호출할 수 없다.**
+- 실체화한 타입 파라미터가 있는 함수는 타입 인자를 바이트코드에 넣기 위해 일반 함수보다 더 많은 작업 필요하고 이를 위해 반드시 inline이 가능해야 한다.
+
+> 인라인 함수는 함수를 함수 파라미터로 가지는 등 성능에 효율적일 때 사용할 수도 있지만 위와 같이 실체화한 타입을 사용하기 위해 사용할 수도 있다.
+
+:::
+
+### 실체화한 타입으로 클래스 참조를 대신하기
+::: details 자세히
+```kotlin
+// class에 대한 정보를 파라미터로 받음
+fun <T> printClass(clazz: Class<T>) = println(clazz)
+
+// 실체화를 통해 타입 정보를 타입 파라미터로 받아서 활용할 수 있음
+inline fun <reified T> printClassUsingReified() = printClass(T::class.java)
+
+fun main() {
+    printClass(Integer::class.java)
+    printClassUsingReified<Integer>()
+}
+```
+
+> 실체화한 타입 파라미터는 타입 검사, 리플렉션 등으로 사용할 순 있지만 해당 인스턴스를 생성하거나, 동반 객체 메서드를 호출하는 등의 작업은 불가능하다.
+:::
+
+
+### 변성(variance): 제네릭과 하위 타입
+- 변성(공변성, 무공변성, 반공변성)은 제네릭 타입의 기저 타입은 동일하나 타입 파라미터가 다를 때 서로 어떤 관계를 가지는지에 대한 개념으로 제네릭을 제대로 활용하기 위해 꼭 필요한 개념이다.
+
+### 변성이 있는 이유: 인자를 함수에 넘기기
+::: details 자세히
+```kotlin
+fun addContent(list: MutableList<Any>) {
+    list.add(1)
+}
+
+fun main() {
+    val strings = mutableListOf("a")
+    // String은 Any의 하위타입이므로 List<Any>를 받는 함수 파라미터에 List<String>을 넘겨줄 수 있을거 같지만 
+    // 실제 addContent 함수에서 처럼 Integer 타입이 추가될 수 있어 런타임 에러가 발생하여 타입 안전성을 보장해줄 수 없어 컴파일이 불가능하다.
+    addContent(strings)  // ## 컴파일 에러 ##
+}
+```
+- stringList가 addContent의 파라미터로 들어가기 위해선 `MutableList\<String>이 MutableList\<Any>의 하위 타입`이 되어야 한다.
+- **이를 지키기 위해선 MutableList가 공변성을 지니면 된다.**
+
+> 코틀린에서 T는 T?의 하위 타입이다. 즉 한 클래스에 두 가지타입(nullable type, not nullable type)이 존재한다.
+:::
+
+### 공변성: 하위 타입 관계를 유지
+::: details 자세히
+- A가 B의 하위 타입일 때 Service\<A>가 Service\<B>의 하위 타입이라면 이는 공변성을 가진다.
+- **제네릭은 기본적으로 무공변성을 지니기 때문에** MutableList\<Any>에 MutableList\<String>을 넣을 수 없다. (하위 타입이 아니기 때문에)
+- 하지만 코틀린은은 타입 파라미터에 `out`이라는 명령어를 통해 타입 파라미터가 공변성을 가지도록 할 수 있다.
+
+```kotlin
+open class Animal
+class Cat: Animal()
+class Dog: Animal()
+
+// out을 붙여 공변성을 지니게 하면 타입 안전성을 위해 해당 클래스는 타입 파라미터를 오직 out위치(생산)에 둘 수 있다.
+class Herd<out T : Animal> {
+    // T가 out 위치에 있으므로 가능. 해당 타입을 읽어 반환하는건 가능하다.
+    fun getTypeParameter(): T = TODO()
+
+    // T가 in 위치에 있으므로 에러 발생. 소비(쓰기)는 불가능
+    // 공변성을 제공하게 되면 Herd<T>는 Any의 하위 타입인 Herd<Dog> or Herd<Cat>도 가능해진다. 
+    // ## 만약 add 메서드를 사용할 수 있게 되면 Herd<Cat>인 인스턴스에서 add(t: Dog)가 호출될 수 있고 Dog는 Cat이 될 수 없어 런타임 에러를 발생시킬 수 있다. ## 
+    // fun add(t: T) = TODO()
+}
+
+// Head<Dog> or Herd<Cat>이 오더라도 Head<>엔 소비하는 코드가 없고 오직 생산하는 코드만 있으므로 문제가 되지 않는다.
+// - Dog이던 Cat이던 결군 상위 타입인 Animal이 될 수 있기 때문에 런타임 에러를 유발하지 않는다.
+fun feedAll(animalHerd: Herd<Animal>) {
+    for (animal in animalHerd.animals) {
+        TODO()
+    }
+}
+
+fun catTest(catHerd: Herd<Cat>) {
+    // out을 지정해 공변성을 가지도록 하였으므로 Herd<Cat>은 Herd<Animal>의 하위 타입이 되어 호출이 가능하다.
+    feedAll(catHerd)
+}
+```
+- out 키워드를 붙이면 **공변성**은 제공해주나 이를 보장하기 위해 **내부에서 타입 파라미터를를 소비하는건 불가능하다.**
+- List는 읽기 전용이므로 내부에서 요소를 소비할 일이 없기 때문에 out을 붙여 공변성을 보장해주도록 했다. 그래서 **MutableList\<>와 달리 List\<>는 공변성을 제공한다.**
+
+> 변성(variance)은 코드에서 위험할 여지가 있는 함수를 호출하지 못하게 만들어 제네릭 타입의 안전성을 제공한다.
+> - out 키워드는 내부에서 소비를 막아 공변성을 제공하더라도 제네릭 타입을 안전하게 사용할 수 있음을 보장한다.
+:::
+
+### 반공변성: 뒤집힌 하위 타입 관계
+::: details 자세히
+```kotlin
+interface Comparator<in T> {
+  /**
+   * - 반공변하므로 Comparator<String>를 파라미터로 가지는 메서드에 Comparator<Any>가 전달될 수 있고 compare 메서드에 String 타입이 전달될 것이다.
+   * - String은 Any의 하위타입이므로 compare(e1: Any, e2: Any)에서 String이 타입이 전달되어 사용이 가능하다.
+   */
+  fun compare(e1: T, e2: T): Int
+
+  /** T가 out 위치에 있으므로 컴파일 에러가 발생한다.
+   *  - 현재 Comparator는 반공변성을 제공하므로 Comparator<Any>는 Comparator<String>의 하위 타입이 되어 Comparator<String>를 파라미터로 가지는 메서드에 Comparator<Any>를 전달할 수 있다.
+   *  - 만약 해당 메서드에서 Comparator<Any>가 전달되었는데 get()을 호출하게 되면 String인 T가 반환되어야 한다. 하지만 실제론 Any이기 때문에 하위 타입인 String으로 반환이 불가능하다.
+   */
+  // fun get(): T
+}
+
+
+class StringComparator: Comparator<String> {
+  override fun compare(e1: String, e2: String): Int {
+    TODO("Not yet implemented")
+  }
+}
+
+class AnyComparator: Comparator<Any> {
+  override fun compare(e1: Any, e2: Any): Int {
+    TODO("Not yet implemented")
+  }
+}
+
+// Comparator<String>를 파라미터로 가지지만 반공변성을 가지므로 Comparator<Any>가 올 수 있다.
+fun test(comparator: Comparator<String>) {
+  comparator.compare("1", "2")
+}
+
+fun main() {
+  val stringComparator = StringComparator()
+  test(stringComparator)
+
+  // Comparator는 반공변성을 가지므로 Comparator<Any>는 Comparator<String>의 하위타입이 되어 test 메서드를 호출할 수 있다.
+  val anyComparator = AnyComparator()
+  test(anyComparator)
+}
+```
+- 반공변성은 공변성의 반대이다. 반공변성을 가지는 클래스는 위와 같이 타입 값을 소비하는 것만 가능하다.
+- **Service\<A>가 Service\<B>의 하위 타입일 때 A가 B의 상위 타입이라면 Service\<T>는 타입T에 반공변하다.**
+- in 키워드를 붙이면 반공변을 제공할 수 있고 이를 보장하기 위해 해당 클래스에선 소비만 가능하다.(in 위치에만 사용 가능)
+
+```kotlin
+public interface Function1<in P1, out R> : Function<R> {
+    public operator fun invoke(p1: P1): R
+}
+```
+- Function1 인터페이스를 보면 in, out을 모두 가질 수 있는 것을 알 수 있다.
+:::
+
+### 사용 지점 변성: 타입이 언급되는 지점에서 변성 지정
+::: details 자세히
+- 위에서 사용한 out, in 방식은 **선언 지점 변성**이라고 하며 클래스 선언 시 변성을 지정하면 모든 장소에 영향을 끼치므로 편리하다.
+- 하지만 자바에서는 제네릭 클래스를 사용할 때마다 필요하다면 와일드 카드를 통해 직접 변성을 정의해야 하며 이를 **사용 지점 변성**이라고 한다.
+
+```java
+public interface Stream<T> extends BaseStream<T, Stream<T>> {
+    <R> Stream<R> map(Function<? super T, ? extends R> mapper);
+}
+```
+- 자바는 사용 지점 변성이기 때문에 위와 같이 Function을 사용하는 모든곳에서 직접 변성을 지정해야 한다.
+
+```kotlin
+// 코틀린도 사용 지점 변성을 지원한다. 만약 클래스 에서 이미 변성이 지정되어 있다면 따로 사용 지점 변성을 하지 않아도 된다.
+// 사용 지점 변성은 자바와 동일하기 떄문에 out T -> ? extends T, in T -> ? super T와 동일하다.
+fun<T> copyData(source: MutableList<out T>,
+                destination: MutableList<in T>) {
+    for (item in source) {
+        destination.add(item)
+    }
+}
+```
+:::
+
+### 스타 프로젝션: 타입 대신 *
+::: details 자세히
+- 자바의 와일드 카드와 동일하게 생각하면 된다.
+- Service\<*>는 사실 Service\<out Any?>로 동작한다고 할 수 있다.
+- *는 어떤 타입을 넣을 지 정확히 모르지만 제네릭 안전성을 위해선 오직 out만 가능할 것이다.
+
+> 스타 프로젝션은 자바 와일드 카드처럼 타입의 데이터를 읽기만하지만 어떤 타입인지 알 필요 없을 때 일반 제네릭 타입 파라미터보다 간결하게 사용할 수 있다.
+:::
+
+## 10장. 애노테이션과 리플렉션
+- 코틀린에서 애노테이션을 사용하는 문법은 자바와 똑같지만 선언할 때 사용하는 문법은 약간 다르다.
+- 리플렉션 API의 일반 구조도 자바와 같지만 세부 사항에서 약간 차이가 있다.
+
+### 애노테이션 선언과 적용
+::: details 자세히
+- 코틀린 애노테이션 인자를 지정하는 문법은 자바아 약간 다르다.
+  - 클래스를 애노테이션 인자로 지정 시 @Anno(MyClass::class)로 지정해야 함
+  - 다른 애노테이션을 인자로 지정할 때 @는 제외시켜야 한다.
+  - 배열을 인자로 지정하기 위해선 arrayOf를 사용해야 한다.
+    - 자바의 애노테이션 사용시 기본 value에 대해선 생략 가능
+  - 어떤 프로퍼티를 애노테이션의 인자에 넣기 위해선 const를 붙여줘야 한다.
+    - 애노테이션의 인자는 컴파일 시점에 알 수 있어야 하기 때문에 상수로 취급되어야 한다.
+
+```kotlin
+class HasTempFolder {
+    // 프로퍼티가 아닌 getter에 애노테이션을 명시하는 방법
+    // @property는 코틀린 프로퍼티 전체(getter, field 등등)에 적용될 수 있게 할 수 있다.
+    @get:MyAnno
+    val folder = Any()
+}
+
+// 애노테이션은 메타데이터이기 때문에 내부에 코드를 가질 수 없다. 그러므로 코틀린 애노테이션은 본문을 가질 수 없다.
+// 프로퍼티는 오직 주 생성자로 정의한다.
+annotation class MyAnno
+```
+:::
+
+### 자바 API를 애노테이션으로 제어
+- @JvmName, @JvmStatic, @JvmOverloads, @JvmField등 애노테이션으로 자바 언어를 대신할 수 있는 애노테이션들을 제공한다.
+
+### 리플렉션
+- 코틀린 리플렉션을 사용하기 위해 **자바가 제공하는 표준 리플렉션과**, **코틀린이 제공하는 코틀린 리플렉션 API**를 사용할 수 있어야 한다.
+- 자바 리플렉션에서 기본적인건 제공하지만 코틀린만의 특성을 지닌 Nullable 타입, 코틀린 고유개념에 대해선 코틀린 API가 필요하다.
+
+### 코틀린 리플렉션 API: KClass, KCallable, KFunction, KProperty
+::: details 자세히
+```kotlin
+class Person2(val name: String, val age: Int)
+
+fun foo(x: Int) = println(x)
+fun main() {
+    val kClass: KClass<Person2> = Person2::class
+    // 비확장 프로퍼티만
+    kClass.memberProperties.forEach { println(it.name) }
+
+    // 모든 프로퍼티
+    // KCallable은 함수와 프로퍼티를 아우르는 상위 인터페이스로 call 메서드가 들어있고 call 메서드로 함수나 프로퍼티(getter)를 호출할 수 있다.
+    val members: Collection<KCallable<*>> = kClass.members
+    members.forEach { println(it.name) }
+
+    // KFunction은 KCallable을 구현하므로 call 호출 가능
+    val kFunction = ::foo
+    kFunction.call()
+}
+```
+
+```kotlin
+var counter = 0
+fun main() {
+    // 최상위 프로퍼티는 Property0이다. 이 프로퍼티는 인자 없이 get을 호출한다.
+    val kProperty: KMutableProperty0<Int> = ::counter
+    kProperty.setter.call(10)
+    Assert.isTrue(kProperty.get() == 10)
+
+    val person = Person2("name", 1)
+    // 객체의 프로퍼티는 Property1로 get호출 시 객체를 넘겨주면 된다.
+    val ageProperty1: KProperty1<Person2, Int> = Person2::age
+    Assert.isTrue(ageProperty1.get(person) == 1)
+}
+```
+
+#### KFunctionN 인터페이스는 언제 어떻게 정의될까?
+- KFunction들은 컴파일러가 생성한 합성 타입이기 때문에 정의를 찾을 수 없다.(실제 해당 구현체를 조회할 수 없음)
+- **코틀린은 컴파일러가 자동으로 생성하는 방식을 활용하기 때문에 원하는 수만큼 많은 파라미터를 갖는 함수에 대한 인터페이스를 사용할 수 있는 것이다.**
+
+#### KClass 얻기
+- 컴파일 시점에 정확히 대상을 알고 있다면 ClassName::class로 얻을 수 있다.
+- 만약 런타임에 동적으로 얻길 원한다면 object.javaClass.kotlin을 사용한다.
+:::
+
+
+## 11장. DSL 만들기
+
+### API에서 DSL로
+::: details 자세히
+- 개발자의 궁극적인 목표는 코드의 가독성과 유지 보수성을 가장 좋게 유지하는 것이다.
+- 깔끔한 API는 클래스와 메서드 명으로 어떤 일을 수행하는지 명확히 알 수 있고 간결한 코드를 제공한다.
+- 코틀린이 제공하는 확장 함수, 중위 함수, 연산자 오버로딩 등등의 다양한 기능은 깔끔한 API를 작성하는데 많은 도움을 준다.
+- 코틀린의 기능을 잘 활용하면 깔끔한 API에서 더 나아가 DSL을 구축할 수 있다.
+:::
+
+
+### Domain-Specific Language
+::: details 자세히
+- 특정 도메인 영역에 특화된 언어들 중 가장 대표적인건 SQL, 정규식이 존재한다.
+  - SQL은 데이터베이스 조작, 정규식은 문자열 조작에 가장 적합하며 그 이외엔 거의 사용되지 않는다.
+- 이 둘은 자신들만의 규칙을 통해 범용 프로그래밍 언어에 비해 훨씬 더 깔끔하게 원하는 연산을 수행할 수 있다.
+- 범용 프로그래밍 언어는 보통 **명령적**특징을 가지지만, DSL은 **선언적**특징을 가진다.
+  - 명령적 언어는 원하는 연산을 위해 각 순서를 정확히 기술하지만, 선언적 언어는 원하는 결과만을 기술하고 세부적인건 내부 구현에 맡긴다.
+- DSL이 가지는 단점은 자기만의 고유한 문법이 있어 다른 언어와의 통합이 어렵고 DSL 문법을 따로 습득해야 하므로 개발비용이 높다.
+  - 이러한 단점을 해결하기 위해 내부 DSL이 많이 활용된다.
+:::
+
+### 내부 DSL
+- 내부 DSL은 범용 언어로 작성된 프로그램의 일부로, 범용 언어와 동일한 문법을 사용하여 DSL의 장점을 유지한채 단점을 해결할 수 있다.
+
+### DSL의 구조
+::: details 자세히
+- DSL과 일반 API를 명확히 구분하긴 어렵지만 DSL이 고유하게 가지는 특징은 자신만의 구조와 문법을 가지는 것이다.
+- 일반 라이브러리 API는 어떤 메서드를 호출하면 다른 호출과는 아무런 연결성이 존재하지 않는다.
+- 반면 DSL은 메서드 호출 시 정해진 DSL 문법에 의해서 구조화 된다.
+  - 코틀린에서는 람다를 중첩시키거나, 메서드 호출을 연쇄시키는 방법으로 DSL 구조를 만들 수 있다.
+:::
+
+
+### 구조화된 API 구축으로 DSL 만들기
+::: details 자세히
+- 코틀린의 확장함수의 특징과 수신 객체 지정 람다를 통해 구조화된 API를 손쉽게 만들 수 있다.
+```kotlin
+// 파라미터를 일반 람다로 정의
+fun myBuildString(
+        buildAction: (StringBuilder) -> Unit
+): String {
+    val sb = StringBuilder()
+    buildAction(sb)
+    return sb.toString()
+}
+
+// 파라미터를 확장 함수 타입의 람다로 정의(수신 객체 지정 람다)
+fun myBuildString2(
+        buildAction: StringBuilder.() -> Unit
+): String {
+    val sb = StringBuilder()
+    sb.buildAction()
+    return sb.toString()
+}
+
+// 실제 코틀린에 구현된 방식. apply를 활용하여 더 간다히 정의할 수 있다.
+fun buildStringByKotlinLib (
+        buildAction: StringBuilder.() -> Unit
+) = StringBuilder().apply { buildAction }.toString()
+
+// with를 활용할 수도 있다.
+fun buildStringUsingWith(
+        buildAction: StringBuilder.() -> Unit
+) = with(StringBuilder(), buildAction).toString()
+
+fun main() {
+    // 일반 람다이므로 it을 명시적으로 붙여줘야 한다.
+    myBuildString {
+        it.append("hello")
+        it.append("world")
+    }
+
+    // 수신 객체 지정 람다이므로 this가 자동적으로 바인딩되므로 it을 생략하여도 된다.
+    myBuildString2 {
+        append("hello")
+        append("world")
+    }
+}
+```
+:::
+
+
+### kotlinx 사용해보기
+::: details 자세히
+```kotlin
+fun buildDropdown() = createHTML()
+        .div(classes = "dropdown") {
+            button(classes = "btn dropdown-toggle") {
+                +"Dropdown"
+                span(classes = "caret")
+            }
+            ul(classes = "dropdown-menu") {
+                li { a("#") { +"Action" } }
+                li { a("#") { +"Another action" } }
+                li { role = "separator"; classes = setOf("divider") }
+                li { classes = setOf("dropdown-header"); +"Header" }
+                li { a("#") { +"Separated Link" } }
+            }
+        }
+
+
+fun buildDropdown2() = createHTML()
+        .div(classes = "dropdown") {
+            button(classes = "btn dropdown-toggle") {
+                +"Dropdown"
+                span(classes = "caret")
+            }
+            // 코틀린 언어로 구현되었기 때문에 커스텀하게 tag를 만들 수 있다.
+            dropdownMenu {
+                item("#", "Action")
+                item("#", "Another action")
+                divider()
+                dropdownHeader("Header")
+                item("#", "Separated Link")
+            }
+        }
+
+fun UL.item(href: String, text: String) = li { a(href) { +text } }
+fun UL.divider() = li { role = "separator"; classes = setOf("divider") }
+fun UL.dropdownHeader(text: String) = li { classes = setOf("dropdown-header"); +text }
+fun DIV.dropdownMenu(action: UL.() -> Unit) = ul(classes = "dropdown-menu", action)
+```
+:::
+
+### invoke 관례
+::: details 자세히
+```kotlin
+class Greeter(private val greeting: String) {
+    operator fun invoke(name: String) {
+        println("$greeting, $name!")
+    }
+}
+
+fun main() {
+    val greeter = Greeter("Hello")
+    // 관례로 인해 gretter.invoke("World")로 호출된다.
+    greeter("World")
+}
+```
+- 인스턴스를 함수처럼 호출하면 invoke가 자동으로 호출된다.
+
+#### invoke 활용하기
+```kotlin
+class DEPENDENCIES {
+    fun compile(text: String) {
+        println(text)
+    }
+    
+    // 자기자신을 호출할 때 스스로에 대한 람다를 받아 dsl 구문으로 받을 수 있다.
+    operator fun invoke(body: DEPENDENCIES.() -> Unit) {
+        body()
+    }
+}
+
+fun main() {
+    val dependencies = DEPENDENCIES()
+    // invoke를 활용하면 dsl형식과 일반 메서드 호출 형식을 모두 지원하도록 할 수 있다.
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-web")
+    }
+    dependencies.compile("org.springframework.boot:spring-boot-starter-web")
+}
+```
+:::
+
+### 중위 함수 활용
+::: details 자세히
+```kotlin
+interface Matcher<T> {
+    fun test(value: T)
+}
+
+class startWith(val prefix: String) : Matcher<String> {
+    override fun test(value: String) {
+        if (!value.startsWith(prefix)) {
+            throw AssertionError("String $value does not start with $prefix")
+        }
+    }
+}
+
+// 중위 함수를 정의
+infix fun <T> T.should(matcher: Matcher<T>) = matcher.test(this)
+
+fun test1() {
+    // DSL을 활용하면 테스트 코드를 깔끔하게 유지시킬 수 있다.
+    "hello" should startWith("h")
+}
+
+
+// start는 단순히 dsl 문법을 위해 사용되는 것
+object start
+
+infix fun String.should(x: start) = StartWrapper(this)
+
+class StartWrapper(val value: String) {
+    infix fun with(prefix: String) =
+            if (value.startsWith(prefix))
+                Unit
+            else
+                throw AssertionError("String $value does not start with $prefix")
+}
+
+fun test2() {
+    // 중위 함수를 활용하면 이렇게도 가능
+    "hello" should start with "h"
+}
+```
+:::
+
+### 원시 타입에 확장 프로퍼티를 활용하여 날짜 처리를 간단히
+::: details 자세히
+```kotlin
+// 확장 프로퍼티는 백킹필드를 가질 수 없으므로 getter로 직접 명시하여야 한다.
+val Int.days: Period get() = Period.ofDays(this)
+
+val Period.ago: LocalDateTime get() = LocalDateTime.now() - this
+val Period.fromNow: LocalDateTime get() = LocalDateTime.now() + this
+val LocalDateTime.toDate get() = this.toLocalDate()
+
+fun main() {
+    Assert.isTrue(1.days.ago.toDate == LocalDateTime.now().minusDays(1).toLocalDate())
+    Assert.isTrue(1.days.fromNow.toDate == LocalDateTime.now().plusDays(1).toLocalDate())
+}
+```
+:::
+
+### SQL DSL 만들기
+::: details 자세히
+```kotlin
+// Table 내부에서 컬럼에 대한 기능을 확장하여 Table에서만 사용할 수 있도록 한다.(이런걸 멤버 확장이라고 한다)
+open class Table {
+    fun integer(name: String) = Column<Int>()
+    fun varchar(name: String, length: Int) = Column<String>()
+    
+    fun <T> Column<T>.primaryKey(): Column<T> = TODO()
+    // 자동 증가는 int만 되도록 제한을 건다
+    fun Column<Int>.autoIncrement(): Column<Int> = TODO()
+}
+
+class Column<T>
+
+// Table에서 정의한 타입들을 활용하여 컬럼을 지정할 수 있다.
+object Item: Table() {
+    val id = integer("id").primaryKey().autoIncrement()
+    val name = varchar("name", 50)
+}
+fun main() {
+    // 컬럼에 필요한 함수들은 Table 내부에서 확장하여 사용하기 때문에 외부에선 호출을 불가능하게 캡슐화할 수 있다.
+    // Column<Int>().primaryKey()
+}
+```
+:::
+
+> 코틀린은 다양한 기능으로 내부 DSL을 제공해줄 수 있으면서, 코틀린은 정적 타입 언어이므로 코틀린으로 내부 DSL을 만들면 자동 완성 및 문법 안정성을 보장받으면서 DSL를 사용할 수 있다.
