@@ -11,7 +11,7 @@ tags:
 - 코틀린은 자바 코드와의 상호운용성을 중시한다.
 - 코틀린은 정적 타입 지정 언어이다.
 
-### 정적 타입 언어 장점
+### 정적 타입 언어의 장점
 ::: details 자세히
 - **성능**
     - 런타임에 어떤 메서드를 호출해야할 지 알아내지 않아도되므로 성능이 더 우수
@@ -139,25 +139,25 @@ class Sum(var left: Expr, val right: Expr) : Expr
 
 // 스마트 캐스팅을 지원한다.
 fun eval(e: Expr): Int =
-        when(e) {
-            is Num -> e.value
-            is Sum -> eval(e.left) + eval(e.right)
-            else -> throw IllegalArgumentException()
+        when (e) {
+          is Num -> e.value
+          is Sum -> eval(e.left) + eval(e.right)
+          else -> throw IllegalArgumentException()
         }
 
 /**
  *  클래스의 프로퍼티를 스마트 캐스팅하고 싶다면 val이면서 커스텀 접근자가 정의되어 있지 않아야 한다.
- *  - var거나 커스텀 접근자가 있으면 언제가 같은 타입을 반환해준다는 것을 확신할 수 없기 때문에.. 
-  */
+ *  - var거나 커스텀 접근자가 있으면 언제나 같은 타입을 반환해준다는 것을 확신할 수 없기 때문에..
+ */
 fun main() {
-    val sum = Sum(Num(1), Num(2))
-    if (sum.left is Num) {
+  val sum = Sum(Num(1), Num(2))
+  if (sum.left is Num) {
     //  println(sum.left.value) 컴파일 에러 (left는 var이다)
-    }
-    // 스마트 캐스팅 가능(rifht는 val이기 때문)
-    if (sum.right is Num) { 
-        println(sum.right.value)
-    }
+  }
+  // 스마트 캐스팅 가능(rifht는 val이기 때문)
+  if (sum.right is Num) {
+    println(sum.right.value)
+  }
 }
 ```
 - 타입검사와 동시에 형변환을 하도록하여 스마트 캐스팅 지원
@@ -248,44 +248,52 @@ fun regognize(c: Char): String =
 fun <T> joinToString(collection: Collection<T>, separator: String = ","): String {
     val builder = StringBuilder()
     for ((index, element) in collection.withIndex()) {
-        if (index > 0) builder.append(separator)
-        builder.append(element)
+      if (index > 0) builder.append(separator)
+      builder.append(element)
     }
-    return builder.toString()
+  return builder.toString()
 }
 
 fun main() {
-    joinToString(separator = "|", collection = listOf(1, 2, 3))
+  joinToString(separator = "|", collection = listOf(1, 2, 3))
 }
 ```
-- 아규먼트에 디폴트 값을 지정할 수 있고 네이밍이 가능하다.
+
+- 아규먼트에 디폴트 값을 지정할 수 있고 호출 시 네이밍이 가능하다.
 - named argument로 자바의 빌더를 대체할 수 있다.
 
 #### Default Argument를 자바에도 지원하려면?
+
 - @JvmOverloads를 붙이면 각각의 아규먼트에 맞는 오버로딩 메서드를 만들어준다.
-:::
-  
+  :::
+
 ### 최상위 함수와 최상위 프로퍼티
+
 ::: details 자세히
+
 #### 최상위 함수는 어떻게 생성될까?
-- 바이트코드로 변환 후 자바로 디컴파일해보면 파일명Kt라는 클래스의 static 메서드로 정의된다.
+
+- 바이트코드로 변환 후 자바로 디컴파일해보면 해당 코드가 작성된 파일명Kt라는 클래스의 static 메서드로 정의된다.
 
 #### 최상위 프로퍼티 val? const?
+
 - 최상위 프로퍼티에 val, var 모두 사용 가능하다.
 - val은 재할당이 불가능한건 맞지만 실제 호출 시 내부의 getter를 호출한다.
-- 상수를 선언할 때 getter를 호출하는건 자연스럽지 못하므로 `const val NAME = "Dexter`와 같이 const를 붙여주자.
-:::
+- 상수를 선언할 때 getter를 호출하는건 자연스럽지 못하므로 `const val NAME = "Dexter"`와 같이 const를 붙여주자.
+  :::
 
 ### 확장 함수
+
 ::: details 자세히
+
 - 기존에 만들어져 있던 클래스의 함수를 외부에서 추가하여 확장시키는 기법
 
 ```kotlin
-// String의 확장 함수 정의. 확장이 될 대상을 **수신 객체 타입**이라고 칭하며 실제 함수가 호출된 수신 객체는 해당 함수에서 this로 참조가능
-fun String.lastChar(): Char = this[this.length -1]
+// String의 확장 함수 정의. 확장이 될 대상을 **수신 객체 타입**이라고 칭하며 호출된 수신 객체는 해당 함수에서 this로 참조가능
+fun String.lastChar(): Char = this[this.length - 1]
 ```
 
-> 확장 함수는 캡슐화를 지키므로 수신 객체를 this로 참조하더라도 확장 함수에서는 접근이 제한된 대상은 접근이 불가능
+> 확장 함수는 캡슐화를 지키므로 수신 객체를 this로 참조하더라도 확장 함수에서는 확장할 클래스 내부로 접근이 제한된 대상은 접근이 불가능
 
 #### 자바에서 확장 함수 호출하기
 - 확장함수는 내부적으로 수신 객체를 첫번째 인자로 갖는 static method로 정의된다.
@@ -378,13 +386,14 @@ for ((key, value) in mutableMapOf(Pair("A", 1))) {
 
 ### 문자열 및 정규식 다루기
 ::: details 자세히
+
 ```kotlin
 fun regex() {
-    // 명시적으로 정규 표현식을 표현
-    val regex = "\\d\\d".toRegex()
+  // 명시적으로 정규 표현식을 표현
+  val regex = "\\d\\d".toRegex()
 
-    // 삼중 따옴표는 역슬래쉬를 두번써 이스케이핑이 필요 없다.
-    val regex2 = """\d\d""".toRegex()
+  // 삼중 따옴표는 역슬래쉬를 한번만 사용할 수 있다.
+  val regex2 = """\d\d""".toRegex()
 }
 ```
 :::
@@ -421,24 +430,28 @@ class Button : Clickable {
 - `abstract`는 자바와 동일하게 추상 메서드를 의미한다.
 
 #### 스마트 캐스트와 상속
+
 - 이전에 스마트 캐스팅을 위해선 클래스의 프로퍼티가 val이면서 커스텀 접근자를 구현하지 않아야 가능하다고 했다.
-- 이는 클래스에도 적용되기 때문에 만약 클래스가 open되어 있다면 스마트 캐스트는 불가할 것이다.
-:::
-  
+- 이는 클래스에도 적용되기 때문에 만약 클래스가 open되어 있다면 스마트 캐스트는 불가하다.
+  :::
+
 ### 가시성 변경자
+
 ::: details 자세히
-- 코틀린은 기본이 public이며 default 접근자는 따로 존재하지 않는다.
-- 모듈 내부에서만 사용할 수 있는 internal 접근자를 따로 제공한다.
+
+- 코틀린은 기본 가시성변경자가 public이며 default 접근자는 따로 존재하지 않는다.
+- 모듈 내부에서만 사용할 수 있는 internal 접근자를 따로
+  제공한다. [(모듈 범위 문서 참고)](https://kotlinlang.org/docs/reference/visibility-modifiers.html#modules)
 - public, internal, private, protected의 가시성 변경자가 존재하며 protected를 제외하곤 최상위에 선언도 가능하다.
 
 ```kotlin
 interface Focusable {
-    fun showOff() = println("I`m Focusable showOff")
+  fun showOff() = println("I`m Focusable showOff")
 }
 
 internal open class TalkativeButton : Focusable {
-    private fun yell() = println("yell")
-    protected fun whisper() = println("whisper")
+  private fun yell() = println("yell")
+  protected fun whisper() = println("whisper")
 }
 
 // 확장하려는 클래스가 internal이므로 가시성이 수준이 같거나 더 낮아야 한다.
@@ -490,7 +503,7 @@ sealed class Expr2 {
 }
 
 // 봉인 클래스를 활용하면 when절에서 else를 사용하지 않아도 된다.
-// 새로운 중첩 클래스가 생기면 when절을 반드시 구현해야 하므로 안전하다.
+// 새로운 중첩 클래스가 생겼을 때 해당 클래스에 대해 when절을 구현하지 않으면 컴파일 에러가 발생한다.
 fun eval2(e: Expr2): Int =
         when (e) {
             is Expr2.Num -> TODO()
@@ -531,10 +544,11 @@ class SubUser(name: String) : User(name)
 
 ```kotlin
 interface Member {
-    val name: String
-    // 다른 프로퍼티를 활용하여 커스텀 접근자를 가지는 프로퍼티를 구현할 수도 있다.(상태를 가지면 안되므로 Backing Field가 존재 안함)
-    val listCharName: Char
-        get() = name.lastChar
+  val name: String
+
+  // 다른 프로퍼티를 활용하여 커스텀 접근자를 가지는 프로퍼티를 구현할 수는 있다.(상태를 가지면 안되므로 Backing Field가 존재 안함)
+  val listCharName: Char
+    get() = name.lastChar
 }
 
 // 추상 프로퍼티는 반드시 구현되어야 한다.
@@ -548,18 +562,18 @@ class PrivateMember(override val name: String) : Member {}
 
 ```kotlin
 class AUser(val name: String) {
-    var address: String = "unselected"
-        set(value: String) {
-            // backing field는 `field`로 접근가능 (get에서 field를 참조할 수 있지만 읽기만 가능하다.)
-            print("백킹 필드값(이전값): $field, 새로운 값: $value")
-            field = value
-        }
+  var address: String = "unselected"
+    set(value: String) {
+      // backing field는 `field`로 접근가능 (get에서는 field를 참조할 수 있지만 읽기만 가능하다.)
+      print("백킹 필드값(이전값): $field, 새로운 값: $value")
+      field = value
+    }
 }
 
 fun main() {
-    val aUser = AUser("name")
-    aUser.address = "서울시" // setter 호출
-    aUser.address = "부산시" // setter 호출
+  val aUser = AUser("name")
+  aUser.address = "서울시" // setter 호출
+  aUser.address = "부산시" // setter 호출
 //    ## 출력 ##
 //    백킹 필드값(이전값): unselected, 새로운 값: 서울시
 //    백킹 필드값(이전값): 서울시, 새로운 값: 부산시
@@ -711,7 +725,8 @@ fun main() {
   // 람다를 변수에 직접 할당할 수 있다.
   val sum = { x: Int, y: Int -> x + y }
 
-  // 람다 본문을 바로 호출하도록 할 수 있다.
+  // { println("Hello World") }()
+  //  람다를 위와 같이 호출할 수도 있지만 더 간단하게 run 함수를 활용하면 람다 본문을 호출할 수 있다.
   run { println("Hello World") }
 }
 ```
@@ -804,8 +819,10 @@ fun createRunable() = Runnable { println("RUN!") }
 val runnable = Runnable { println("RUN!") }
 ```
 
-- 컴파일러가 자동으로 람다를 함수형 인터페이스 익명 클래스로 바꾸지 못할 상황에는 SAM 생성자를 활용한다.
-  :::
+- 함수형 인터페이스의 인스턴스를 반환하는 메서드가 있으면 람다로 반환이 불가능하고 SAM 생성자로 감싸주어야 한다.
+-
+
+:::
 
 ### 수신 객체 지정 람다: with, apply
 
@@ -1734,25 +1751,20 @@ fun foo(l: Lock) {
 :::
 
 ### 컬렉션 연산 인라이닝
-
 ::: details 자세히
-
 - 컬렉션의 filter 같은 함수는 인라인 함수이기 때문에 filter 함수의 바이트코드는 그 함수에 전달된 람다 본문의 바이트코드와 함께 filter를 호출한 위치에 들어가게 된다.
   - 그러므로 직접 if문을 작성하는 것과 바이트코드는 거의 동일하여 성능은 차이가 없다.
     :::
 
 ### 시퀀스와 인라이닝
-
 ::: details 자세히
 
-- 시퀀스는 지연 계산을 해야하기 때문에 filter와 같은 함수를 객체로 가지고 있어야 하기 때문에 인라이닝할 수 없다.
+- 시퀀스는 지연 계산을 위해 filter와 같은 함수를 객체로 가지고 있어야 하므로 인라이닝할 수 없다.
 - **그러므로 지연 계산을 지원하는 시퀀스가 기본 컬렉션 함수보다 성능이 항상 좋은건 아니다. 오직 지연 계산의 이점이 필요할때만 성능이 좋다**
   :::
 
 ### 함수를 인라인으로 선언해야 할 때
-
 ::: details 자세히
-
 - 람다를 인자로 받는 함수를 인라이닝하면 이점이 많다.
   - JVM은 함수 호출과 람다를 인라이닝 해줄 정도로 똑똑하지 못하기 때문에 성능을 향상시킬 가능성이 있다.
   - 인라이닝을 활용하면 함수 호출 비용을 줄일 수 있고, 람다로 표현하는 클래스와 람다 인스턴스에 해당하는 객체를 만들 필요가 없어진다.
@@ -1760,26 +1772,20 @@ fun foo(l: Lock) {
     :::
 
 ### 함수를 인라인으로 선언하지 말아야 할 때
-
 ::: details 자세히
-
 - 람다를 인자로 받는 함수 같은 경우가 아니라 일반 함수 호출은 경우엔 JVM이 이미 강력하게 최적화를 시켜준다.
   - JIT 컴파일러가 기계어로 변환할 때 캐싱기법등을 활용하여 일반 함수 호출에 대한 최적화를 시켜준다.
   - 만약 코틀린 인라이닝을 사용하게 되면 바이트코드 중복이 발생하므로 오히려 성능에 불리하다.
     :::
 
 ### 인라인 함수를 사용할 때 주의할 점
-
 ::: details 자세히
-
 - 인라인 함수는 해당 함수의 본문에 해당하는 바이트코드를 호출 지점에 복사하기 때문에 인라인 함수의 코드 크기가 크다면 바이트코드가 상대적으로 매우 커질 수 있으므로 인라인 함수는 최대한 짧게 정의하는 것이 좋다.
   - 코틀린 기본 지원 inline 함수들을 보면 모두 크기가 아주 작다는 사실을 알 수 있다.
     :::
 
 ### 인라인 함수 활용 예
-
 ::: details 자세히
-
 ```kotlin
 fun main() {
   // Closeable을 구현체들은 inline 확장함수인 use를 사용할 수 있다.
@@ -1792,13 +1798,11 @@ fun doRun(bufferedReader: BufferedReader): List<String> {
   return listOf(bufferedReader.readLine())
 }
 ```
-
 :::
 
 ### 인라인 함수의 non-local return
 
 ::: details 자세히
-
 ```kotlin
 fun lookForAlice(people: List<Person2>) {
   // 일반적인 for문에서는 발견즉시 for문을 종료하여 함수를 리턴할 수 있다.
@@ -1823,13 +1827,11 @@ fun lookForAlice(people: List<Person2>) {
   println("Alice is not found")
 }
 ```
-
 :::
 
 ### 레이블을 활용한 로컬 return
 
 ::: details 자세히
-
 ```kotlin
 fun lookForAlice2(people: List<Person2>) {
   // 로컬 리턴은 for 루프의 break과 비슷한 역할을 수행해준다.
@@ -1843,7 +1845,6 @@ fun lookForAlice2(people: List<Person2>) {
     if (it.name === "Alice") return@forEach
   }
 }
-
 ```
 
 > 람다식의 레이블을 명시하면 함수명을 활용할 수 없다. 그리고 람다 식에는 레이블이 2개 이상 붙을 수 없다.
@@ -1881,10 +1882,10 @@ fun lookForAlice3(people: List<Person2>) {
 
 - 익명함수는 일반 함수와 동일하나 함수 이름이나 파라미터 타입을 생략할 수 있는 차이일 뿐이다.
 
-> 람다 함수는 기본적으로 논로컬 리턴을 특징으로 하고 익명 함수는 자기 자신을 로컬 리턴을 특징으로 한다.
+> 람다 함수는 기본적으로 논로컬 리턴을 특징으로 하고 익명 함수는 로컬 리턴을 특징으로 한다.
 > - 람다는 label을 통해 로컬 리턴이 가능하지만 익명 함수는 논로컬 리턴이 불가능하다.
 > - 익명 함수는 일반 함수와 같아보이지만 사실 람다 식의 문법적 편의일 뿐이다.  
-:::
+    :::
 
 ## 9장. 제네릭스
 ### 제네릭 타입 파라미터
@@ -1903,19 +1904,23 @@ fun <T> ensureTrailingRerioid(seq: T)
 }
 
 // 타입파라미터는 nullable하므로 null 불가능하게 막을 수 있다.
-fun <T: Any> test(t: T): Nothing = TODO()
+fun <T : Any> test(t: T): Nothing = TODO()
 ```
+
 :::
 
-
 ### 런타임의 제네릭: 타임 검사와 캐스트
+
 ::: details 자세히
-- 코틀린도 자바와 동일하게 런타임엔 타입 파라미터 정보는 제거딘다.
+
+- 코틀린도 자바와 동일하게 런타임엔 타입 파라미터 정보는 제거된다..
 - 즉, 런타임에 타입 정보가 제거되므로 런타임에 제네릭 타입에 대한 검사는 불가능하다.
 - 예를들어 자바에선 타입을 검사할 때`stringList is List`와 같이 제네릭 타입을 제외하고 검사 하지만 **코틀린은 제네릭 클래스에 반드시 제네릭 타입을 명시해야 한다.**
-- `stringList is List<*>`와 같이 star projection을 활용할 수 있으며 런타임에 타입 정보를 알수있도록 **inline, reified**를 활용하면 `stringList is List<String>`와 같이 타입 검사가 가능하다.
+- `stringList is List<*>`와 같이 star projection을 활용할 수 있으며 런타임에 타입 정보를 알수있도록 **inline, reified**를
+  활용하면 `stringList is List<String>`와 같이 타입 검사가 가능하다.
 
 #### 실체화한 타입 파라미터를 사용한 함수 선언
+
 - 제네릭 클래스건 함수건 런타임엔 타입이 소거되어 확인이 불가능하지만, 인라인 함수의 타입 파라미터는 실체화시킬 수 있다.
 
 ```kotlin
@@ -1967,50 +1972,52 @@ fun main() {
 ::: details 자세히
 ```kotlin
 fun addContent(list: MutableList<Any>) {
-    list.add(1)
+  list.add(1)
 }
 
 fun main() {
-    val strings = mutableListOf("a")
-    // String은 Any의 하위타입이므로 List<Any>를 받는 함수 파라미터에 List<String>을 넘겨줄 수 있을거 같지만 
-    // 실제 addContent 함수에서 처럼 Integer 타입이 추가될 수 있어 런타임 에러가 발생하여 타입 안전성을 보장해줄 수 없어 컴파일이 불가능하다.
-    addContent(strings)  // ## 컴파일 에러 ##
+  val strings = mutableListOf("a")
+  // String은 Any의 하위타입이므로 List<Any>를 받는 함수 파라미터에 List<String>을 넘겨줄 수 있을거 같지만 
+  // 실제 addContent 함수에서 처럼 Integer 타입이 추가될 수 있어 런타임 에러가 발생하여 타입 안전성을 보장해줄 수 없어 컴파일이 불가능하다.
+  addContent(strings)  // ## 컴파일 에러 ##
 }
 ```
-- stringList가 addContent의 파라미터로 들어가기 위해선 `MutableList\<String>이 MutableList\<Any>의 하위 타입`이 되어야 한다.
-- **이를 지키기 위해선 MutableList가 공변성을 지니면 된다.**
+
+- strings가 addContent의 파라미터로 들어가기 위해선 일반적인 함수 호출 방식에 따라 `MutableList<String>이 MutableList<Any>의 하위 타입`이 되어야 한다.
 
 > 코틀린에서 T는 T?의 하위 타입이다. 즉 한 클래스에 두 가지타입(nullable type, not nullable type)이 존재한다.
 :::
 
 ### 공변성: 하위 타입 관계를 유지
+
 ::: details 자세히
+
 - A가 B의 하위 타입일 때 Service\<A>가 Service\<B>의 하위 타입이라면 이는 공변성을 가진다.
-- **제네릭은 기본적으로 무공변성을 지니기 때문에** MutableList\<Any>에 MutableList\<String>을 넣을 수 없다. (하위 타입이 아니기 때문에)
+- **제네릭은 기본적으로 무공변성을 지니기 때문에** MutableList\<Any>을 기대하는 곳에 MutableList\<String>을 넣을 수 없다. (하위 타입이 아니기 때문에)
 - 하지만 코틀린은은 타입 파라미터에 `out`이라는 명령어를 통해 타입 파라미터가 공변성을 가지도록 할 수 있다.
 
 ```kotlin
 open class Animal
-class Cat: Animal()
-class Dog: Animal()
+class Cat : Animal()
+class Dog : Animal()
 
 // out을 붙여 공변성을 지니게 하면 타입 안전성을 위해 해당 클래스는 타입 파라미터를 오직 out위치(생산)에 둘 수 있다.
 class Herd<out T : Animal> {
-    // T가 out 위치에 있으므로 가능. 해당 타입을 읽어 반환하는건 가능하다.
-    fun getTypeParameter(): T = TODO()
+  // T가 out 위치에 있으므로 가능. 해당 타입을 읽어 반환하는건 가능하다.
+  fun getTypeParameter(): T = TODO()
 
-    // T가 in 위치에 있으므로 에러 발생. 소비(쓰기)는 불가능
-    // 공변성을 제공하게 되면 Herd<T>는 Any의 하위 타입인 Herd<Dog> or Herd<Cat>도 가능해진다. 
-    // ## 만약 add 메서드를 사용할 수 있게 되면 Herd<Cat>인 인스턴스에서 add(t: Dog)가 호출될 수 있고 Dog는 Cat이 될 수 없어 런타임 에러를 발생시킬 수 있다. ## 
-    // fun add(t: T) = TODO()
+  // T가 in 위치에 있으므로 에러 발생. 소비(쓰기)는 불가능
+  // 공변성을 제공하게 되면 Herd<T>는 하위 타입인 Herd<Dog> or Herd<Cat>도 가능해진다. 
+  // ## 만약 add 메서드를 사용할 수 있게 되면 Herd<Cat>인 인스턴스에서 add(t: Dog)가 호출될 수 있고 Dog는 Cat이 될 수 없어 런타임 에러를 발생시킬 수 있다. ## 
+  // fun add(t: T) = TODO()
 }
 
 // Head<Dog> or Herd<Cat>이 오더라도 Head<>엔 소비하는 코드가 없고 오직 생산하는 코드만 있으므로 문제가 되지 않는다.
 // - Dog이던 Cat이던 결군 상위 타입인 Animal이 될 수 있기 때문에 런타임 에러를 유발하지 않는다.
 fun feedAll(animalHerd: Herd<Animal>) {
-    for (animal in animalHerd.animals) {
-        TODO()
-    }
+  for (animal in animalHerd.animals) {
+    TODO()
+  }
 }
 
 fun catTest(catHerd: Herd<Cat>) {
@@ -2031,7 +2038,7 @@ fun catTest(catHerd: Herd<Cat>) {
 interface Comparator<in T> {
   /**
    * - 반공변하므로 Comparator<String>를 파라미터로 가지는 메서드에 Comparator<Any>가 전달될 수 있고 compare 메서드에 String 타입이 전달될 것이다.
-   * - String은 Any의 하위타입이므로 compare(e1: Any, e2: Any)에서 String이 타입이 전달되어 사용이 가능하다.
+   * - String은 Any의 하위타입이므로 compare(e1: Any, e2: Any)에 String이 타입이 전달되어 사용이 가능하다.
    */
   fun compare(e1: T, e2: T): Int
 
