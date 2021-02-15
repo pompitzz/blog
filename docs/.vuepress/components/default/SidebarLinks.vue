@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import SidebarGroup from './SidebarGroup.vue'
-import SidebarLink from './SidebarLink.vue'
-import {isActive} from '@vuepress/theme-default/util/index.js'
+import SidebarGroup from './SidebarGroup.vue';
+import SidebarLink from './SidebarLink.vue';
+import { isActive } from '@vuepress/theme-default/util/index.js';
 
 export default {
   name: 'SidebarLinks',
@@ -33,7 +33,7 @@ export default {
   props: [
     'items',
     'depth',  // depth of current sidebar links
-    'sidebarDepth' // depth of headers to be extracted
+    'sidebarDepth', // depth of headers to be extracted
   ],
 
   data() {
@@ -43,24 +43,13 @@ export default {
     }
   },
 
-  watch: {
-    '$route'() {
-      this.refreshIndex()
-    }
-  },
-
   created() {
     this.refreshIndex()
   },
 
   methods: {
     refreshIndex() {
-      const index = resolveOpenGroupIndex(
-          this.$route,
-          this.items
-      )
-      this.openIndexMap = {};
-      if (index > -1) {
+      for (let index = 0; index < this.items.length; index++) {
         this.openIndexMap[index] = true;
       }
     },
