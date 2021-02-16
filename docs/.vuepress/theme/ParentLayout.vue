@@ -23,12 +23,15 @@
         <slot name="sidebar-bottom" />
       </template>
     </Sidebar>
-
-    <TagMain v-if="$page.frontmatter.home"
-             :tagName="tagName"
+    <RightBar :currentPath="$route.path"
+              :isTagMain="$page.frontmatter.home || $page.frontmatter.tagMain"
+              :items="sidebarItems"
+              :tags="tags"
     />
-    <TagMain v-else-if="$page.frontmatter.tagMain"
-             :tagName="$page.frontmatter.tagMain"
+    <TagMain v-if="$page.frontmatter.home || $page.frontmatter.tagMain"
+             :allPosts="allPosts"
+             :tagName="$page.frontmatter.home ? null : $page.frontmatter.tagMain"
+             :tags="tags"
     />
     <Page v-else
           :sidebar-items="sidebarItems"
@@ -50,11 +53,15 @@ import Page from '../components/default/Page.vue';
 import Sidebar from '../components/default/Sidebar.vue';
 import { resolveSidebarItems } from '@vuepress/theme-default/util/index.js';
 import TagMain from '../components/TagMain.vue';
+import RightBar from '../components/RightBar.vue';
+import getPostsByPath from '../utils/htmlUtil.js';
+import { getTagStore } from '../store/tag.js';
 
 export default {
   name: 'Layout',
 
   components: {
+    RightBar,
     TagMain,
     Home,
     Page,
@@ -65,6 +72,8 @@ export default {
   data() {
     return {
       isSidebarOpen: false,
+      tags: [],
+      allPosts: [],
     };
   },
 
@@ -116,11 +125,12 @@ export default {
       const { frontmatter } = this.$page;
       return frontmatter.home || frontmatter.tagMain;
     },
+  },
 
-    tagName() {
-      const { frontmatter } = this.$page;
-      return frontmatter.tagMain;
-    },
+  beforeMount() {
+    this.allPosts = getPostsByPath('/', this.$site.pages);
+    this.tags = getTagStore().getTagsWithCouting(this.allPosts);
+    this.tags.sort((a, b) => b.count - a.count);
   },
 
   mounted() {

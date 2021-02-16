@@ -63,6 +63,9 @@ export default {
 .hide
   transform translateX(-100%)
 
+.sidebar-group > ul
+  padding-top 0.5rem
+
 @media (max-width: $MQMobile)
   .sidebar
     .nav-links

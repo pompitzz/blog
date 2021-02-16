@@ -70,7 +70,7 @@ drwxr-xr-x  5 XXX  staff   160B  5 28 01:22 assets
 
 
 ### smple.html 접속
-<img src="./samplepage.png" width="400" heigth="200"/>
+<img src="./VuePress/samplepage.png" width="400" heigth="200"/>
 
 - yarn dev로 테스트 서버를 띄운 후 localhost:8080/sample.html로 접속하면 위와 같이 sample 페이지가 나타나는 것을 알 수 있습니다.
 
@@ -99,7 +99,8 @@ module.exports = {
 > [VuePress Docs](https://vuepress.vuejs.org/theme/default-theme-config.html)를 참고하시면 더 많은 설정들을 확인할 수 있습니다.
 
 ### 변경된 테마 확인
-<img src="./settingConfig.png" width="600" height="200"/>
+
+<img src="./VuePress/settingConfig.png" width="600" height="200"/>
 
 - 수정 후 다시 테스트 서버를 띄우고 적용된 base url(localhost:8080/vuepress/)로 접속해보면 테마가 변경된 것을 확인할 수 있습니다.
 

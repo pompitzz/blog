@@ -22,10 +22,7 @@ module.exports = {
 
 
 function navConfigs() {
-    return [
-        { text: 'JAVA', link: '/tag/JAVA.html' },
-        { text: 'Vue.js', link: '/tag/Vue.js.html' },
-    ];
+    return [];
 }
 
 function headConfig() {

@@ -37,5 +37,9 @@ export default {
 .page
   padding-bottom 2rem
   display block
+  padding-right $rightbarWidth
 
+@media (max-width: $MQXMobile)
+  .page
+    padding-right: 0;
 </style>

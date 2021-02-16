@@ -1,5 +1,5 @@
 <template>
-  <div class="px-3 text-center">
+  <div class="px-8 text-center">
     <Tag v-for="(tag, index) in tags"
          :key="index"
          :color="tag.color"
@@ -11,21 +11,11 @@
   </div>
 </template>
 <script>
-import { errorLogging } from '../utils/error';
 import Tag from './Tag.vue';
 
 export default {
   name: 'TagList',
   components: { Tag },
   props: ['tags'],
-  methods: {
-    moveTo(path) {
-      if (path === '/tag/ALL') {
-        this.$router.push('/');
-      } else {
-        this.$router.push(path).catch(errorLogging);
-      }
-    }
-  }
 }
 </script>

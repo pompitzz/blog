@@ -1,7 +1,7 @@
 <template>
   <v-app class="page tag-main">
     <TagList :tags="tags"
-             class="mt-3"
+             class="mt-3 tag-list"
     />
     <Posts :posts="posts"
            class="mt-3"
@@ -10,9 +10,7 @@
 </template>
 
 <script>
-import getPostsByPath from '../utils/htmlUtil';
 import { toArray } from '../utils/arrayUtil';
-import { getTagStore } from '../store/tag';
 import TagList from './TagList.vue';
 import Posts from './Posts.vue';
 
@@ -23,24 +21,21 @@ export default {
       type: String,
       required: false,
     },
+    allPosts: {
+      type: Array,
+      required: true,
+    },
+    tags: {
+      type: Array,
+      required: true,
+    },
   },
   name: 'TagMain',
-  data() {
-    return {
-      tags: [],
-      allPosts: [],
-    };
-  },
   computed: {
     // 태그전용 페이지면 태그 post만 보여준다.
     posts() {
       return this.tagName ? filterOnlyTagName(this.tagName, this.allPosts) : this.allPosts;
     },
-  },
-  beforeMount() {
-    this.allPosts = getPostsByPath('/', this.$site.pages);
-    this.tags = getTagStore().getTagsWithCouting(this.allPosts);
-    this.tags.sort((a, b) => b.count - a.count);
   },
 };
 
@@ -64,4 +59,8 @@ function changePostTagArr(post, tag) {
 >
 .tag-main
   padding-top 65px
+
+@media (min-width: $MQXMobile)
+  .tag-list
+    display none
 </style>

@@ -42,7 +42,6 @@ export default {
 
     const displayAllHeaders = $themeLocaleConfig.displayAllHeaders
         || $themeConfig.displayAllHeaders;
-
     if (item.type === 'auto') {
       return [link, renderChildren(h, item.children, item.basePath, $route, maxDepth)];
     } else if ((active || displayAllHeaders) && item.headers && !hashRE.test(item.path)) {
@@ -73,24 +72,7 @@ function renderLink(h, to, text, active, level) {
     };
   }
 
-  if (level) return h('RouterLink', component, text);
-  return h('div', {
-        class: {
-          'sidebar-link-wrapper': true,
-        },
-      },
-      [h('RouterLink', component, text), renderChown(h, active, level)]);
-}
-
-function renderChown(h, active) {
-  const component = {
-    class: {
-      'arrow': true,
-      'down': active,
-      'right': !active,
-    },
-  };
-  return h('span', component);
+  return h('RouterLink', component, text);
 }
 
 function renderChildren(h, children, path, route, maxDepth, depth = 1) {
@@ -124,12 +106,12 @@ function renderExternal(h, to, text) {
   font-size 0.95em
 
 a.sidebar-link
-  font-size 1em
+  font-size 12px
   font-weight 400
   display inline-block
   color $textColor
   border-left 0.25rem solid transparent
-  padding 0.1rem 1rem 0.1rem 1.25rem !important
+  padding 0.1rem 1rem 0.1rem 2rem !important
   line-height 1.4
   width: 100%
   box-sizing: border-box
@@ -155,4 +137,9 @@ a.sidebar-link
 
     &.active
       font-weight 500
+
+@media (min-width: $MQXMobile)
+  .sidebar-sub-headers
+    display: none;
+
 </style>

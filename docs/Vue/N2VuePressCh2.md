@@ -18,13 +18,13 @@ tags:
 - 그 후 메인페이지에서 우측 상단에 위치하는 Setting을 클릭하면 사진과 같이 자신의 저장소 목록이 나타나며, 빨간 박스로 표시된 버튼을 클릭하면 연동이 완료됩니다.
 - 연동 후 메인 페이지로 다시 돌아가면 왼쪽 리스트에 연동된 저장소목록이 나타납니다.
 
-<img src="./travisRepo.png" width="600" height="200"/>
+<img src="./VuePress/travisRepo.png" width="600" height="200"/>
 
 ### Gitgub Token 생성하기
 - Travis CI에서 블로그를 배포하기 위해선 Travis CI에게 저장소에 배포할 권한을 부여해야 합니다.
 - 이를 위해 [Github Token 생성 페이지](https://github.com/settings/tokens/new)에 접속하여 토큰을 생성합니다.
 
-<img src="./githubToken.png" width="500" height="400"/>
+<img src="./VuePress/githubToken.png" width="500" height="400"/>
 
 - 위와 같이 같이 설정 후 생성하기 버튼을 누르면 중앙에 초록색으로 토큰이 나타나는데 이를 복사합니다.
 
@@ -32,7 +32,7 @@ tags:
 - [Travis CI](https://travis-ci.org/)에 접속하여 왼쪽 리스트에서 연동한 저장소를 클릭한 후 **우측 상단의 More options 버튼을 클릭하여 Setting에 들어갑니다.**
 - Setting 화면에서 복사한 토큰 값을 아래 사진의 VALUE에 넣어 토큰 값을 등록합니다.
 
-<img src="./tokenRegister.png"/>  
+<img src="./VuePress/tokenRegister.png"/>  
 
 ### Travis CI 스크립트 작성
 ```shell script
