@@ -7,12 +7,12 @@
            :key="index"
       >
         <div v-if="post.frontmatter !== undefined"
-             class="post-card v-card v-card--hover"
+             class="post-card shadow border cursor-pointer hover:shadow-xl"
              @click="moveTo(post.path)"
         >
 
           <div v-if="post.frontmatter.img.length >= 1"
-               class="post-card-img-wrapper elevation-2"
+               class="post-card-img-wrapper shadow-md"
           >
             <img :src="'/blog/img/' + post.frontmatter.img[0]"
                  alt=""
@@ -21,12 +21,13 @@
           </div>
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
-          <div class="text-center pb-2 pt-0">
+          <div class="text-center py-1.5">
             <Tag v-for="(tagName, index) in post.frontmatter.tags"
                  :key="index"
                  :tagName="tagName"
                  routing
                  small
+                 class="mr-2"
             />
           </div>
         </div>
@@ -94,7 +95,6 @@ function size(listLength, size) {
   width 18rem
   margin 1rem
   background-color #fff
-
 
 .post-card-img-half-wrapper
   position relative

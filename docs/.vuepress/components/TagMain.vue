@@ -1,12 +1,12 @@
 <template>
-  <v-app class="page tag-main">
+  <div class="page tag-main">
     <TagList :tags="tags"
              class="mt-3 tag-list"
     />
     <Posts :posts="posts"
            class="mt-3"
     />
-  </v-app>
+  </div>
 </template>
 
 <script>
