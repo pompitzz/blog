@@ -15,9 +15,15 @@ module.exports = {
     plugins: {
         'sitemap': {
             hostname: 'https://pompitzz.github.io/blog',
-            exclude: ['/404.html']
+            exclude: ['/404.html'],
         },
-    }
+    },
+    postcss: {
+        plugins: [
+            require('tailwindcss')('./tailwind.config.js'),
+            require('autoprefixer'),
+        ],
+    },
 };
 
 

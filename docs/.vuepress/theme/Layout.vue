@@ -16,15 +16,7 @@ import PostTitle from '../components/PostTitle.vue';
 
 export default {
   name: 'Layout',
-  data() {
-    return {
-      loading: true,
-    };
-  },
   components: { PostTitle, ParentLayout, Disqus },
-  beforeMount() {
-    import('vuetify/dist/vuetify.min.css').then(() => this.loading = false);
-  },
 };
 </script>
 

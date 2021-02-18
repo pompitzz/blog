@@ -10,20 +10,20 @@
     "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev docs"
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.3",
     "@vuepress/plugin-back-to-top": "^1.5.0",
+    "autoprefixer": "^9",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
+    "postcss": "^7",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vuepress": "1.4.1",
     "watchpack": "1.6.1"
   },
   "dependencies": {
-    "@mdi/font": "^5.3.45",
-    "@mdi/js": "^5.9.55",
-    "material-design-icons-iconfont": "^5.0.1",
     "vue-router": "^3.2.0",
-    "vuepress-plugin-sitemap": "^2.3.1",
-    "vuetify": "^2.2.29"
+    "vuepress-plugin-sitemap": "^2.3.1"
   },
   "resolutions": {
     "watchpack": "1.6.1"

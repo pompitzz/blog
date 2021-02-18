@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 @import "palette.styl"
 
+@tailwind components;
+@tailwind utilities;
+
 body
-    font-family "Nanum Gothic", "Roboto", sans-serif
+    font-family "Nanum Gothic", "Roboto", sans-serif !important
 
 .nav-links
     .nav-item
@@ -51,18 +54,6 @@ blockquote
 details blockquote
     background-color #fff !important
 
-.v-application p
-    margin-bottom auto !important
-
-
-code:before
-    content none !important
-
-
-.v-application code
-    white-space pre !important
-    font-weight 550 !important
-
 .theme-default-content code
     font-weight bold
 
@@ -93,14 +84,6 @@ pre > code
     width 95%
 
 
-.w-90
-    width 90%
-
-
-.h-100
-    height 100%
-
-
 .theme-default-content:not(.custom) > *:first-child
     margin-top 0
     padding-top 0 !important
@@ -115,17 +98,6 @@ pre > code
 
 .page-edit
     padding 0 !important
-
-
-a.sidebar-link
-    font-size 1em
-    font-weight 400
-    display inline-block
-    border-left .25rem solid transparent
-    padding .35rem 1rem .35rem 1.25rem
-    line-height 1.4
-    width 100%
-    box-sizing border-box
 
 
 .content__default h3, h4

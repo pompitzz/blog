@@ -1,8 +1,8 @@
 <template>
-  <v-app class="d-block content-title">
+  <div class="block content-title">
     <div style="width: 100%">
-      <div class="w-90 mx-auto">
-        <h1 :class="mobile ? 'mobile-post-title' : ''">{{ post.title }}</h1>
+      <div class="w-11/12 mx-auto title">
+        <span :class="mobile ? 'mobile-post-title' : ''">{{ post.title }}</span>
       </div>
 
       <div class="text--primary text-right w-95 mr-5 my-2">
@@ -14,11 +14,12 @@
              :tagName="tagName"
              routing
              small
+             class="mr-2"
         />
       </div>
       <hr class="content-divider">
     </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -66,8 +67,12 @@ export default {
   margin-top 1rem
   margin-bottom 1rem
 
+.title
+  font-size 1.7rem
+  font-weight bold
 
 .mobile-post-title
   font-size 1.5rem
+  font-weight bold
 
 </style>

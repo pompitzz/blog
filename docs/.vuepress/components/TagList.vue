@@ -5,7 +5,7 @@
          :color="tag.color"
          :count="tag.count"
          :tagName="tag.tagName"
-         class="mt-2"
+         class="mt-2 mr-2"
          routing
     />
   </div>

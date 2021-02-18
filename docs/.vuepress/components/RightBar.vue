@@ -1,25 +1,25 @@
 <template>
   <aside class="rightbar">
-    <v-app v-if="isTagMain"
-           class="h-100"
+    <div v-if="isTagMain"
+         class="flex flex-col justify-center align-middle h-full"
     >
-      <div class="ma-auto text-center">
-        <div v-for="(tag, index) in tags"
-             :key="index"
-        >
-          <Tag :color="tag.color"
-               :count="tag.count"
-               :tagName="tag.tagName"
-               class="mt-3"
-               routing
-               style="width: 150px; height: 30px;"
-          />
-        </div>
+      <div v-for="(tag, index) in tags"
+           :key="index"
+           class="text-center"
+      >
+        <Tag :color="tag.color"
+             :count="tag.count"
+             :tagName="tag.tagName"
+             class="mt-3"
+             routing
+             style="width: 150px; height: 30px;"
+        />
       </div>
-    </v-app>
+    </div>
     <HeaderLinks v-else
                  :headers="headers"
                  :rootPath="currentPath"
+                 class="pr-2"
     />
   </aside>
 </template>
@@ -94,7 +94,7 @@ function findCurrentItem(items, currentPath) {
   box-sizing: border-box;
   border-left: 1px solid #eaecef;
   overflow-y: auto;
-  padding 1rem 0.5rem 1rem 0
+  padding 1rem 0 1rem 0
 
   ul
     list-style-type none
