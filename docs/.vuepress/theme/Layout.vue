@@ -1,7 +1,6 @@
 <template>
   <ParentLayout>
     <PostTitle v-if="$frontmatter.title"
-               class="v-application"
                slot="page-top"
     />
     <Disqus v-if="$frontmatter.title"

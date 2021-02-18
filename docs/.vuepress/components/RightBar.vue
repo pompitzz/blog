@@ -1,7 +1,7 @@
 <template>
   <aside class="rightbar">
-    <div v-if="isTagMain"
-         class="h-100 v-application"
+    <v-app v-if="isTagMain"
+           class="h-100"
     >
       <div class="ma-auto text-center">
         <div v-for="(tag, index) in tags"
@@ -16,7 +16,7 @@
           />
         </div>
       </div>
-    </div>
+    </v-app>
     <HeaderLinks v-else
                  :headers="headers"
                  :rootPath="currentPath"
