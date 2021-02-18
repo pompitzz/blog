@@ -1,5 +1,5 @@
 <template>
-  <ParentLayout v-if="!loading">
+  <ParentLayout>
     <PostTitle v-if="$frontmatter.title"
                class="v-application"
                slot="page-top"

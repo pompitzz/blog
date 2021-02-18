@@ -24,7 +24,7 @@
       </template>
     </Sidebar>
     <RightBar :currentPath="$route.path"
-              :isTagMain="$page.frontmatter.home || $page.frontmatter.tagMain"
+              :isTagMain="!!$page.frontmatter.home || !!$page.frontmatter.tagMain"
               :items="sidebarItems"
               :tags="tags"
     />
