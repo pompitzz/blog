@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://pompitzz.github.io/blog/sitemap.xml
