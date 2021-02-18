@@ -2,14 +2,14 @@
   <div class="block content-title">
     <div style="width: 100%">
       <div class="w-11/12 mx-auto title">
-        <h1 :class="mobile ? 'mobile-post-title' : 'title'">{{ post.title }}</h1>
+        <h1 class="title">{{ post.title }}</h1>
       </div>
 
       <div class="text--primary text-right w-95 mr-5 my-2">
         작성일: {{ post.date }}
       </div>
       <div class="w-100 text-center">
-        <Tag v-for="(tagName, index) in post.tags"
+        <Tag v-for="(tagName, index) in post.tags || []"
              :key="index"
              :tagName="tagName"
              routing
@@ -28,24 +28,9 @@ import Tag from './Tag';
 export default {
   name: 'PostTitle',
   components: { Tag },
-  data() {
-    return {
-      tags: [],
-      mobile: false,
-    };
-  },
   computed: {
     post() {
-      return Object.assign({ post: '' }, this.$page.frontmatter);
-    },
-  },
-  beforeMount() {
-    this.changePageViewer();
-    window.addEventListener('resize', this.changePageViewer);
-  },
-  methods: {
-    changePageViewer() {
-      this.mobile = window.innerWidth < 1200;
+      return this.$page.frontmatter;
     },
   },
 };
@@ -71,8 +56,9 @@ export default {
   font-size 1.7rem
   font-weight bold
 
-.mobile-post-title
-  font-size 1.5rem
-  font-weight bold
 
+@media (max-width: 1200px)
+  .title
+    font-size 1.5rem
+    font-weight bold
 </style>

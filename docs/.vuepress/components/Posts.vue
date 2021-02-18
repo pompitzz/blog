@@ -6,12 +6,11 @@
       <div v-for="(post, index) in showPosts"
            :key="index"
       >
-        <div v-if="post.frontmatter !== undefined"
-             class="post-card shadow border cursor-pointer hover:shadow-xl"
-             @click="moveTo(post.path)"
+        <div class="post-card shadow border cursor-pointer hover:shadow-xl"
+             @click="$router.push(post.path)"
         >
 
-          <div v-if="post.frontmatter.img.length >= 1"
+          <div v-if="hasImage(post.frontmatter)"
                class="post-card-img-wrapper shadow-md"
           >
             <img :src="'/blog/img/' + post.frontmatter.img[0]"
@@ -22,7 +21,7 @@
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
           <div class="text-center py-1.5">
-            <Tag v-for="(tagName, index) in post.frontmatter.tags"
+            <Tag v-for="(tagName, index) in post.frontmatter.tags || []"
                  :key="index"
                  :tagName="tagName"
                  routing
@@ -38,12 +37,16 @@
 
 <script>
 import { getTagStore } from '../store/tag';
-import { errorLogging } from '../utils/error';
 import Tag from './Tag.vue';
 
 export default {
   components: { Tag },
-  props: ['posts'],
+  props: {
+    posts: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       pageNumber: 0,
@@ -52,33 +55,27 @@ export default {
   },
   computed: {
     showPosts() {
-      return this.posts;
+      return this.posts
+          .filter(({ frontmatter }) => !!frontmatter)
+          .map(post => ({
+            ...post,
+            frontmatter: Object.assign({
+              title: '',
+              date: '',
+              path: '',
+              tags: [],
+              img: [],
+            }, post.frontmatter),
+          }));
     },
   },
   methods: {
-    // addNextshowPosts() {
-    //   if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)) {
-    //     if (this.showPosts.length === this.posts.length) return;
-    //     this.pageNumber += 1;
-    //     const start = (this.pageNumber - 1) * this.pageItemSize;
-    //     const end = (this.pageNumber * this.pageItemSize) > this.posts.length ? this.posts.length : (this.pageNumber * this.pageItemSize);
-    //     for (let i = start; i < end; i++) {
-    //       this.showPosts.push(this.posts[i]);
-    //     }
-    //   }
-    // },
     getColor(tagName) {
       return getTagStore().color(tagName);
     },
-    moveTo(path) {
-      this.$router.push(path).catch(errorLogging);
+    hasImage(frontmatter) {
+      return frontmatter.img && frontmatter.length >= 1;
     },
-  },
-  beforeMount() {
-    // for (let i = 0; i < size(this.posts.length, this.pageItemSize); i++) {
-    //   this.showPosts.push(this.posts[i]);
-    // }
-    // window.addEventListener("scroll", this.addNextshowPosts);
   },
 };
 
