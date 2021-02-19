@@ -1,10 +1,8 @@
 <template>
   <ParentLayout>
-    <ClientOnly>
-      <PostTitle v-if="$frontmatter.title"
-                 slot="page-top"
-      />
-    </ClientOnly>
+    <PostTitle v-if="$frontmatter.title"
+               slot="page-top"
+    />
     <Disqus v-if="$frontmatter.title"
             slot="page-bottom"
     />

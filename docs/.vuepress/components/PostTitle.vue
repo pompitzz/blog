@@ -9,13 +9,15 @@
         작성일: {{ post.date }}
       </div>
       <div class="w-100 text-center">
-        <Tag v-for="(tagName, index) in post.tags || []"
-             :key="index"
-             :tagName="tagName"
-             class="mr-2"
-             routing
-             small
-        />
+        <ClientOnly>
+          <Tag v-for="(tagName, index) in post.tags || []"
+               :key="index"
+               :tagName="tagName"
+               class="mr-2"
+               routing
+               small
+          />
+        </ClientOnly>
       </div>
       <hr class="content-divider">
     </div>

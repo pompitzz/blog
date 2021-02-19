@@ -74,7 +74,7 @@ export default {
       return getTagStore().color(tagName);
     },
     hasImage(frontmatter) {
-      return frontmatter.img && frontmatter.length >= 1;
+      return frontmatter.img && frontmatter.img.length >= 1;
     },
   },
 };
@@ -116,7 +116,6 @@ function size(listLength, size) {
 
 
 .post-card-title
-  width 100%
   font-size 1rem !important
   overflow hidden
   white-space nowrap
