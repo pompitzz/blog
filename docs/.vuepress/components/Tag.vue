@@ -16,7 +16,10 @@
       </svg>
     </div>
     <div class="my-auto">
-      {{ tagName }} <span v-if="count">({{ count }})</span>
+      {{ tagName }}
+    </div>
+    <div class="my-auto">
+      <span v-if="count">({{ count }})</span>
     </div>
   </div>
 </template>
@@ -80,7 +83,7 @@ export default {
   padding 0 12px
   color white
   height 24px
-  font-weight 700
+  font-weight bold
   border-radius 4px
   cursor pointer
 
