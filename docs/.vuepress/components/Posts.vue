@@ -10,25 +10,25 @@
              @click="$router.push(post.path)"
         >
 
-          <!--          <div v-if="hasImage(post.frontmatter)"-->
-          <!--               class="post-card-img-wrapper shadow-md"-->
-          <!--          >-->
-          <!--            <img :src="'/blog/img/' + post.frontmatter.img[0]"-->
-          <!--                 alt=""-->
-          <!--                 class="post-card-img"-->
-          <!--            />-->
-          <!--          </div>-->
+          <div v-if="hasImage(post.frontmatter)"
+               class="post-card-img-wrapper shadow-md"
+          >
+            <img :src="'/blog/img/' + post.frontmatter.img[0]"
+                 alt=""
+                 class="post-card-img"
+            />
+          </div>
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
-          <!--          <div class="text-center py-1.5">-->
-          <!--            <Tag v-for="(tagName, index) in post.frontmatter.tags || []"-->
-          <!--                 :key="index"-->
-          <!--                 :tagName="tagName"-->
-          <!--                 routing-->
-          <!--                 small-->
-          <!--                 class="mr-2"-->
-          <!--            />-->
-        </div>
+          <div class="text-center py-1.5">
+            <Tag v-for="(tagName, index) in post.frontmatter.tags || []"
+                 :key="index"
+                 :tagName="tagName"
+                 class="mr-2"
+                 routing
+                 small
+            />
+          </div>
         </div>
       </div>
     </div>

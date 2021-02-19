@@ -3,9 +3,11 @@
     <TagList :tags="tags"
              class="mt-3 tag-list"
     />
-    <Posts :posts="posts"
-           class="mt-3"
-    />
+    <ClientOnly>
+      <Posts :posts="posts"
+             class="mt-3"
+      />
+    </ClientOnly>
   </div>
 </template>
 
