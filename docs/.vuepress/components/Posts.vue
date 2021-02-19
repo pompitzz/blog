@@ -92,6 +92,10 @@ function size(listLength, size) {
   width 18rem
   margin 1rem
   background-color #fff
+  transition all .5s
+
+.post-card:hover
+  transform translateY(-4px)
 
 .post-card-img-half-wrapper
   position relative
