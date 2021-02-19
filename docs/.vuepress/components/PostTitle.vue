@@ -8,15 +8,15 @@
       <div class="text--primary text-right w-95 mr-5 my-2">
         작성일: {{ post.date }}
       </div>
-      <div class="w-100 text-center">
-        <Tag v-for="(tagName, index) in post.tags || []"
-             :key="index"
-             :tagName="tagName"
-             routing
-             small
-             class="mr-2"
-        />
-      </div>
+      <!--      <div class="w-100 text-center">-->
+      <!--        <Tag v-for="(tagName, index) in post.tags || []"-->
+      <!--             :key="index"-->
+      <!--             :tagName="tagName"-->
+      <!--             routing-->
+      <!--             small-->
+      <!--             class="mr-2"-->
+      <!--        />-->
+      <!--      </div>-->
       <hr class="content-divider">
     </div>
   </div>
