@@ -1,9 +1,10 @@
 ---
-title: 자바 코딩의 기술 정리 date: 2021-02-06 02:24 img:
-
-- java.png tags:
-- JAVA
-
+title: 자바 코딩의 기술 정리 
+date: 2021-02-06 02:24 
+img: 
+    - java.png 
+tags:
+    - JAVA
 ---
 
 ### 코드 품질
