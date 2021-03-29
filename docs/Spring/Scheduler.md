@@ -1,18 +1,19 @@
 ---
-title: 스프링 TaskScheduler DeepDive(@EnableScheduling, @Scheduled)
-date: 2020-12-22 23:50
-img: 
-    - spring.png
-tags: 
-    - JAVA
-    - Spring 
+title: 스프링 TaskScheduler(@EnableScheduling, @Scheduled)
+date: 2020-12-22 23:50 img:
+
+- spring.png tags:
+- JAVA - Spring
+
 ---
 
 - 스프링 3.0부터 @EnableScheduling를 선언하여 스케줄링을 활성화 시키고 @Scheduled로 스케줄링할 작업을 간단히 추가할 수 있습니다.
-- 스프링이 어떻게 스케줄링을 활성화 시키고 @Scheduled 메서드 작업을 주기적으로 수행시키는지 알아보겠습니다.   
+- 스프링이 어떻게 스케줄링을 활성화 시키고 @Scheduled 메서드 작업을 주기적으로 수행시키는지 알아보겠습니다.
 
 ## 1. 스케줄링 활성화 및 실행
+
 ```java
+
 @Slf4j
 @Configuration
 @EnableScheduling // 스케줄링을 위해 추가
