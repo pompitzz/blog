@@ -1,11 +1,11 @@
-import {Map} from '../utils/map.js';
+import { Map } from '../utils/map.js';
 
 function getTagStore() {
     const tagStore = new TagMap();
     tagStore.put('JAVA', new Tag('JAVA', '#eb2025'));
     tagStore.put('Kotlin', new Tag('Kotlin', '#7882e3'));
     tagStore.put('Groovy', new Tag('Groovy', '#6398aa'));
-    // tagStore.put('Refactoring', new Tag('Refactoring', '#e06717'));
+    tagStore.put('Network', new Tag('Network', '#41b3b6'));
     tagStore.put('Spring', new Tag('Spring', '#6cb33e'));
     tagStore.put('AWS', new Tag('AWS', '#ec912e'));
     tagStore.put('Vue.js', new Tag('Vue.js', '#42b882'));
