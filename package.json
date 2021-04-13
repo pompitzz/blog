@@ -19,7 +19,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "vuepress": "1.4.1",
+    "vuepress": "^1.8.2",
     "watchpack": "1.6.1"
   },
   "dependencies": {
