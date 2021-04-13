@@ -1,22 +1,19 @@
 <template>
   <ParentLayout>
-    <PostTitle v-if="$frontmatter.title"
-               slot="page-top"
-    />
-    <Disqus v-if="$frontmatter.title"
-            slot="page-bottom"
+    <PostTitle
+        v-if="$frontmatter.title"
+        slot="page-top"
     />
   </ParentLayout>
 </template>
 
 <script>
 import ParentLayout from './ParentLayout.vue';
-import Disqus from '../components/Disqus';
 import PostTitle from '../components/PostTitle.vue';
 
 export default {
   name: 'Layout',
-  components: { PostTitle, ParentLayout, Disqus },
+  components: { PostTitle, ParentLayout },
 };
 </script>
 
