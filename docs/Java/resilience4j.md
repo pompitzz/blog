@@ -5,7 +5,6 @@ img:
   - java.png 
 tags:
   - JAVA
-
 ---
 
 ## Introducion
@@ -16,7 +15,7 @@ tags:
 
 ## Circuit Breaker
 
-![CircuitBreaker](./circuit-breaker.jpeg)
+![CircuitBreaker](./resilience4j/circuit-breaker.jpeg)
 
 - CircuitBreaker는 3개의 normal states(`CLOSE`, `OPEN` and `HALF_OPEN`)과 두개의 special states(`DISABLED` and `FORCED_OPEN`)을
   가지는 유한 상태 머신으로 구현되어 있습니다.
@@ -77,7 +76,7 @@ tags:
 
 **Example with 3 Threads**
 
-![circuitbreadker-flow](./circuitbreadker-flow-with-3threds.png)
+![circuitbreadker-flow](./resilience4j/circuitbreadker-flow-with-3threds.png)
 
 ## 학습 테스트
 

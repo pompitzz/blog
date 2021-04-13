@@ -12,6 +12,7 @@
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.3",
     "@vuepress/plugin-back-to-top": "^1.5.0",
+    "@vuepress/plugin-google-analytics": "^1.8.2",
     "autoprefixer": "^9",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
