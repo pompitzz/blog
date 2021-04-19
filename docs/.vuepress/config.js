@@ -12,6 +12,11 @@ module.exports = {
     markdown: {
         lineNumbers: true,
     },
+    locales: {
+        '/': {
+            lang: 'ko',
+        },
+    },
     plugins: [
         [
             'sitemap',

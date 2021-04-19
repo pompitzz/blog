@@ -52,7 +52,7 @@ export default {
   computed: {
     headers() {
       const currentItem = findCurrentItem(this.items, this.currentPath);
-      if (currentItem) {
+      if (currentItem && currentItem.headers) {
         return groupHeaders(currentItem.headers);
       }
       return [];
