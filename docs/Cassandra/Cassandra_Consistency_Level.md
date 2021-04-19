@@ -83,8 +83,8 @@ tags:
 - 모든 datacenter에서 `QUORUM`만큼의 replica 노드에서 커밋 되지 않은 상태의 데이터를 읽을 수 있는 level
 - 가장 최신의 값을 읽기 위해 사용할 수 있다.
 
-### 7. LOCAL_SERIAL
-- SERIAL과 동일하나 local dc로 제한된다.
+### 8. LOCAL_SERIAL
+- SERIAL과 동일하나 local dc로 제한한다.
 
 ## 참고 자료
 [datastax docs](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html)
