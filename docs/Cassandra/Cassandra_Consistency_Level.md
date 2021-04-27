@@ -12,14 +12,14 @@ tags:
 - 클러스터의 모든 replica 노드들의 `commit log`와 `memtable`에 쓰기 동작이 완료되어야 하는 level
 - 가장 높은 일관성을 보장하지만 가용성은 가장 낮다.
 
+### 2. EACH_QUORUM
+- 각 datacenter에서 `QUORUM`만큼의 replica 노드들의 `commit log`와 `memtable`에 쓰기 동작이 완료되어야 하는 level
+- 특정 dc가 다운되면 QUORUM수를 만족하지 못해 쓰기 동작이 실패할 것이므로 각 datacenter를 같은 수준의 일관성으로 유지하고 싶을 때 사용할 수 있다.
+
 #### 데이터센터(datacenter)?
 - 여기서 의미하는 datacenter는 특정 클러스터에서 `replication`, `workload segregation`을 목적으로 구성된 `노드들의 그룹`을 의미
 - 흔히 아는 물리적 데이터 센터를 의미하는 것이 아님
 - [참고(datastax glossary)](https://docs.datastax.com/en/glossary/doc/glossary/gloss_data_center.html)
-
-### 2. EACH_QUORUM
-- 각 datacenter에서 `QUORUM`만큼의 replica 노드들의 `commit log`와 `memtable`에 쓰기 동작이 완료되어야 하는 level
-- 특정 dc가 다운되면 QUORUM수를 만족하지 못해 쓰기 동작이 실패할 것이므로 각 datacenter를 같은 수준의 일관성으로 유지하고 싶을 때 사용할 수 있다.
 
 #### QUORUM 공식
 - `quorum = floor(sum of replication factors / 2) + 1`
