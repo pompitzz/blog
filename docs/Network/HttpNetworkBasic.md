@@ -1,6 +1,8 @@
 ---
 title: 그림으로 배우는 Http Network Basic 정리
 date: 2021-03-30 01:05
+img:
+    - http.png
 tags: 
     - Network
 ---
@@ -63,5 +65,3 @@ tags:
 - 데이터가 변조되지 않았다는 완전성을 증명할 수 있어야 한다.
 
 > HTTP의 약점을 보완하기 위해 HTTPS가 생겨났다.
-
-## HTTP + 암호화 + 인증 + 완전성 보호 = HTTPS
