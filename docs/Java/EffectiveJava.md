@@ -327,3 +327,213 @@ public class Main {
 - 지역변수처럼 클래스를 정의할 수 있고 정적 멤버를 가질 수 없다.
 
 
+## ITEM 31. 한정적 와일드카드를 사용해 API 유연성을 높이라
+### PECS
+- 생산자 역할의 매개변수에는 `extends`, 소비자 역할의 매개변수에는 `super`를 사용하여 유연성을 높일 수 있다.
+- 매개변수가 생산자와 소비자 역할을 모두하면 한정적 와일드카드는 아무런 도움이 되지 않는다. 
+
+#### producer-extends
+```java
+public interface Stack<E> {
+    void push(E e);
+
+    // elements는 stack에 push하기 위한 element를 생산하는 생산자이다. 
+    // E의 하위 타입은 E가 될 수 있으므로 extends를 활용할 수 있다.
+    default void pushAll(Iterable<? extends E> elements) {
+        for (E element : elements) {
+            push(element);
+        }
+    }
+}
+```
+- 생산자 역할의 매개변수에는 `extends`를 사용하여 유연성을 높일 수 있다.
+
+#### consumer-super
+```java
+public interface Stack<E> {
+    E pop();
+    
+    boolean isEmpty();
+
+    // collection은 stack의 element를 사용하는 소비자이다.
+    // E의 상위 타입은 E를 가질 수 있으므로(E는 E의 상위 타입이 될 수 있음) super를 활용할 수 있다.
+    default void popAll(Collection<? super E> collection) {
+        while (!isEmpty()) {
+            collection.add(pop());
+        }
+    }
+}
+```
+- 소비자 역할의 매개변수에는 `super`를 사용하여 유연성을 높일 수 있다.
+
+#### Comparable\<E>(Comparator\<E>)는 언제나 소비자
+- Comparable\<E>, Comparator\<E>는 언제나 E 인스턴스를 `소비`하여 순서를 결정하므로 `? super E`를 사용하는게 좋다.
+
+> E는 E의 상위 타입이 될 수 있으므로 E의 순서를 비교하기 위해 E의 상위 타입을 사용해도 문제가 되지 않는다.
+
+### 와일드카드 타입을 위한 헬퍼 메서드
+```java
+public static void swap(List<?> list, int i, int j) {
+    swapHelper(list, i, j);
+}
+
+private static <E> void swapHelper(List<E> list, int i, int j) {
+    list.set(i, list.set(j, list.get(i)));
+}
+```
+- public API를 깔끔하게 유지하기 위해 와일드 카드를 사용할 때 실제 타입이 필요한 경우 헬퍼 메서드를 이용하여 실제 타입을 활용할 수 있다.
+
+
+## ITEM 32. 제네릭과 가변인수를 함께 쓸 때는 신중하라.
+가변인수 메서드는 호출 시 가변인수를 담기 위한 배열을 자동으로 생성한다.
+
+제네릭 배열을 직접 생성하는건 불가능하지만 제네릭과 가변인수를 함께 사용하여 제네릭 배열이 생성되게 할 수 있다.
+- 제네릭 가변인수가 실무에서 유용하므로 이러한 모순이 수용되었다.
+    - 예시로 `Arrays.asList(T... a)`가 있다. 
+
+### 제네릭 가변인수를 안전하게 사용하기 위한 규칙
+제네릭 가변인수를 안전하게 사용하기 위해선 반드시 다음 규칙을 지켜야 하며 `@SafeVarargs`를 선언하자.
+1. 메서드에서 varargs 매개변수 배열에 아무것도 저장하지 않는다.
+2. 배열(혹은 복제본)을 신뢰할 수 없는 코드에 노출하지 않는다.
+
+#### 첫 번째 규칙을 어겼을 때
+```java
+static String dangerous(List<String> ... stringLists) {
+    List<Integer> integers = List.of(12);
+    Object[] objects = stringLists;
+    objects[0] = integers; // 힙 오염
+    return stringLists[0].get(0); // ClassCastException
+}
+```
+- 제네릭 배열은 타입 안전성을 보장하지 않으므로 제네릭 배열에 값을 저장하는건 위험하다.
+
+#### 두 번째 규칙을 어겼을 때
+```java
+public class Main {
+    public static void main(String[] args) {
+        // pickTwo는 Integer[]를 반환하지만 내부에서 사용되는 toArray는 Object[]를 반환하므로 ClassCashException 발생
+        Integer[] integers = pickTwo(1, 2, 3);
+    }
+
+    static <T> T[] pickTwo(T a, T b, T c) {
+        switch (ThreadLocalRandom.current().nextInt(3)) {
+            case 0:
+                return toArray(a, b);
+            case 1:
+                return toArray(a, c);
+            case 2:
+                return toArray(b, b);
+        }
+        throw new RuntimeException();
+    }
+
+    static <T> T[] toArray(T... args) {
+        // 배열의 타입은 컴파일 타임에 결정되므로 모든 객체를 담을 수 있는 Object[]가 반환된다.
+        return args; 
+    }
+}
+```
+- 제네릭 가변인수를 그대로 노출하는 것은 위험하다.
+
+> 규칙을 지킬 수 있다면 제네릭 가변인수를 활용하고 그렇지 않으면 List를 활용하자.
+
+## ITEM 33. 타입 안전 이종 컨테이너를 고려하라.
+일반적인 제네릭 형태에서는 한 컨테이너에 다룰 수 있는 타입의 수가 고정되어 있다.
+
+**하지만 컨테이너 자체가 아닌 키를 타입 매개변수로 바꾸면 이런 제약이 없는 타입 안전 이종 컨테이너를 만들 수 있다.**
+- 타입 안전 이종 컨테이너를 Class를 키로 쓰며, 이때 쓰이는 Class 객체를 `타입 토큰`이라고 한다.
+
+### 타입 안전 이종 컨테이너 패턴
+```java
+/** 이 클래스엔 두 가지 제약이 있다.
+ *  1. raw 타입을 사용하면 타입 안전성이 깨지므로 예외가 발생한다.
+ *  2. List<String>과 같은 실체와 불가 타입에서는 활용할 수 없다.
+ *      - 슈퍼 타입 토큰으로 우회할 수 있다. 
+ */
+public class Favorites {
+    private Map<Class<?>, Object> favorites = new HashMap<>();
+
+    public <T> void putFavorite(Class<T> type, T instance) {
+        // put에서 type.cast를 쓰는 이유는 raw 타입이 들어와 타입 안정성이 깨지지 않도록 하기 위함이다.
+        favorites.put(Objects.requireNonNull(type), type.cast(instance));
+    }
+
+    public <T> T getFavorite(Class<T> type) {
+        return type.cast(favorites.get(type));
+    }
+
+    public static void main(String[] args) {
+        Favorites favorites = new Favorites();
+        favorites.putFavorite(Integer.class, 1);
+        favorites.putFavorite(String.class, "2");
+        Assert.isTrue(favorites.getFavorite(Integer.class) == 1);
+        Assert.isTrue(favorites.getFavorite(String.class).equals("2"));
+    }
+}
+```
+- Favorites 내부적으로 쓰이는 Map은 명시적인 타입을 보장하지 않지만 제네릭 메서드를 통해 타입 안전함을 보장할 수 있다.
+
+## ITEM 34. int 상수 대신 열거 타입을 사용하라.
+int 상수는 타입 안전성을 보장할 수 없고 표현력도 좋지 않다. **컴파일타임에 알 수 있는 상수 집합이라면 항상 열거 타입을 사용하라.**
+
+자바의 열거 타입은 클래스이므로 다른 언어의 열거 타입보다 훨씬 강력하다.
+- 자바는 열거 타입에 대해 싱글톤을 보장한다.
+- 열거 타입은 근본적으로 불변이라 모든 필드는 final이어야 한다.
+
+### 상수별 메서드 구현
+```java
+public enum Operation {
+    PLUS {
+        public double apply(double x, double y) { return x + y; }
+    },
+    MINUS {
+        public double apply(double x, double y) { return x - y; }
+    },
+    TIMES {
+        public double apply(double x, double y) { return x * y; }
+    },
+    DIVIDE {
+        public double apply(double x, double y) { return x / y; }
+    };
+
+    public abstract double apply(double x, double y);
+}
+```
+- 열거 타입에서 상수별로 다른 동작을 수행해야 한다면 switch문 대신 상수별 메서드 구현을 이용하는 것이 좋다.
+
+### 전략 열거 타입 패턴
+```java
+@RequiredArgsConstructor
+public enum PayrollDay {
+    MON(WEEKDAY), TUES(WEEKDAY), WED(WEEKDAY), THUR(WEEKDAY), FRI(WEEKDAY), SAT(WEEKEND), SUN(WEEKEND);
+
+    private final PayType payType;
+
+    int pay(int minutesWorked, int payRate) {
+        return payType.pay(minutesWorked, payRate);
+    }
+
+    enum PayType {
+        WEEKDAY {
+            int overtimePay(int minutesWorked, int payRate) {
+                return minutesWorked <= MINS_PER_SHIFT ? 0 :
+                        (minutesWorked - MINS_PER_SHIFT) * payRate / 2;
+            }
+        },
+        WEEKEND {
+            int overtimePay(int minutesWorked, int payRate) {
+                return minutesWorked * payRate / 2;
+            }
+        };
+
+        abstract int overtimePay(int minutesWorked, int payRate);
+        private static final int MINS_PER_SHIFT = 8 * 60;
+
+        int pay(int minutesWorked, int payRate) {
+            int basePay = minutesWorked * payRate;
+            return basePay + overtimePay(minutesWorked, payRate);
+        }
+    }
+}
+```
+- 열거 타입에서 상수별로 다른 동작을 수행하지만 일부 같은 동작을 공유해야 한다면 전략 열거 타입 패턴을 활용하자.
