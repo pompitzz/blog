@@ -6,7 +6,7 @@ img:
     - ec2.png
 tags: 
     - AWS
-    - JAVA
+    - Java
 ---
 
 - yum에는 설치가능한 JDK가 1.8까지만 존재하기 때문에 JDK 11을 설치하기 위해선 다른 방법을 이용해야합니다.

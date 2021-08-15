@@ -1,6 +1,6 @@
 class Map {
     constructor() {
-        this.map = [];
+        this.map = {};
     }
 
     put(key, value) {

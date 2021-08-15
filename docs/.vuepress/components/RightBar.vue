@@ -10,9 +10,9 @@
         <Tag :color="tag.color"
              :count="tag.count"
              :tagName="tag.tagName"
-             class="mt-3"
+             class="mt-3 justify-center"
              routing
-             style="width: 150px; height: 30px;"
+             style="width: 130px; height: 30px;"
         />
       </div>
     </div>

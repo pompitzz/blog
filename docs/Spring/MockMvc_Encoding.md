@@ -4,7 +4,7 @@ date: 2021-05-04 00:27
 img:
     - spring.png
 tags:
-    - JAVA
+    - Java
     - Spring
 ---
 

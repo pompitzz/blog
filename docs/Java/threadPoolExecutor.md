@@ -5,7 +5,7 @@ img:
     - java.png
     - spring.png
 tags: 
-    - JAVA
+    - Java
     - Spring
 ---
 - Java의 ThreadPoolExecutor를 통해 ThreadPool을 설정하는 방법과 Spring의 ThreadPoolTaskExecutor가 ThreadPoolExecutor를 어떻게 활용하는지 알아보겠습니다.

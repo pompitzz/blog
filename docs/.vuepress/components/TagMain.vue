@@ -43,7 +43,7 @@ export default {
 
 function filterOnlyTagName(tagName, posts) {
   return toArray(posts)
-      .filter(post => post.frontmatter.tags.includes(tagName))
+      .filter(post => (post.frontmatter.tags || []).includes(tagName))
       .map(post => changePostTagArr(post, tagName));
 }
 

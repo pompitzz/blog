@@ -3,3 +3,7 @@ export function errorLogging(error) {
         console.log(error);
     }
 }
+
+export function ignored(error) {
+
+}

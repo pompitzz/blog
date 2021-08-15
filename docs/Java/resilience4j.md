@@ -4,7 +4,7 @@ date: 2021-04-06 22:09
 img:
   - java.png 
 tags:
-  - JAVA
+  - Java
 ---
 
 ## Introducion

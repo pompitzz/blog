@@ -1,32 +1,38 @@
 <template>
   <div>
-    <div v-if="showPosts.length > 0"
-         class="posts-row"
+    <div
+        v-if="showPosts.length > 0"
+        class="posts-row"
     >
-      <div v-for="(post, index) in showPosts"
-           :key="index"
+      <div
+          v-for="(post, index) in showPosts"
+          :key="index"
       >
-        <div class="post-card shadow border cursor-pointer hover:shadow-xl"
-             @click="$router.push(post.path)"
+        <div
+            class="post-card shadow border cursor-pointer hover:shadow-xl"
+            @click="$router.push(post.path)"
         >
 
-          <div v-if="hasImage(post.frontmatter)"
-               class="post-card-img-wrapper shadow-md"
+          <div
+              v-if="hasImage(post.frontmatter)"
+              class="post-card-img-wrapper shadow-md"
           >
-            <img :src="'/blog/img/' + post.frontmatter.img[0]"
-                 alt=""
-                 class="post-card-img"
+            <img
+                :src="'/blog/img/' + post.frontmatter.img[0]"
+                alt=""
+                class="post-card-img"
             />
           </div>
           <div class="post-card-title">{{ post.frontmatter.title }}</div>
           <div class="post-card-date">{{ post.frontmatter.date }}</div>
           <div class="text-center py-1.5">
-            <Tag v-for="(tagName, index) in post.frontmatter.tags || []"
-                 :key="index"
-                 :tagName="tagName"
-                 class="mr-2"
-                 routing
-                 small
+            <Tag
+                v-for="(tagName, index) in getTags(post)"
+                :key="index"
+                :tagName="tagName"
+                class="mr-2"
+                routing
+                small
             />
           </div>
         </div>
@@ -76,6 +82,13 @@ export default {
     hasImage(frontmatter) {
       return frontmatter.img && frontmatter.img.length >= 1;
     },
+    getTags(post) {
+      const tags = post.frontmatter.tags;
+      if (tags && tags.length > 0) {
+        return tags;
+      }
+      return [''];
+    },
   },
 };
 
@@ -84,8 +97,9 @@ function size(listLength, size) {
 }
 </script>
 
-<style lang="stylus"
-       scoped
+<style
+    lang="stylus"
+    scoped
 >
 .post-card
   display block

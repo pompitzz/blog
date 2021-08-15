@@ -4,7 +4,7 @@ date: 2021-02-06 02:24
 img: 
     - java.png 
 tags:
-    - JAVA
+    - Java
 ---
 
 ### 코드 품질

@@ -1,5 +1,5 @@
 ---
-tagMain: JAVA
+tagMain: Java
 sitemap:
    exclude: true
 ---
