@@ -1,2 +1,2 @@
-# VuePress로 Blog 제작
+# VuePress Blog
 - [바로가기](https://pompitzz.github.io/blog/)
