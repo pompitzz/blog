@@ -3,6 +3,8 @@ title: 디자인 패턴(구조 패턴)
 date: 2021-08-28 16:36
 img: 
     - structural_design_pattern.png
+tags:
+    - Design
 ---
 
 **구조 패턴은 더 큰 구조를 형성하기 위해 어떻게 클래스와 객체를 합성하는가와 관련된 패턴이다.**

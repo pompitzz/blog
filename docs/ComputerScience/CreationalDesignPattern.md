@@ -3,6 +3,8 @@ title: 디자인 패턴(생성 패턴)
 date: 2021-08-14 21:36
 img: 
     - creational_design_pattern.png
+tags:
+    - Design
 ---
 
 ## 추상 팩토리(Abstract Factory) 패턴
