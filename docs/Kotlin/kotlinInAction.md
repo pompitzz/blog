@@ -12,17 +12,15 @@ tags:
 - 코틀린은 정적 타입 지정 언어이다.
 
 ### 정적 타입 언어의 장점
-::: details 자세히
 - **성능**
     - 런타임에 어떤 메서드를 호출해야할 지 알아내지 않아도되므로 성능이 더 우수
 - **신뢰성**
     - 컴파일러를 통한 검증으로 신뢰성 향상
 - **유지보수성**
 - **강력한 도구 지원**
-:::
+
   
 ### 코틀린의 철학
-::: details 자세히
 - **실용성**
     - 연구를 위한 언어가 아닌 실무에 사용할 수 있도록 증명된 해법과 기능을 바탕으로 만듬
 - **간결성**
@@ -32,14 +30,13 @@ tags:
     - 타입 지정 언어이므로 안전한 코딩이 가능하다.
 - **상호운용성**
     - 자바와 매우 높은 호환성을 가짐
-:::
+
 
 ## 2장 코틀린 기초
 - 코틀린은 루프를 제외하고 대부분 `식(expression)`으로 구성됨
 - expression은 값을 만들지만 statement는 블럭의 최상위 요소로 존재할 뿐 값을 만들지 않는다.
 
 ### 함수와 변수
-::: details 자세히
 ```kotlin
 // 함수는 fun으로 정의하며 블럭문이 아닌 식으로도 정의 가능
 fun hello() = println("Hello")
@@ -59,21 +56,19 @@ fun max(a: Int, b: Int) = if (a > b) a else b
 
 #### 굳이 변수를 뒤에 선언하는 이유?
 - 변수를 뒤에 지정하게 되면 `타입 지정을 생략할 수 있게 해준다.`
-:::
+
 
 
 ### 문자열 템플릿
-::: details 자세히
 ```kotlin
 val name = "Dexter"
 println("Hello $name")
 println("Hello ${name}")
 ```
 - 자바에 비해 훨씬 더 간편하게 문자열을 다룰 수 있다.
-:::
+
 
 ### 클래스
-::: details 자세히
 ```kotlin
 class Person(
     // val은 읽기 전용으로 비공개 필드와 getter 제공
@@ -86,10 +81,9 @@ val person = Person("Dexter", 26)
 println(person.name) // 프로퍼티로 직접 접근하면 게터가 호출된다.
 println(person.age)
 ```
-:::
+
 
 ### 커스텀 접근자
-::: details 자세히
 ```kotlin
 class Rectangle(val height: Int, val width: Int) {
     // 커스텀 접근자를 지정할 수 있다.
@@ -97,10 +91,9 @@ class Rectangle(val height: Int, val width: Int) {
         get() = height == width
 }
 ```
-:::
+
 
 ### enum과 when
-::: details 자세히
 ```kotlin
 enum class Color {
     RED,
@@ -128,10 +121,9 @@ fun getStringColor3(color1: Color, color2: Color) =
             else -> throw RuntimeException()
         }
 ```
-:::
+
 
 ### 스마트 캐스팅
-::: details 자세히
 ```kotlin
 interface Expr
 class Num(val value: Int) : Expr
@@ -161,10 +153,9 @@ fun main() {
 }
 ```
 - 타입검사와 동시에 형변환을 하도록하여 스마트 캐스팅 지원
-:::
+
 
 ### expression when, if
-::: details 자세히
 ```kotlin
 fun expressionWhen(e: Expr): Int =
         when(e) {
@@ -191,10 +182,9 @@ fun expressionIf(e: Expr): Int =
             throw IllegalArgumentException()
         }
 ```
-:::
+
 
 ### 이터레이션
-::: details 자세히
 ```kotlin
 fun iterationEx() {
     // 1~10 출력
@@ -220,10 +210,9 @@ fun iterationEx() {
     }
 }
 ```
-:::
+
 
 ### in으로 범위 검사
-::: details 자세히
 ```kotlin
 
 fun isSmallLetter(c: Char) = c in 'a'..'z' // 컴파일 -> 'a'<= c && c <= 'z'
@@ -235,7 +224,7 @@ fun regognize(c: Char): String =
             else -> "is not small letter"
         }
 ```
-:::
+
 
 ### 예외
 - 코틀린은 모두 언체크 예외로 이루어져 있다.
@@ -243,7 +232,6 @@ fun regognize(c: Char): String =
 
 ## 3장 함수 정의와 호출
 ### Default and Named Argument
-::: details 자세히
 ```kotlin
 fun <T> joinToString(collection: Collection<T>, separator: String = ","): String {
     val builder = StringBuilder()
@@ -265,11 +253,10 @@ fun main() {
 #### Default Argument를 자바에도 지원하려면?
 
 - @JvmOverloads를 붙이면 각각의 아규먼트에 맞는 오버로딩 메서드를 만들어준다.
-  :::
+  
 
 ### 최상위 함수와 최상위 프로퍼티
 
-::: details 자세히
 
 #### 최상위 함수는 어떻게 생성될까?
 
@@ -280,11 +267,10 @@ fun main() {
 - 최상위 프로퍼티에 val, var 모두 사용 가능하다.
 - val은 재할당이 불가능한건 맞지만 실제 호출 시 내부의 getter를 호출한다.
 - 상수를 선언할 때 getter를 호출하는건 자연스럽지 못하므로 `const val NAME = "Dexter"`와 같이 const를 붙여주자.
-  :::
+  
 
 ### 확장 함수
 
-::: details 자세히
 
 - 기존에 만들어져 있던 클래스의 함수를 외부에서 추가하여 확장시키는 기법
 
@@ -316,10 +302,9 @@ fun main() {
 }
 ```
 - 내부적으로 정적 메서드로 구현되므로 오버라이딩은 불가능하기 때문에 실제 인스턴스는 Child이나 Parent의 hi가 호출된다.
-:::
+
   
 ### 확장 프로퍼티
-::: details 자세히
 ```kotlin
 val String.lastChar: Char
     get() = get(length - 1)
@@ -338,10 +323,9 @@ fun main() {
 }
 ```
 - 기존 클래스 객체에 필드를 추가하는게 아니라 상태를 가질 순 없고 접근자 프로퍼티를 정의하여 사용 가능
-:::
+
   
 ### 가변 인자 함수
-::: details 자세히
 ```kotlin
 fun print(vararg args: String) {
     for (arg in args) {
@@ -358,18 +342,16 @@ fun main() {
     printArray(arrayOf("1", "2"))
 }
 ```
-:::
+
 
 ### 중위 함수
-::: details 자세히
 ```kotlin
 val map = hashMapOf(1 to "one", 2 to "two")
 ```
 - 인자가 하나뿐인 일반 메서드나 확장 함수는 중위 호출이 가능하다.
-:::
+
 
 ### 구조 분해
-::: details 자세히
 ```kotlin
 for ((key, value) in mutableMapOf(Pair("A", 1))) {
 
@@ -382,10 +364,9 @@ for ((key, value) in mutableMapOf(Pair("A", 1))) {
 }
 ```
 - map을 key, value로 구조분해, list를 withIndex로 호출하여 index, value로 구조분해 하는등의 방식을 활용 가능.
-:::
+
 
 ### 문자열 및 정규식 다루기
-::: details 자세히
 
 ```kotlin
 fun regex() {
@@ -396,12 +377,11 @@ fun regex() {
   val regex2 = """\d\d""".toRegex()
 }
 ```
-:::
+
 
 ## 4장. 클래스, 객체, 인터페이스
 
 ### 인터페이스와 클래스
-::: details 자세히
 ```kotlin
 interface Clickable {
     fun click()
@@ -433,11 +413,10 @@ class Button : Clickable {
 
 - 이전에 스마트 캐스팅을 위해선 클래스의 프로퍼티가 val이면서 커스텀 접근자를 구현하지 않아야 가능하다고 했다.
 - 이는 클래스에도 적용되기 때문에 만약 클래스가 open되어 있다면 스마트 캐스트는 불가하다.
-  :::
+  
 
 ### 가시성 변경자
 
-::: details 자세히
 
 - 코틀린은 기본 가시성변경자가 public이며 default 접근자는 따로 존재하지 않는다.
 - 모듈 내부에서만 사용할 수 있는 internal 접근자를 따로
@@ -474,10 +453,9 @@ class LengthCounter {
         private set // set은 클래스 내부에서만 사용할 수 있게 함.
 }
 ```
-:::
+
 
 ### 내부 클래스와 중첩 클래스
-::: details 자세히
 - 코틀린은 외부 클래스가 내부 클래스의 private 멤버에 접근이 불가능하다.
 
 ```kotlin
@@ -510,10 +488,9 @@ fun eval2(e: Expr2): Int =
             is Expr2.Sum -> TODO()
         }
 ```
-:::
+
 
 ### 코틀린의 생성자
-::: details 자세히
 - 코틀린 클래스의 생성자는 크게 주 생성자와, 부 생성자로 구분할 수 있다.
     - 주 생성자는 클래스 본문이 아닌 괄호 안에서 정의
     - 부 생성자는 클래스 본문 안에서 정의
@@ -536,10 +513,9 @@ class SubUser(name: String) : User(name)
 
 > 코틀린은 모든 생성자 프로퍼티에 디폴트 값을 부여하면 자동으로 디폴트 생성자를 만들어준다.
 > - 코틀린은 디폴트 파라미터가 있기 때문에 대부분의 부 생성자 오버로딩이 필요 없다.
-:::
+
 
 ### 인터페이스 프로퍼티와 Backing Field
-::: details 자세히
 - 인터페이스에서 상태를 가질 순 없지만 `추상 프로퍼티 정의`가 가능하다.
 
 ```kotlin
@@ -584,17 +560,15 @@ fun main() {
 - 해당 프로퍼티를 사용하는 클라이언트 입장에서는 Backing Field에 대해 알 필요가 없다.
 - 디폴트 접근자로 구현을 하더라도 코틀린 내부적으로 Backing Field를 생성해주기 때문이다.
 - 단, 직접 커스텀 접근자를 구현하였는데 거기서 Backing Field를 사용하지 않으면 Backing Field는 존재하지 않게 된다.
-:::
+
 
 ### data class
-::: details 자세히
 - JVM언어에서는 hash 컬렉션의 사용 방식으로 인해 equals, hashCode를 반드시 동시에 알맞게 구현해줘야 하는 규칙이 있다.
     - 최적화를 위해 hashCode로 비교 후 equals로 한번 더 비교하기 때문이다.
 - 이런 보일러 플레이트 같은 메서드들을 자동 구현해주는 data class가 존재한다. -> `data class User(val name: String)`
-:::
+
 
 ### 클래스 위임: by
-::: details 자세히
 - 상속을 하지 않고 클래스에 새로운 동작을 추가하기 위해선 주로 **데코레이터 패턴**을 활용한다.
 - 데코레이터 패턴을 위해선 동일한 인터페이스를 구현해야하고, 관련되지 않은 모든 동작도 하나씩 위임해줘야 한다.
 - 코틀린은 언어적으로 이러한 위임을 간편히 할 수 있도록 제공해준다.
@@ -607,10 +581,9 @@ class DelegatingCollection<T>(innerList: Collection<T> = ArrayList<T>()) : Colle
     }
 
 ```
-:::
+
 
 ### object 키워드: 클래스 선언과 동시에 인스턴스 생성(싱글톤 보장)
-::: details 자세히
 - object 키워드는 클래스 선언과 동시에 인스턴스를 생성하여 싱글톤을 보장해준다.
     - 주로 싱글톤, 익명 내부 클래스, 동반 객체에서 사용된다.
 
@@ -632,10 +605,9 @@ data class Person(val name: String) {
     }
 }
 ```
-:::
+
 
 ### 동반 객체
-::: details 자세히
 - 코틀린은 클래스 내부에서 static 메서드를 제공해주지 않는다.(최상위 함수와, 객체 선언이 가능해서)
 - 하지만 상황에 따라 클래스 내부에 private 접근자로 접근하기 위해 클래스 내부에 구현되어야 할 필요가 있다.
 - 이런경우 동반 객체를 활용하여 private 접근자에 접근이 가능하도록 할 수 있다.
@@ -685,10 +657,9 @@ fun DUser.Companion.fromJSON(json: String): DUser {
     TODO()
 } 
 ```
-:::
+
 
 ### 객체 식: 익명 내부 클래스
-::: details 자세히
 ```kotlin
 interface Sender {
     fun send()
@@ -708,13 +679,12 @@ fun main() {
 - `object : className() {}` 로 익명 내부 클래스를 정의할 수 있다.
 - 주로 메서드에 넘겨줄 객체를 즉시 생성할 때 사용된다.
   - 이 경우 object는 싱글톤을 보장하지 않는다. 호출될 때 마다 새로운 object를 생성한다.
-    :::
+    
 
 ## 5장. 람다로 프로그래밍
 
 ### 람다와 컬렉션
 
-::: details 자세히
 
 ```kotlin
 fun main() {
@@ -733,11 +703,10 @@ fun main() {
 
 - 자바와 다르게 코틀린은 람다에서 final이 아닌 변수에 접근이 가능하다.
   - 컴파일러가 특별한 wrapper로 감싸서 참조는 그대로두고 내부의 값을 변경할 수 있도록 해준다.
-    :::
+    
 
 ### 컬렉션 함수형 API
 
-::: details 자세히
 
 ```kotlin
 fun main() {
@@ -756,11 +725,10 @@ fun main() {
 ```
 
 - 기본적인 자바 스트림에서 제공하는 filter, map 등등을 제공한다.
-  :::
+  
 
 ### 지연 계산을 위한 시퀀스
 
-::: details 자세히
 
 ```kotlin
 fun main() {
@@ -795,11 +763,10 @@ fun main() {
 ```
 
 - 기본 함수형 API는 지연 계산을 하지 않으므로 지연 계산이 필요하다면 `asSequence()` or `stream()`를 사용하면 된다.
-  :::
+  
 
 ### 람다 vs 익명 클래스
 
-::: details 자세히
 
 - 람다와 익명 클래스는 간결성에서도 차이가 나지만, 재사용에서도 차이가 있다.
 - 익명 클래스는 생성마다 새로운 인스턴스를 만들지만 람다는 재사용한다.
@@ -807,26 +774,22 @@ fun main() {
 > 책 기준으로 inline 되지 않은 람다식은 구버전 호환을 위해 익명 클래스로 만들어짐.
 > - 자바 8부터 제공하는 람다를 사용하도록 변경될 예정이다.
 > - 대부분 기본 확장함수는 inline을 활용하므로 익명 클래스를 만들진 않는다.
-    :::
+    
 
 ### SAM 생성자: 람다를 함수형 인터페이스로 명시적 변경
-
-::: details 자세히
+- 하나의 추상 메서드만 가지는 인터페이스를 흔히 funtional interface or SAM(Single Abstract Method) 라고 부른다.
 
 ```kotlin
 // Runnable 같은 함수형 인터페이스는 SAM 생성자를 활용하자
 fun createRunable() = Runnable { println("RUN!") }
 val runnable = Runnable { println("RUN!") }
 ```
-
 - 함수형 인터페이스의 인스턴스를 반환하는 메서드가 있으면 람다로 반환이 불가능하고 SAM 생성자로 감싸주어야 한다.
--
 
-:::
+
 
 ### 수신 객체 지정 람다: with, apply
 
-::: details 자세히
 
 #### with 함수(수신 객체 지정 람다)
 
@@ -883,7 +846,7 @@ fun main() {
 }
 ```
 
-:::
+
 
 ## 6장. 코틀린 타입 시스템
 
@@ -892,15 +855,13 @@ fun main() {
 
 ### Nullability
 
-::: details 자세히
 
 - NPE를 피할 수 있게 돕기 위한 코틀린 타입 시스템의 특성으로 컴파일 시점에 null 에러를 파악할 수 있도록 해준다.
 - 코틀린은 기본 타입이 null이 불가능하며, nullable 타입을 위해 ?를 붙이면 됨.
-  :::
+  
 
 ### 앨비스 연산자 ?:
 
-::: details 자세히
 
 ```kotlin
 data class Address(val city: String, val country: String)
@@ -920,11 +881,10 @@ fun print(employee: Employee) {
 
 - 어떤 값이 null일 떄 그 값대신 사용할 기본 값을 지정할 수 있다.
 - `val t: String = str ?: "Default`
-  :::
+  
 
 ### 안전한 캐스팅 as?
 
-::: details 자세히
 
 ```kotlin
 fun findAddressCity(any: Any): String {
@@ -934,7 +894,7 @@ fun findAddressCity(any: Any): String {
 ```
 
 - 코틀린은 as?를 통해 ClassCastException이 발생하지 않도록 할 수 있다.
-  :::
+  
 
 ### null 아님 단언: !!
 
@@ -942,7 +902,6 @@ fun findAddressCity(any: Any): String {
 
 ### let 함수
 
-::: details 자세히
 
 ```kotlin
 fun sendEmail(message: String) = print(message)
@@ -961,11 +920,10 @@ fun main() {
 ```
 
 - nullable한 타입의 값일 때 null이 불가능한 함수의 파라미터로 넘기려고 할 때 let을 활용하면 된다.
-  :::
+  
 
 ### null 불가능 타입의 지연 초기화
 
-::: details 자세히
 
 ```kotlin
 class LateInit {
@@ -976,11 +934,10 @@ class LateInit {
 - null이 불가능한 타입을 사용하지만 상황에 따라 지연 초기화가 필요할 때가 존재한다.
 - 그럴땐 lateinit을 활용하면 null이 불가능한 타입을 사용할 수 있다.
   - `프로퍼티 초기화전에 접근 시 예외가 발생한다.`
-    :::
+    
 
 ### 타입 파라미터와 nullable
 
-::: details 자세히
 
 ```kotlin
 // 타입 파라미터는 유일하게 Any?로 추론되므로 nullable하다.
@@ -990,11 +947,10 @@ fun <T> some1(): T = TODO()
 fun <T : Any> some2(): T = TODO()
 ```
 
-:::
+
 
 ### 플랫폼 타입
 
-::: details 자세히
 
 - 코틀린이 null에 대한 정보를 알수 없는 타입으로 처리를 개발자에게 전적으로 맡긴다.
 - **오직 자바에서 가져온 타입만 플랫폼 타입이 될 수 있다.**
@@ -1010,15 +966,14 @@ fun <T : Any> some2(): T = TODO()
 #### 자바 메서드 오버라이드
 
 - 자바 메서드를 오버라이드하고, 메서드 변수가 null 불가능한 타입으로 선언된다면 null 아님을 단언하는 validation을 자동으로 추가해준다.
-  :::
+  
 
 ### 코틀린의 원시타입
 
-::: details 자세히
 
 - 코틀린은 원시 타입과 래퍼 타입의 구분이 없다. 코틀린 내부적으로 런타임에 가장 효율적인 방식으로 처리한다.
   - 대부분의 Int 타입은 자바 int로 컴파일되며, 컬렉션이나 제네릭 같은곳에서만 래퍼 객체를 사용한다.
-    :::
+    
 
 ### Any, Any?: 최상위 타입
 
@@ -1030,7 +985,6 @@ fun <T : Any> some2(): T = TODO()
 
 ### Nothing
 
-::: details 자세히
 
 ```kotlin
 // 정상적으로 끝날 수 없는 함수
@@ -1045,19 +999,17 @@ fun main() {
 ```
 
 - Nothing 타입은 오직 반환 타입으로만 쓸 수 있으며 `Nothing을 반환하는 함수는 정상적으로 끝나지 않음을 의미한다.`
-  :::
+  
 
 ### 코틀린과 자바 컬렉션
 
-::: details 자세히
 
 - 코틀린의 모든 컬렉션은 자바 컬렉션 인터페이스의 구현체이므로 언제든지 서로 오갈 수 있다.
 - 코틀린은 자바 컬렉션을 구현했지만 읽기 전용 클래스와 변경 가능 컬렉션(MutableCollection)을 분리했다.
-  :::
+  
 
 ### 배열
 
-::: details 자세히
 
 ```kotlin
 fun main(args: Array<String>) {
@@ -1082,13 +1034,12 @@ fun main(args: Array<String>) {
 ```
 
 - 코틀린은 배열에 대해서도 다양한 api를 제공해준다.
-  :::
+  
 
 ## 7장. 연산자 오버로딩과 기타 관례
 
 ### 산술 연산자 오버로딩
 
-::: details 자세히
 
 ```kotlin
 /**
@@ -1127,11 +1078,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### 복합 대입 연산자 오버로딩
 
-::: details 자세히
 
 ```kotlin
 // 현재 리스트를 그대로 유지하면서 복합 연산자 오버로딩을 수행한다.
@@ -1157,11 +1107,10 @@ fun main() {
 - +, -는 항상 새로운 컬렉션을 반환한다.
 - 변경 가능한 컬렉션에서의 +=, -=는 메모리에 있는 객체 상태를 변경시킨다.
 - 읽기 전용 컬렉션의 경우 복사본을 반환한다.
-  :::
+  
 
 ### 단항 연산자 오버로딩
 
-::: details 자세히
 
 ```kotlin
 /** 단항 연산자 (함수 파라미터가 없다)
@@ -1179,11 +1128,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### 비교 연산자 오버로딩
 
-::: details 자세히
 
 ```kotlin
 /** 동등 비교 연산자
@@ -1214,11 +1162,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### get, set 관례
 
-::: details 자세히
 
 ```kotlin
 // get 관례는 [index or key]와 같이 접근을 가능하게 해준다.
@@ -1255,11 +1202,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### in 관례
 
-::: details 자세히
 
 ```kotlin
 data class Rectangle(val upperLeft: Point, val lowerRight: Point)
@@ -1280,11 +1226,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### rangeTo 관례
 
-::: details 자세히
 
 ```kotlin
 /** start..end -> start.rangeTo(end)
@@ -1303,11 +1248,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### for 루프 iterator 관례
 
-::: details 자세히
 
 - for 루프에서 사용하는 in은 iterator를 호출해 hasNext, next 호출을 반복하는 식으로 변환된다.
 
@@ -1338,11 +1282,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### 구조 분해 관례
 
-::: details 자세히
 
 ```kotlin
 /** 구조 분해 관례
@@ -1380,11 +1323,10 @@ fun main() {
 }
 ```
 
-:::
+
 
 ### 위임 프로퍼티
 
-::: details 자세히
 
 ```kotlin
 class Foo {
@@ -1435,11 +1377,10 @@ class Person4(val name: String) {
 }
 ```
 
-:::
+
 
 ### 위임 프로퍼티 구현해보기
 
-::: details 자세히
 
 - 위임 프로퍼티 없이 프로퍼티 변경을 리스너에 통지해주는 기능을 구현하보고 그 후에 위임 프로퍼티를 사용하는 방식으로 리팩터링 한다.
 
@@ -1571,21 +1512,19 @@ class MyPerson(
 }
 ```
 
-:::
+
 
 ## 8장. 고차 함수
 
 ### 고차 함수 정의
 
-::: details 자세히
 
 - 고차 함수는 다른 함수를 인자로 받거나 함수를 반환하는 함수이다.
 - 그러므로 filter, map, with 등이 모두 고차 함수로 볼 수 있다.
-  :::
+  
 
 ### 함수 타입
 
-::: details 자세히
 
 ```kotlin
 fun main() {
@@ -1620,19 +1559,17 @@ fun main() {
 #### IntelliJ IDEA 팁
 
 - 인텔리에는 디버깅할 때 람다 코드 내부를 한 단계씩 실행해볼 수 잇는 `스마트 스테핑을 제공`한다.
-  :::
+  
 
 ### 자바에서 코틀린 함수 타입
 
-::: details 자세히
 
 - 컴파일된 코드 안에서 함수 타입은 FunctionN인터페이스를 구현한 객체이다.
 - FunctionN 인터페이스에는 invoke 메서드 정의가 하나 들어있기 때문에 자바에서도 코틀린 함수타입을 invoke를 통해 호출할 수 있게 된다.
-  :::
+  
 
 ### 안전한 nullable function 호출
 
-::: details 자세히
 
 ```kotlin
 fun <T> Collection<T>.joinToString(
@@ -1655,11 +1592,10 @@ fun <T> Collection<T>.joinToString(
 }
 ```
 
-:::
+
 
 ### 함수를 반환하는 함수 만들기
 
-::: details 자세히
 
 ```kotlin
 data class Person(
@@ -1679,21 +1615,19 @@ fun getPredicate(prefix: String = "", onlyWithPhoneNumber: Boolean = false): (Pe
 }
 ```
 
-:::
+
 
 ### 인라인 함수: 람다의 부가 비용 없애기
 
-::: details 자세히
 
 - 코틀린이 보통 람다를 익명 클래스로 컴파일하지만 그렇다고 람다를 사용할 때마다 익명 클래스처럼 새로운 클래스를 만들지 않는다.
 - 하지만 **람다가 변수를 포획하여 상태를 가지고 있게 되면 람다가 생성되는 시점마다 새로운 익명 클래스 객체가 생성될 것이다.**
 - 이런 경우에는 실행 시점에 익명 클래스 생성에 대한 부가 비용이 발생하여 성능저하가 일어날 수 있다.
 - **inline 변경자를 활용하면 컴파일러는 해당 인라인 함수를 호출하는 곳에 함수 본문에 해당하는 바이트 코드를 복사하여 컴파일 시켜준다.**
-  :::
+  
 
 ### 인라이닝이 작동하는 방식
 
-::: details 자세히
 
 ```kotlin
 // 이 함수는 inline을 사용했으므로 자바의 synchronized 문과 같을 것이다.
@@ -1734,11 +1668,10 @@ fun foo(l: Lock) {
 - 인라인을 활용하면 함수를 호출하는 바이트코드 대신 함수 본문을 번역한 바이트코드로 컴파일될 것이다.
 
 > 한 인라임 함수를 여러곳에서 사용하면 호출하는 곳에 각각 바이트 코드를복사하므로 바이트코드가 거대해질 수 있다.
-:::
+
 
 ### 인라인 함수의 한계
 
-::: details 자세히
 
 - **모든 람다식을 인라이닝할 수 없다.**
 - 인라이닝은 람다식을 본문에 직접 펼치기 때문에 상황에 따라 이러한 방식이 불가능 할 때가 존재한다.
@@ -1748,44 +1681,38 @@ fun foo(l: Lock) {
   - 이러한 상황에 대비하여 의도적으로 인라이닝을 하지 못하도록 notinline 변경자를 붙여 인라인을 금지시킬 수 있다.
 
 > 인라인 함수의 본문에서 람다 식을 바로 호출하거나, 해당 람다 식을 인자로 전달받아 바로 호출하는 경우에 해당 람다를 인라이닝할 수 있다.
-:::
+
 
 ### 컬렉션 연산 인라이닝
-::: details 자세히
 - 컬렉션의 filter 같은 함수는 인라인 함수이기 때문에 filter 함수의 바이트코드는 그 함수에 전달된 람다 본문의 바이트코드와 함께 filter를 호출한 위치에 들어가게 된다.
   - 그러므로 직접 if문을 작성하는 것과 바이트코드는 거의 동일하여 성능은 차이가 없다.
-    :::
+    
 
 ### 시퀀스와 인라이닝
-::: details 자세히
 
 - 시퀀스는 지연 계산을 위해 filter와 같은 함수를 객체로 가지고 있어야 하므로 인라이닝할 수 없다.
 - **그러므로 지연 계산을 지원하는 시퀀스가 기본 컬렉션 함수보다 성능이 항상 좋은건 아니다. 오직 지연 계산의 이점이 필요할때만 성능이 좋다**
-  :::
+  
 
 ### 함수를 인라인으로 선언해야 할 때
-::: details 자세히
 - 람다를 인자로 받는 함수를 인라이닝하면 이점이 많다.
   - JVM은 함수 호출과 람다를 인라이닝 해줄 정도로 똑똑하지 못하기 때문에 성능을 향상시킬 가능성이 있다.
   - 인라이닝을 활용하면 함수 호출 비용을 줄일 수 있고, 람다로 표현하는 클래스와 람다 인스턴스에 해당하는 객체를 만들 필요가 없어진다.
   - 일반 람다 표현식으로는 하지 못하는 non-local return 같은 기능도 활용할 수 있다.
-    :::
+    
 
 ### 함수를 인라인으로 선언하지 말아야 할 때
-::: details 자세히
 - 람다를 인자로 받는 함수 같은 경우가 아니라 일반 함수 호출은 경우엔 JVM이 이미 강력하게 최적화를 시켜준다.
   - JIT 컴파일러가 기계어로 변환할 때 캐싱기법등을 활용하여 일반 함수 호출에 대한 최적화를 시켜준다.
   - 만약 코틀린 인라이닝을 사용하게 되면 바이트코드 중복이 발생하므로 오히려 성능에 불리하다.
-    :::
+    
 
 ### 인라인 함수를 사용할 때 주의할 점
-::: details 자세히
 - 인라인 함수는 해당 함수의 본문에 해당하는 바이트코드를 호출 지점에 복사하기 때문에 인라인 함수의 코드 크기가 크다면 바이트코드가 상대적으로 매우 커질 수 있으므로 인라인 함수는 최대한 짧게 정의하는 것이 좋다.
   - 코틀린 기본 지원 inline 함수들을 보면 모두 크기가 아주 작다는 사실을 알 수 있다.
-    :::
+    
 
 ### 인라인 함수 활용 예
-::: details 자세히
 ```kotlin
 fun main() {
   // Closeable을 구현체들은 inline 확장함수인 use를 사용할 수 있다.
@@ -1798,11 +1725,10 @@ fun doRun(bufferedReader: BufferedReader): List<String> {
   return listOf(bufferedReader.readLine())
 }
 ```
-:::
+
 
 ### 인라인 함수의 non-local return
 
-::: details 자세히
 ```kotlin
 fun lookForAlice(people: List<Person2>) {
   // 일반적인 for문에서는 발견즉시 for문을 종료하여 함수를 리턴할 수 있다.
@@ -1827,11 +1753,10 @@ fun lookForAlice(people: List<Person2>) {
   println("Alice is not found")
 }
 ```
-:::
+
 
 ### 레이블을 활용한 로컬 return
 
-::: details 자세히
 ```kotlin
 fun lookForAlice2(people: List<Person2>) {
   // 로컬 리턴은 for 루프의 break과 비슷한 역할을 수행해준다.
@@ -1885,11 +1810,10 @@ fun lookForAlice3(people: List<Person2>) {
 > 람다 함수는 기본적으로 논로컬 리턴을 특징으로 하고 익명 함수는 로컬 리턴을 특징으로 한다.
 > - 람다는 label을 통해 로컬 리턴이 가능하지만 익명 함수는 논로컬 리턴이 불가능하다.
 > - 익명 함수는 일반 함수와 같아보이지만 사실 람다 식의 문법적 편의일 뿐이다.  
-    :::
+    
 
 ## 9장. 제네릭스
 ### 제네릭 타입 파라미터
-::: details 자세히
 - **자바와 다르게 코틀린은 raw 타입을 허용하지 않으므로 제네릭 타입의 타입인자를 컴파일러가 알 수 있게 해줘야 한다.**
 - 제네릭의 기본적인 특징은 자바랑 대부분 동일하다.
 
@@ -1907,11 +1831,10 @@ fun <T> ensureTrailingRerioid(seq: T)
 fun <T : Any> test(t: T): Nothing = TODO()
 ```
 
-:::
+
 
 ### 런타임의 제네릭: 타임 검사와 캐스트
 
-::: details 자세히
 
 - 코틀린도 자바와 동일하게 런타임엔 타입 파라미터 정보는 제거된다..
 - 즉, 런타임에 타입 정보가 제거되므로 런타임에 제네릭 타입에 대한 검사는 불가능하다.
@@ -1944,10 +1867,9 @@ fun main() {
 
 > 인라인 함수는 함수를 함수 파라미터로 가지는 등 성능에 효율적일 때 사용할 수도 있지만 위와 같이 실체화한 타입을 사용하기 위해 사용할 수도 있다.
 
-:::
+
 
 ### 실체화한 타입으로 클래스 참조를 대신하기
-::: details 자세히
 ```kotlin
 // class에 대한 정보를 파라미터로 받음
 fun <T> printClass(clazz: Class<T>) = println(clazz)
@@ -1962,14 +1884,13 @@ fun main() {
 ```
 
 > 실체화한 타입 파라미터는 타입 검사, 리플렉션 등으로 사용할 순 있지만 해당 인스턴스를 생성하거나, 동반 객체 메서드를 호출하는 등의 작업은 불가능하다.
-:::
+
 
 
 ### 변성(variance): 제네릭과 하위 타입
 - 변성(공변성, 무공변성, 반공변성)은 제네릭 타입의 기저 타입은 동일하나 타입 파라미터가 다를 때 서로 어떤 관계를 가지는지에 대한 개념으로 제네릭을 제대로 활용하기 위해 꼭 필요한 개념이다.
 
 ### 변성이 있는 이유: 인자를 함수에 넘기기
-::: details 자세히
 ```kotlin
 fun addContent(list: MutableList<Any>) {
   list.add(1)
@@ -1986,11 +1907,10 @@ fun main() {
 - strings가 addContent의 파라미터로 들어가기 위해선 일반적인 함수 호출 방식에 따라 `MutableList<String>이 MutableList<Any>의 하위 타입`이 되어야 한다.
 
 > 코틀린에서 T는 T?의 하위 타입이다. 즉 한 클래스에 두 가지타입(nullable type, not nullable type)이 존재한다.
-:::
+
 
 ### 공변성: 하위 타입 관계를 유지
 
-::: details 자세히
 
 - A가 B의 하위 타입일 때 Service\<A>가 Service\<B>의 하위 타입이라면 이는 공변성을 가진다.
 - **제네릭은 기본적으로 무공변성을 지니기 때문에** MutableList\<Any>을 기대하는 곳에 MutableList\<String>을 넣을 수 없다. (하위 타입이 아니기 때문에)
@@ -2030,10 +1950,9 @@ fun catTest(catHerd: Herd<Cat>) {
 
 > 변성(variance)은 코드에서 위험할 여지가 있는 함수를 호출하지 못하게 만들어 제네릭 타입의 안전성을 제공한다.
 > - out 키워드는 내부에서 소비를 막아 공변성을 제공하더라도 제네릭 타입을 안전하게 사용할 수 있음을 보장한다.
-:::
+
 
 ### 반공변성: 뒤집힌 하위 타입 관계
-::: details 자세히
 ```kotlin
 interface Comparator<in T> {
   /**
@@ -2086,10 +2005,9 @@ public interface Function1<in P1, out R> : Function<R> {
 }
 ```
 - Function1 인터페이스를 보면 in, out을 모두 가질 수 있는 것을 알 수 있다.
-:::
+
 
 ### 사용 지점 변성: 타입이 언급되는 지점에서 변성 지정
-::: details 자세히
 - 위에서 사용한 out, in 방식은 **선언 지점 변성**이라고 하며 클래스 선언 시 변성을 지정하면 모든 장소에 영향을 끼치므로 편리하다.
 - 하지만 자바에서는 제네릭 클래스를 사용할 때마다 필요하다면 와일드 카드를 통해 직접 변성을 정의해야 하며 이를 **사용 지점 변성**이라고 한다.
 
@@ -2110,23 +2028,21 @@ fun<T> copyData(source: MutableList<out T>,
     }
 }
 ```
-:::
+
 
 ### 스타 프로젝션: 타입 대신 *
-::: details 자세히
 - 자바의 와일드 카드와 동일하게 생각하면 된다.
 - Service\<*>는 사실 Service\<out Any?>로 동작한다고 할 수 있다.
 - *는 어떤 타입을 넣을 지 정확히 모르지만 제네릭 안전성을 위해선 오직 out만 가능할 것이다.
 
 > 스타 프로젝션은 자바 와일드 카드처럼 타입의 데이터를 읽기만하지만 어떤 타입인지 알 필요 없을 때 일반 제네릭 타입 파라미터보다 간결하게 사용할 수 있다.
-:::
+
 
 ## 10장. 애노테이션과 리플렉션
 - 코틀린에서 애노테이션을 사용하는 문법은 자바와 똑같지만 선언할 때 사용하는 문법은 약간 다르다.
 - 리플렉션 API의 일반 구조도 자바와 같지만 세부 사항에서 약간 차이가 있다.
 
 ### 애노테이션 선언과 적용
-::: details 자세히
 - 코틀린 애노테이션 인자를 지정하는 문법은 자바아 약간 다르다.
   - 클래스를 애노테이션 인자로 지정 시 @Anno(MyClass::class)로 지정해야 함
   - 다른 애노테이션을 인자로 지정할 때 @는 제외시켜야 한다.
@@ -2147,7 +2063,7 @@ class HasTempFolder {
 // 프로퍼티는 오직 주 생성자로 정의한다.
 annotation class MyAnno
 ```
-:::
+
 
 ### 자바 API를 애노테이션으로 제어
 - @JvmName, @JvmStatic, @JvmOverloads, @JvmField등 애노테이션으로 자바 언어를 대신할 수 있는 애노테이션들을 제공한다.
@@ -2157,7 +2073,6 @@ annotation class MyAnno
 - 자바 리플렉션에서 기본적인건 제공하지만 코틀린만의 특성을 지닌 Nullable 타입, 코틀린 고유개념에 대해선 코틀린 API가 필요하다.
 
 ### 코틀린 리플렉션 API: KClass, KCallable, KFunction, KProperty
-::: details 자세히
 ```kotlin
 class Person2(val name: String, val age: Int)
 
@@ -2200,22 +2115,20 @@ fun main() {
 #### KClass 얻기
 - 컴파일 시점에 정확히 대상을 알고 있다면 ClassName::class로 얻을 수 있다.
 - 만약 런타임에 동적으로 얻길 원한다면 object.javaClass.kotlin을 사용한다.
-:::
+
 
 
 ## 11장. DSL 만들기
 
 ### API에서 DSL로
-::: details 자세히
 - 개발자의 궁극적인 목표는 코드의 가독성과 유지 보수성을 가장 좋게 유지하는 것이다.
 - 깔끔한 API는 클래스와 메서드 명으로 어떤 일을 수행하는지 명확히 알 수 있고 간결한 코드를 제공한다.
 - 코틀린이 제공하는 확장 함수, 중위 함수, 연산자 오버로딩 등등의 다양한 기능은 깔끔한 API를 작성하는데 많은 도움을 준다.
 - 코틀린의 기능을 잘 활용하면 깔끔한 API에서 더 나아가 DSL을 구축할 수 있다.
-:::
+
 
 
 ### Domain-Specific Language
-::: details 자세히
 - 특정 도메인 영역에 특화된 언어들 중 가장 대표적인건 SQL, 정규식이 존재한다.
   - SQL은 데이터베이스 조작, 정규식은 문자열 조작에 가장 적합하며 그 이외엔 거의 사용되지 않는다.
 - 이 둘은 자신들만의 규칙을 통해 범용 프로그래밍 언어에 비해 훨씬 더 깔끔하게 원하는 연산을 수행할 수 있다.
@@ -2223,22 +2136,20 @@ fun main() {
   - 명령적 언어는 원하는 연산을 위해 각 순서를 정확히 기술하지만, 선언적 언어는 원하는 결과만을 기술하고 세부적인건 내부 구현에 맡긴다.
 - DSL이 가지는 단점은 자기만의 고유한 문법이 있어 다른 언어와의 통합이 어렵고 DSL 문법을 따로 습득해야 하므로 개발비용이 높다.
   - 이러한 단점을 해결하기 위해 내부 DSL이 많이 활용된다.
-:::
+
 
 ### 내부 DSL
 - 내부 DSL은 범용 언어로 작성된 프로그램의 일부로, 범용 언어와 동일한 문법을 사용하여 DSL의 장점을 유지한채 단점을 해결할 수 있다.
 
 ### DSL의 구조
-::: details 자세히
 - DSL과 일반 API를 명확히 구분하긴 어렵지만 DSL이 고유하게 가지는 특징은 자신만의 구조와 문법을 가지는 것이다.
 - 일반 라이브러리 API는 어떤 메서드를 호출하면 다른 호출과는 아무런 연결성이 존재하지 않는다.
 - 반면 DSL은 메서드 호출 시 정해진 DSL 문법에 의해서 구조화 된다.
   - 코틀린에서는 람다를 중첩시키거나, 메서드 호출을 연쇄시키는 방법으로 DSL 구조를 만들 수 있다.
-:::
+
 
 
 ### 구조화된 API 구축으로 DSL 만들기
-::: details 자세히
 - 코틀린의 확장함수의 특징과 수신 객체 지정 람다를 통해 구조화된 API를 손쉽게 만들 수 있다.
 ```kotlin
 // 파라미터를 일반 람다로 정의
@@ -2283,11 +2194,10 @@ fun main() {
     }
 }
 ```
-:::
+
 
 
 ### kotlinx 사용해보기
-::: details 자세히
 ```kotlin
 fun buildDropdown() = createHTML()
         .div(classes = "dropdown") {
@@ -2326,10 +2236,9 @@ fun UL.divider() = li { role = "separator"; classes = setOf("divider") }
 fun UL.dropdownHeader(text: String) = li { classes = setOf("dropdown-header"); +text }
 fun DIV.dropdownMenu(action: UL.() -> Unit) = ul(classes = "dropdown-menu", action)
 ```
-:::
+
 
 ### invoke 관례
-::: details 자세히
 ```kotlin
 class Greeter(private val greeting: String) {
     operator fun invoke(name: String) {
@@ -2367,10 +2276,9 @@ fun main() {
     dependencies.compile("org.springframework.boot:spring-boot-starter-web")
 }
 ```
-:::
+
 
 ### 중위 함수 활용
-::: details 자세히
 ```kotlin
 interface Matcher<T> {
     fun test(value: T)
@@ -2411,10 +2319,9 @@ fun test2() {
     "hello" should start with "h"
 }
 ```
-:::
+
 
 ### 원시 타입에 확장 프로퍼티를 활용하여 날짜 처리를 간단히
-::: details 자세히
 ```kotlin
 // 확장 프로퍼티는 백킹필드를 가질 수 없으므로 getter로 직접 명시하여야 한다.
 val Int.days: Period get() = Period.ofDays(this)
@@ -2428,10 +2335,9 @@ fun main() {
     Assert.isTrue(1.days.fromNow.toDate == LocalDateTime.now().plusDays(1).toLocalDate())
 }
 ```
-:::
+
 
 ### SQL DSL 만들기
-::: details 자세히
 ```kotlin
 // Table 내부에서 컬럼에 대한 기능을 확장하여 Table에서만 사용할 수 있도록 한다.(이런걸 멤버 확장이라고 한다)
 open class Table {
@@ -2455,6 +2361,6 @@ fun main() {
     // Column<Int>().primaryKey()
 }
 ```
-:::
+
 
 > 코틀린은 다양한 기능으로 내부 DSL을 제공해줄 수 있으면서, 코틀린은 정적 타입 언어이므로 코틀린으로 내부 DSL을 만들면 자동 완성 및 문법 안정성을 보장받으면서 DSL를 사용할 수 있다.
