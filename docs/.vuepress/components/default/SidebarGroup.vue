@@ -149,4 +149,9 @@ export default {
   transition height .1s ease-out
   font-size 0.95em
   overflow hidden
+
+.sidebar-group.is-sub-group > .sidebar-heading
+  font-size 13px !important
+  font-weight bold !important
+  color #2c3e50 !important
 </style>

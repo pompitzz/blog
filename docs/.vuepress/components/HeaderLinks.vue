@@ -58,8 +58,8 @@ export default {
     width 100%
 
   a.rightbar-link.active
-    font-weight: 600
-    color: #3eaf7c
-    border-left-color: #3eaf7c
+    font-weight: 600 !important
+    color: #3eaf7c !important
+    border-left-color: #3eaf7c !important
 
 </style>

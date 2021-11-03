@@ -1,6 +1,7 @@
 ---
-title: 데이터 중심 애플리케이션 설계(Ch 5. 복제)
+title: 데이터 중심 애플리케이션 설계 Ch 5. 복제
 date: 2021-10-04 18:06
+sub: true
 img: 
     - data-intensive.jpg
 tags: 
@@ -137,7 +138,7 @@ DB의 복사본을 저장하는 각 노드를 `복제 서버(replica)`라고 한
 #### 3) 일관된 순서로 일기
 - 데이터가 서로 다른 파티션에 저장되고 파티션 리더가 다를 때 실제 시간상으론 A -> B 순으로 입력되었지만 팔로워들은 B -> A 순으로 복제가 될 가능성이 있다.
   
-<img src="./DesigningDataIntensiveApplication/Consistent-Prefix-Read.png"/>
+<img src="./images/Consistent-Prefix-Read.png"/>
 
 - Observer는 실제로 쓰여진 순서가 아닌 반대로 읽는다.
 - `일관된 순서로 읽기(Consistent Prefix Read)`는 이런 종류의 이상 현상이 발생하지 않음을 보장한다.
@@ -157,7 +158,7 @@ DB의 복사본을 저장하는 각 노드를 `복제 서버(replica)`라고 한
 단일 데이터센터 내에 다중 리더 설정은 복잡도에 비해 이점이 크지 않고 다른 몇 몇 상황에서 합리적인 방식이다.
 
 ### 1) 다중 데이터센터 운영
-<img src="./DesigningDataIntensiveApplication/Multi-leader-multi-DC.png"/>
+<img src="./images/Multi-leader-multi-DC.png"/>
 
 - 다중 데이터센터에서 각 데이터센터마다 리더가 존재하는 방식으로 다중 리더를 세팅할 수 있다.
 - DC간의 복제는 리더들간에 이루어지도록 하고 팔로워는 같은 DC의 리더에 의해서만 복제되도록 한다.
@@ -187,7 +188,7 @@ DB의 복사본을 저장하는 각 노드를 `복제 서버(replica)`라고 한
 - `복제 토폴로지`는 쓰기를 한 노드에서 다른 노드로 전달하는 통신 경로를 말한다.
 - 리더가 두개라면 다중 데이터센터 운영 구조처럼만 사용할 수 있지만 **리더가 둘 이상이라면 다양한 토폴로지가 가능하다.**
 
-<img src="./DesigningDataIntensiveApplication/Replication-Topologies.png"/>
+<img src="./images/Replication-Topologies.png"/>
 
 - **원형 토폴로지**는 각 노드가 하나의 노드로부터 쓰기를 받고, 이 쓰기를 다른 한 노드에게만 전달한다.
     - MySQL에서 기본적으로 이 방식을 사용한다.
@@ -240,7 +241,7 @@ DB의 복사본을 저장하는 각 노드를 `복제 서버(replica)`라고 한
 ### 동시 쓰기 감지
 - 다이나모 스타일 데이터베이스는 여러 클라이언트가 동시에 같은 키에 쓰는 것을 허용하므로 쓰기 충돌이 발생한다.
 
-<img src="./DesigningDataIntensiveApplication/duplicate-write.png"/>
+<img src="./images/duplicate-write.png"/>
 
 - 동시 쓰기가 발생했을 때 네트워크 지연이나 부분적인 장애로 인해 쓰기 요청이 다른 노드에 다른 순서로 도착하여 위와 같이 일관성이 깨질 수 있다.
 - 최종적 일관성을 보장하기 위해선 복제본 값이 동일해야 한다. 어떻게 이를 처리하는지 알아본다.

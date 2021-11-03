@@ -106,26 +106,26 @@ function renderExternal(h, to, text) {
   font-size 0.95em
 
 a.sidebar-link
-  font-size 12px
-  font-weight 400
-  display inline-block
-  color $textColor
-  border-left 0.25rem solid transparent
+  font-size 12px !important
+  font-weight 400 !important
+  display inline-block !important
+  color $textColor !important
+  border-left 0.25rem solid transparent !important
   padding 0.1rem 1rem 0.1rem 2rem !important
-  line-height 1.4
-  width: 100%
-  box-sizing: border-box
-  overflow hidden;
-  text-overflow ellipsis;
-  white-space: nowrap;
+  line-height 1.4 !important
+  width: 100% !important
+  box-sizing: border-box !important
+  overflow hidden !important
+  text-overflow ellipsis !important
+  white-space: nowrap !important
 
   &:hover
-    color $accentColor
+    color $accentColor !important
 
   &.active
-    font-weight 600
-    color $accentColor
-    border-left-color $accentColor
+    font-weight 600 !important
+    color $accentColor !important
+    border-left-color $accentColor !important
 
   .sidebar-group &
     padding-left 2rem

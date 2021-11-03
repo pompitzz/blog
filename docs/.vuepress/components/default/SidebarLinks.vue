@@ -9,7 +9,7 @@
                     :collapsable="item.collapsable || item.collapsible"
                     :depth="depth"
                     :item="item"
-                    :open="openIndexMap[i]"
+                    :open="isOpen(item, i)"
                     @toggle="toggleGroup(i)"
       />
       <SidebarLink v-else
@@ -49,20 +49,40 @@ export default {
 
   methods: {
     refreshIndex() {
-      for (let index = 0; index < this.items.length; index++) {
-        this.openIndexMap[index] = true;
+      // console.group()
+      // console.log('items length. ', this.items.length)
+      // console.log('depth:', this.depth);
+      // this.items.forEach(item => console.log(item));
+      // console.groupEnd()
+      if (this.isSupportSidbarToggle()) {
+        for (let index = 0; index < this.items.length; index++) {
+          this.openIndexMap[index] = true;
+        }
       }
     },
 
     toggleGroup(index) {
-      this.openIndexMap = {
-        ...this.openIndexMap,
-        [index]: !this.openIndexMap[index],
+      if (this.isSupportSidbarToggle()) {
+        this.openIndexMap = {
+          ...this.openIndexMap,
+          [index]: !this.openIndexMap[index],
+        };
       }
     },
 
     isActive(page) {
       return isActive(this.$route, page.regularPath)
+    },
+
+    isOpen(item, index) {
+      if (this.isSupportSidbarToggle()) {
+        return this.openIndexMap[index];
+      }
+      console.log(item.path, this.$route.path, item.path === this.$route.path);
+      return this.$route.path.startsWith(item.path);
+    },
+    isSupportSidbarToggle() {
+      return this.depth === 0;
     }
   }
 }

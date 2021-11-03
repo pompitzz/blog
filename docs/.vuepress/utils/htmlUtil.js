@@ -2,7 +2,8 @@
 export default function getPostsByPath(path, pages) {
     let onlyHtml = new RegExp(`${path}(?=.*html)`);
     let htmlPosts = pages
-        .filter(page => page.path.match(onlyHtml))
+        // .filter(page => page.path.match(onlyHtml))
+        .filter(page => page.path !== '/') // filter home
         .filter(page => !!page.title)
         .map(page => setDefaultImgIfNoneHas(page));
     htmlPosts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));

@@ -61,8 +61,10 @@ export default {
   },
   computed: {
     showPosts() {
+      this.posts.forEach(p => console.log(p.frontmatter.title));
       return this.posts
           .filter(({ frontmatter }) => !!frontmatter)
+          .filter(({ frontmatter }) => !frontmatter.sub)
           .map(post => ({
             ...post,
             frontmatter: Object.assign({
