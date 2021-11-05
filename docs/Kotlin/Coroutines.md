@@ -100,6 +100,7 @@ fun main() {
 ```
 - 해당 코드는 코루틴을 100k개 만들어서 5초 딜레이 후 점을 찍는다. 코루틴은 가볍기 때문에 정상 실행된다.
 - 만약 스레드를 사용한다면 Out of Memory가 발생할 것이다.
+    - `runBlocking`를 제거하고 `launch` -> `thread`, `delay` -> `Thread.sleep`로 변경하면 스레드로 테스트가 가능하다.
 
 ## Cancellation and timeouts
 ### Cancelling coroutin execution
@@ -287,6 +288,190 @@ fun main() {
     println(acquired)
 }
 ```
+
+## Composing suspending functions
+### Sequential by default
+```kotlin
+fun main() {
+    runBlocking {
+        val time = measureTimeMillis {
+            val one = doSomethingUsefulOne()
+            val two = doSomethingUsefulTwo()
+            println("answer: $one + $two")
+        }
+        println("take: $time")
+    }
+}
+
+suspend fun doSomethingUsefulOne(): Int {
+    delay(1000L) // pretend we are doing something useful here
+    return 13
+}
+
+suspend fun doSomethingUsefulTwo(): Int {
+    delay(1000L) // pretend we are doing something useful here, too
+    return 29
+}
+```
+- 코루틴 코드는 기본적으로 순차적이기 순차적 호출이 필요할 때 일반 코드와 같이 순서대로 호출하면 된다.
+
+### Concurrent using async
+```kotlin
+fun main() {
+    runBlocking {
+        val time = measureTimeMillis {
+            val one = async { doSomethingUsefulOne() }
+            val two = async { doSomethingUsefulTwo() }
+            println("answer: ${one.await()} + ${two.await()}")
+        }
+        println("take: $time")
+    }
+}
+```
+- 위 코드에서 두 함수를 동시에 호출하고 싶을 땐 `async` 함수를 활용하면 된다.
+- `async`는 `launch`와 비슷하게 개별적인 코루틴을 생성하여 계산을 수행하지만 `launch`는 **반환 값을 가지고 있지 않은 Job을 반환**하는 반면 `async`는 **반환 값을 가지는 Deferred를 반환**한다.
+    - Deferred는 await을 호출하여 최종적으로 값을 얻을 수 있고 Job과 동일하게 cancel이 가능하다.
+- `async(start = CoroutineStart.LAZY){ }`와 같이 LAZY 옵션을 명시하면 `start` 함수를 호출하거나 `await`을 호출할 때 실제 계산이 시작되도록 지연시킬 수 있다.
+
+### Async-style functions(권장하지 않는 방법)
+```kotlin
+fun main() {
+    val time = measureTimeMillis {
+        // 이 Aync 함수들은 suspending 함수가 아니므로 코루틴 스코프 내부가 아니여도 Async 함수를 호출할 수 있다.
+        val one = somethingUsefulOneAsync()
+        val two = somethingUsefulTwoAsync()
+        runBlocking {
+            println("The answer is ${one.await() + two.await()}")
+        }
+    }
+    println("Completed in $time ms")
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun somethingUsefulOneAsync(): Deferred<Int> = GlobalScope.async {
+    doSomethingUsefulOne()
+}
+
+// The result type of somethingUsefulTwoAsync is Deferred<Int>
+@OptIn(DelicateCoroutinesApi::class)
+fun somethingUsefulTwoAsync(): Deferred<Int> = GlobalScope.async {
+    doSomethingUsefulTwo()
+}
+```
+- 다른 프로그래밍 언어에서 인기있는 방식처럼 GlobalScope를 통해 async 함수를 정의하고 이를 사용하도록 할 수 있지만 이 방식은 권장되지 않는다.
+    - 이 방식은 어떤 async 함수 로직 중간에 에러가 있어 작업을 중단하여도 다른 async 함수는 백그라운드에서 계속 작업이 수행된다.  
+    - 구조화된 코루틴을 활용하면 이를 해결할 수 있다.
+    
+### Structured concurrency with async
+```kotlin
+suspend fun concurrentSum(): Int = coroutineScope {
+    val one = async { doSomethingUsefulOne() }
+    val two = async { doSomethingUsefulTwo() }
+    one.await() + two.await()
+}
+```
+- 계산 과정을 하나의 함수로 추출하고 `coroutineScope`를 활용하여 스코프를 제한하면 해당 함수에서 예외가 발생하여 작업이 중단될 때 해당 스코프 내부의 모든 코루틴도 취소된다.
+
+```kotlin
+fun main() = runBlocking<Unit> {
+    try {
+        failedConcurrentSum()
+    } catch(e: ArithmeticException) {
+        println("Computation failed with ArithmeticException")
+    }
+}
+
+suspend fun failedConcurrentSum(): Int = coroutineScope {
+    val one = async<Int> {
+        try {
+            delay(Long.MAX_VALUE)
+            42
+        } finally {
+            println("First child was cancelled")
+        }
+    }
+    val two = async<Int> {
+        println("Second child throws an exception")
+        throw ArithmeticException()
+    }
+    one.await() + two.await()
+}
+```
+-  await 함수가 호출될 때 `two` 코루틴은 예외 발생으로 작업이 중단되면서 `one` 코루틴도 함께 중단되고 예외가 전파된다.
+
+## Coroutine context and dispatchers
+코루틴은 항상 `CoroutineContext`에서 실행된다. 코루틴 컨텍스트는 다양한 요소로 구성되고 주요요소로는 Job`과 `Dispatcher`가 있다.
+
+### Dispatchers and threads
+```kotlin
+fun main() = runBlocking<Unit> {
+    launch { // 상위의 runBlocking 컨텍스트에서 사용되는 main thread가 사용됨.
+        println("main runBlocking: ${Thread.currentThread().name}")
+    }
+    launch(Dispatchers.Unconfined) { // not confined -- will work with main thread
+        println("Dispatchers.Unconfined: ${Thread.currentThread().name}")
+    }
+    launch(Dispatchers.Default) { // DefaultDispatcher 스레드 사용
+        println("Dispatchers.Default: ${Thread.currentThread().name}")
+    }
+    launch(newSingleThreadContext("MyOwnThread")) { // 커스텀 스레드를 사용하여 사용
+        println("newSingleThreadContext(\"MyOwnThread\"): ${Thread.currentThread().name}")
+    }
+}
+```
+- `CoroutinDispatcher`는 코루틴 실행 시 어떤 스레드를 사용할 지 결정하는 역할을 한다.
+- `launch`나 `async`같은 모든 코루틴 빌더는 필요 시 파라미터를 전달하여 어떤 디스패처를 사용할 지정할 수 있다.
+
+### Unconfined vs confined dispatcher
+```kotlin
+fun main() = runBlocking<Unit> {
+    launch(Dispatchers.Unconfined) { 
+        println("Dispatchers.Unconfined ${Thread.currentThread().name}") // main 스레드
+        delay(500)
+        println("Dispatchers.Unconfined ${Thread.currentThread().name}") // DefaultExecutor
+    }
+    launch {
+        println("main runBlocking: ${Thread.currentThread().name}") // main 스레드
+        delay(1000)
+        println("main runBlocking: ${Thread.currentThread().name}") // main 스레드
+    }
+}
+```
+- `Dispatchers.Unconfined`를 사용하면 해당 코루틴이 첫번째 중단(suspension)전 까지만 호출자 스레드에서 수행되고 작업이 재개될 땐 사용할 스레드가 suspending function에 따라 결정된다.
+    - 이러한 특징때문에 unconfined dispatcher는 특정 스레드에 공유되어야 할 데이터가 없거나, CPU 시간을 소비하지 않는 케이스에 적절히 사용할 수 있다.
+- 그와반대로 기본적으로 dispatcher는 호출자 스레드로 제한하기 때문에 작업이 중단되고 다시 재개되어도 호출자 스레드를 사용한다.
+
+### Children of a coroutine
+- 코투틴이 다른 코루틴의 CoroutineScope에서 수행될 때 코루틴 컨텍스트를 상속하고 새로운 코루틴의 `Job`은 부모 코루틴의 `Job`의 자식이 된다.
+- 이렇게 부모-자식 관계가 맺어지면 부모 코루틴의 작업이 중단될 때 자식 코루틴의 작업도 함께 중단되며 자식 코루틴들의 작업이 완료되기 전까지 기다린다. 
+- 이렇나 부모-자식 관계를 명시적으로 오버라이딩할 수 있는 방법이 있다.
+    - `GlobalScope.launch`와 같이 다른 스코프에서 코루틴을 수행하도록 하면 부모 스코프의 `Job`을 상속하지 않는다.
+    - `launch(Job())`과 같이 다른 `Job`을 명시적으로 지정하면 해당 `Job`을 상속하게 된다.
+    
+### Naming coroutines for debugging
+```kotlin
+async(CoroutineName("someName")){ }
+```
+- 효율적인 디버깅을 위해 코루틴 생성 시 CoroutineName context를 전달하여 코루틴 이름을 명시적으로 지정할 수 있다.
+
+### Combining context elements
+```kotlin
+launch(Dispatchers.Default + CoroutineName("test")) { }
+```
+- 코루틴 생성시 `CoroutineName, Dispatcher`등의 컨텍스트들을 여러개 지정하고 싶은 경우 `+` 오퍼레이터를 이용하면 된다.
+
+### Thread-local data
+- 종종 스레드 로컬 데이터를 사용해야할 때가 있는데 코루틴은 특정 스레드에 바인딩 되지 않기 때문에 불필요하게 반복되는 코드가 필요해질 수 있다.
+- `ThreadLocal.asContextElement` 확장 함수를 활용하면 손쉽게 바인딩되는 스레드가 변경되어도 값을 유지하도록 할 수 있다.
+
+```kotlin
+
+```
+- 코루틴 내부에서 스레드 로컬 값을 변경하면 해당 값은 전파되지 않는다. 그리고 변경된 값은 다음 중단에서 잃게 된다. 그러므로 값을 변경하기 위해서 `withContext`를 사용하여 `asContextElement`로 값을 변경하도록 하자. 
+- 쓰레드 로컬 컨텍스트를 세팅하는걸 놓칠 가능성을 대비하여 `ThreadLocal.ensurePresent`를 활용하여 사전 검증을 하는 것이 좋다.
+- MDC와 같은 스레드 로컬을 활용하는 라이브러리와의 통합과 같은 향상된 사용을 위해 [ThreadContextElement](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-thread-context-element/index.html) 를 직접 구현할 수 있다.
+
+
 
 ## 참고자료
 [Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
