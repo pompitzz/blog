@@ -1889,116 +1889,131 @@ fun main() {
 
 ### 변성(variance): 제네릭과 하위 타입
 - 변성(공변성, 무공변성, 반공변성)은 제네릭 타입의 기저 타입은 동일하나 타입 파라미터가 다를 때 서로 어떤 관계를 가지는지에 대한 개념으로 제네릭을 제대로 활용하기 위해 꼭 필요한 개념이다.
+  - **공변성**: `Red`가 `Color`의 하위 타입일 때 `Bag<Red>`는 `Bag<Color>`의 하위 타입이다. 
+  - **반공변성**: `Red`가 `Color`의 하위 타입일 떄 `Bag<Color>`는 `Bag<Red>`의 하위 타입이다.
+  - **무공변성**: `Red`가 `Color`의 하위 타입이더라도 `Bag<Red>`와 `Bag<Color>`는 아무런 관계가 없다.
 
-### 변성이 있는 이유: 인자를 함수에 넘기기
+#### 변성이 있는 이유
 ```kotlin
+fun main() {
+  val strings: MutableList<String> = mutableListOf("a")
+  addContent(strings)  // ## 컴파일 에러 ##
+}
+
 fun addContent(list: MutableList<Any>) {
   list.add(1)
 }
-
-fun main() {
-  val strings = mutableListOf("a")
-  // String은 Any의 하위타입이므로 List<Any>를 받는 함수 파라미터에 List<String>을 넘겨줄 수 있을거 같지만 
-  // 실제 addContent 함수에서 처럼 Integer 타입이 추가될 수 있어 런타임 에러가 발생하여 타입 안전성을 보장해줄 수 없어 컴파일이 불가능하다.
-  addContent(strings)  // ## 컴파일 에러 ##
-}
 ```
-
-- strings가 addContent의 파라미터로 들어가기 위해선 일반적인 함수 호출 방식에 따라 `MutableList<String>이 MutableList<Any>의 하위 타입`이 되어야 한다.
+- `String`은 `Any`의 하위 타입이므로 `String`은 `Any`가 될 수 있다. 만약 `MutableList<String>`이 `MutableList<Any>`가 될 수 있다고 한다면 위 코드는 컴파일 에러가 발생하지 않을 것이다. 
+- 하지만 `addContenxt` 함수는 `Int` 값을 list에 채우지만  lists는 `MutableList<String>`이므로 이 코드는 런타임에 반드시 에러가 발생한다.  
+- 때문에, 런타임에 타입 안정성을 보장하기 위해서는 변성이라는 개념이 필요하고 코틀린 타입 파라미터는 기본적으로 자바와 같이 `무공변`하기 때문에 이 코드는 컴파일되지 않을 것이다.
+- `공변`, `불공변` 개념을 잘 활용하면 코드를 유연하게 만들 수 있다. 코틀린은 제네릭 클래스 선언 및 사용 시 `공변`, `불공변`을 적용할 수 있다.  
 
 > 코틀린에서 T는 T?의 하위 타입이다. 즉 한 클래스에 두 가지타입(nullable type, not nullable type)이 존재한다.
 
-
-### 공변성: 하위 타입 관계를 유지
-
-
-- A가 B의 하위 타입일 때 Service\<A>가 Service\<B>의 하위 타입이라면 이는 공변성을 가진다.
-- **제네릭은 기본적으로 무공변성을 지니기 때문에** MutableList\<Any>을 기대하는 곳에 MutableList\<String>을 넣을 수 없다. (하위 타입이 아니기 때문에)
-- 하지만 코틀린은은 타입 파라미터에 `out`이라는 명령어를 통해 타입 파라미터가 공변성을 가지도록 할 수 있다.
+#### 공변성 사용 예시
+- 코틀린은 타입 파라미터에 `out`이라는 키워드를 통해 타입 파라미터가 `공변성`을 가지도록 할 수 있다.
+- **타입 안정성을 제공하기 위해서 `out`키워드는 오직 해당 타입 파라미터를 생산하는 경우에만 사용할 수 있다.**
 
 ```kotlin
-open class Animal
-class Cat : Animal()
-class Dog : Animal()
+interface Color
+class Red : Color
+class Blue : Color
 
-// out을 붙여 공변성을 지니게 하면 타입 안전성을 위해 해당 클래스는 타입 파라미터를 오직 out위치(생산)에 둘 수 있다.
-class Herd<out T : Animal> {
-  // T가 out 위치에 있으므로 가능. 해당 타입을 읽어 반환하는건 가능하다.
-  fun getTypeParameter(): T = TODO()
+interface ColorBag<out T : Color> {
+    fun getColor(): T
 
-  // T가 in 위치에 있으므로 에러 발생. 소비(쓰기)는 불가능
-  // 공변성을 제공하게 되면 Herd<T>는 하위 타입인 Herd<Dog> or Herd<Cat>도 가능해진다. 
-  // ## 만약 add 메서드를 사용할 수 있게 되면 Herd<Cat>인 인스턴스에서 add(t: Dog)가 호출될 수 있고 Dog는 Cat이 될 수 없어 런타임 에러를 발생시킬 수 있다. ## 
-  // fun add(t: T) = TODO()
+//    fun setColor(t: T) 이 함수를 제공하게 되면 공변성을 보장할 수 없어 out 키워드를 붙일 수 없다.
 }
 
-// Head<Dog> or Herd<Cat>이 오더라도 Head<>엔 소비하는 코드가 없고 오직 생산하는 코드만 있으므로 문제가 되지 않는다.
-// - Dog이던 Cat이던 결군 상위 타입인 Animal이 될 수 있기 때문에 런타임 에러를 유발하지 않는다.
-fun feedAll(animalHerd: Herd<Animal>) {
-  for (animal in animalHerd.animals) {
-    TODO()
-  }
+class RedBag : ColorBag<Red> {
+    override fun getColor() = Red()
 }
 
-fun catTest(catHerd: Herd<Cat>) {
-    // out을 지정해 공변성을 가지도록 하였으므로 Herd<Cat>은 Herd<Animal>의 하위 타입이 되어 호출이 가능하다.
-    feedAll(catHerd)
-}
-```
-- out 키워드를 붙이면 **공변성**은 제공해주나 이를 보장하기 위해 **내부에서 타입 파라미터를를 소비하는건 불가능하다.**
-- List는 읽기 전용이므로 내부에서 요소를 소비할 일이 없기 때문에 out을 붙여 공변성을 보장해주도록 했다. 그래서 **MutableList\<>와 달리 List\<>는 공변성을 제공한다.**
-
-> 변성(variance)은 코드에서 위험할 여지가 있는 함수를 호출하지 못하게 만들어 제네릭 타입의 안전성을 제공한다.
-> - out 키워드는 내부에서 소비를 막아 공변성을 제공하더라도 제네릭 타입을 안전하게 사용할 수 있음을 보장한다.
-
-
-### 반공변성: 뒤집힌 하위 타입 관계
-```kotlin
-interface Comparator<in T> {
-  /**
-   * - 반공변하므로 Comparator<String>를 파라미터로 가지는 메서드에 Comparator<Any>가 전달될 수 있고 compare 메서드에 String 타입이 전달될 것이다.
-   * - String은 Any의 하위타입이므로 compare(e1: Any, e2: Any)에 String이 타입이 전달되어 사용이 가능하다.
-   */
-  fun compare(e1: T, e2: T): Int
-
-  /** T가 out 위치에 있으므로 컴파일 에러가 발생한다.
-   *  - 현재 Comparator는 반공변성을 제공하므로 Comparator<Any>는 Comparator<String>의 하위 타입이 되어 Comparator<String>를 파라미터로 가지는 메서드에 Comparator<Any>를 전달할 수 있다.
-   *  - 만약 해당 메서드에서 Comparator<Any>가 전달되었는데 get()을 호출하게 되면 String인 T가 반환되어야 한다. 하지만 실제론 Any이기 때문에 하위 타입인 String으로 반환이 불가능하다.
-   */
-  // fun get(): T
-}
-
-
-class StringComparator: Comparator<String> {
-  override fun compare(e1: String, e2: String): Int {
-    TODO("Not yet implemented")
-  }
-}
-
-class AnyComparator: Comparator<Any> {
-  override fun compare(e1: Any, e2: Any): Int {
-    TODO("Not yet implemented")
-  }
-}
-
-// Comparator<String>를 파라미터로 가지지만 반공변성을 가지므로 Comparator<Any>가 올 수 있다.
-fun test(comparator: Comparator<String>) {
-  comparator.compare("1", "2")
+fun useColorBag(colorBag: ColorBag<Color>) {
+    
 }
 
 fun main() {
-  val stringComparator = StringComparator()
-  test(stringComparator)
-
-  // Comparator는 반공변성을 가지므로 Comparator<Any>는 Comparator<String>의 하위타입이 되어 test 메서드를 호출할 수 있다.
-  val anyComparator = AnyComparator()
-  test(anyComparator)
+  val redBag: ColorBag<Red> = RedBag()
+  useColorBag(redBag)
 }
 ```
-- 반공변성은 공변성의 반대이다. 반공변성을 가지는 클래스는 위와 같이 타입 값을 소비하는 것만 가능하다.
-- **Service\<A>가 Service\<B>의 하위 타입일 때 A가 B의 상위 타입이라면 Service\<T>는 타입T에 반공변하다.**
-- in 키워드를 붙이면 반공변을 제공할 수 있고 이를 보장하기 위해 해당 클래스에선 소비만 가능하다.(in 위치에만 사용 가능)
+- `ColorBag`에 `out` 키워드를 붙여 `공변성`을 가지도록 하였다. `공변성`의 특성에 다라 `Red`는 `Color`의 하위 타입이므로 `ColorBag<Red>`는 `ColorBag<Color>`의 하위 타입이 된다.
+- 그러므로 `ColorBag<Color>`를 파라미터로 받는 `useColorBag` 함수에 `ColorBag<Red>`를 넘길 수 있게 된다.
+    - `Red`는 `Color`의 하위 타입이므로 런타임에 `ColorBag<Red>`가 들어와 `getColor`를 호출하여 `Red`가 반환되어도 `Color`로 대체될 수 있으니 타입 안정성이 보장된다.
+- 현재 `ColorBag` interface는 `T` 타입을 생산(반환)하는 `getColor` 함수만을 가진다. **만약 타입을 소비하는 `setColor`를 추가하게 되면 공변성을 가질 수 없게 되어 `out` 키워드를 붙일 수 없다.**
 
+- **만약 `setColor`가 제공되면서 공변성을 가진다고 해보자.** 
+  - 공변성을 가지므로 `ColorBag<Red>`를 `ColorBag<Color>`로 표현할 수 있게 된다.
+  - 그러면 아래와 같이 `ColorBag<Color>`를 파라미터로 받는 `callSetColor`함수에 `ColorBag<Red>` 인스턴스를 넘길 수 있게 된다.
+  - **`callSetColor`는 `Color`의 또 다른 하위 타입인 `Blue`를 set할 수 있게 되므로 런타임에 타입 에러가 발생하게 될 것이다.** 
+  
+```kotlin
+fun callSetColor(colorBag: ColorBag<Color>) {
+  colorBag.setColor(Blue())
+}
+
+fun main() {
+  val redBag: ColorBag<Red> = RedBag()
+  callSetColor(redBag)
+}
+```
+
+> List와 같은 읽기 전용 컬렉션들은 읽기 전용이므로 내부에서 요소를 소비할 일이 없기 때문에 out을 붙여 공변성이 보장된다.
+
+#### 반공변성 사용 예시
+- 코틀린은 타입 파라미터에 `in`이라는 키워드를 통해 타입 파라미터가 `불공변성`을 가지도록 할 수 있다.
+- **타입 안정성을 제공하기 위해서 `in`키워드는 오직 해당 타입 파라미터를 소비하는 경우에만 사용할 수 있다.**
+```kotlin
+interface Color
+class Red : Color
+
+interface ColorBag<in T : Color> {
+//    fun getColor(): T 이 함수를 제공하게 되면 불공변성 보장할 수 없어 out 키워드를 붙일 수 없다.
+
+    fun setColor(t: T)
+}
+
+class ColorBagImpl : ColorBag<Color> {
+    override fun setColor(color: Color) {
+        TODO("Not yet implemented")
+    }
+}
+
+fun useRedBag(redBag: ColorBag<Red>) {
+    redBag.setColor(Red())
+}
+
+fun main() {
+  val colorBag: ColorBag<Color> = ColorBagImpl()
+  useRedBag(colorBag)
+}
+```
+- `ColorBag`에 `in` 키워드를 붙여 `불공변성`을 가지도록 하였다. `불공변성`의 특성에 다라 `Red`는 `Color`의 하위 타입이므로 `ColorBag<Color>`는 `ColorBag<Red>`의 하위 타입이 된다.
+- 그러므로 `ColorBag<Red>`를 파라미터로 받는 `useRedBag` 함수에 `ColorBag<Color>`를 넘길 수 있게 된다.
+  - `useRedBag`에서 `Red` 인스턴스로 `setColor`를 호출하게 되는데 `Red`는 `Color`의 하위 타입이므로 `Color`로 대체될 수 있다.
+  - 그러므로 런타임에 `ColorBag<Color>` 인스턴를 넘기더라도 타입 안전성이 보장된다.
+- 현재 `ColorBag` interface는 `T` 타입을 소비하는 `setColor` 함수만을 가진다. **만약 타입을 생산(반환)하는 `getColor`를 추가하게 되면 불공변성을 가질 수 없게 되어 `in` 키워드를 붙일 수 없다.**
+
+- **만약 `getColor`가 제공되면서 불공변성을 가진다고 해보자.**
+  - 불공변성을 가지므로 `ColorBag<Color>`를 `ColorBag<Red>`로 표현할 수 있게 된다.
+  - 그러면 아래와 같이 `ColorBag<Red>`를 파라미터로 받는 `callGetColor`함수에 `ColorBag<Color>`를 넘길 수 있게 된다.
+  - **여기서 `callGetColor`는 `Red`를 반환하게 되지만 런타임에 실제 타입은 `Color`이다.**
+  - **`Red`는 `Color`가 될 수 있지만 `Color`는 `Red`가 될 수 없다. 그러므로 타입 에러가 발생하게 된다.**
+  
+```kotlin
+fun callGetColor(redBag: ColorBag<Red>) {
+    val color: Red = redBag.getColor()
+}
+
+fun main() {
+    val colorBag: ColorBag<Color> = ColorBagImpl()
+    callGetColor(colorBag)
+}
+```
+
+#### in, out을 모두 활용하는 Function
 ```kotlin
 public interface Function1<in P1, out R> : Function<R> {
     public operator fun invoke(p1: P1): R
@@ -2006,33 +2021,19 @@ public interface Function1<in P1, out R> : Function<R> {
 ```
 - Function1 인터페이스를 보면 in, out을 모두 가질 수 있는 것을 알 수 있다.
 
-
-### 사용 지점 변성: 타입이 언급되는 지점에서 변성 지정
-- 위에서 사용한 out, in 방식은 **선언 지점 변성**이라고 하며 클래스 선언 시 변성을 지정하면 모든 장소에 영향을 끼치므로 편리하다.
-- 하지만 자바에서는 제네릭 클래스를 사용할 때마다 필요하다면 와일드 카드를 통해 직접 변성을 정의해야 하며 이를 **사용 지점 변성**이라고 한다.
-
-```java
-public interface Stream<T> extends BaseStream<T, Stream<T>> {
-    <R> Stream<R> map(Function<? super T, ? extends R> mapper);
-}
-```
-- 자바는 사용 지점 변성이기 때문에 위와 같이 Function을 사용하는 모든곳에서 직접 변성을 지정해야 한다.
-
+#### 사용 지점 변성: 타입이 언급되는 지점에서 변성 지정
 ```kotlin
-// 코틀린도 사용 지점 변성을 지원한다. 만약 클래스 에서 이미 변성이 지정되어 있다면 따로 사용 지점 변성을 하지 않아도 된다.
-// 사용 지점 변성은 자바와 동일하기 떄문에 out T -> ? extends T, in T -> ? super T와 동일하다.
-fun<T> copyData(source: MutableList<out T>,
-                destination: MutableList<in T>) {
-    for (item in source) {
-        destination.add(item)
-    }
+// ColorBag이 getColor, setColor를 가져 불공변한 경우 함수에서 사용 방식에 따라 변성을 지정해줄 수 있다. 
+fun useRedBag(colorBag: ColorBag<out Color>) {
+    val color = colorBag.getColor()
 }
 ```
-
+- 클래스 선언 시 out, in 키워드를 추가하는 방식을 **선언 지점 변성**이라고 하며 클래스 선언 시 변성을 지정하면 모든 장소에 영향을 끼치므로 편리하다.
+- 하지만 만약 클래스 자체는 `무공변`하지만 해당 클래스를 사용하는 함수에서 생산하는 기능 혹은 소비하는 기능만 사용하여 `공변성`이나 `불공변성`을 가질 수 있다면 **사용 지점 변성**으로 제공할 수 있다. 
 
 ### 스타 프로젝션: 타입 대신 *
-- 자바의 와일드 카드와 동일하게 생각하면 된다.
-- Service\<*>는 사실 Service\<out Any?>로 동작한다고 할 수 있다.
+- 자바의 와일드 카드와 동일하게 생각하면 된다. 자바에선 `ColorBag<?>`로 표현하지만 코틀린에선 `ColorBag<*>`를 사용한다.
+- `ColorBag<*>`는 사실` ColorBag<out Any?>`로 동작한다고 할 수 있다.
 - *는 어떤 타입을 넣을 지 정확히 모르지만 제네릭 안전성을 위해선 오직 out만 가능할 것이다.
 
 > 스타 프로젝션은 자바 와일드 카드처럼 타입의 데이터를 읽기만하지만 어떤 타입인지 알 필요 없을 때 일반 제네릭 타입 파라미터보다 간결하게 사용할 수 있다.
