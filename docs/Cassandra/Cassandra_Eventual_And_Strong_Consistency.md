@@ -46,7 +46,7 @@ tags:
 - Strong consistency가 필요하고 write에 비해 read request가 매우 많다면 고려해볼만 하다.
 
 ### 2. Write: QUORUM, Read: QUORUM
-- replication factor가 3이므로 QUORUM=2이다.[(QUORUM 구하는 법)](http://localhost:8081/blog/Cassandra/Cassandra_Consistency_Level.html#_2-each-quorum)
+- replication factor가 3이므로 QUORUM=2이다.[(QUORUM 구하는 법)](/Cassandra/Cassandra_Consistency_Level.html#_2-each-quorum)
 - 즉 2개의 replica node에 write request가 처리되면 Write 동작은 성공한다.
 - 그리고 read request 또한 2개의 replica node에게 전달되므로 전달 받은 `두개의 node중 하나의 node는 반드시 최신 상태의 데이터를 가지고 있으므로 Strong Consistency가 보장된다.`  
 
