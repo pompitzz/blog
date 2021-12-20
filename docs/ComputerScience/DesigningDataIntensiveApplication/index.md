@@ -16,6 +16,6 @@ tags:
 ## Part 2. 분산 데이터 
 - ### [Ch 5. 복제](ch5.html)
 - ### [Ch 6. 파티셔닝](ch6.html)
-- ### [(TODO)Ch 7. 트랜잭션](ch7.html)
+- ### [Ch 7. 트랜잭션](ch7.html)
 - ### [Ch 8. 분산 시스템의 골칫거리](ch8.html)
 
