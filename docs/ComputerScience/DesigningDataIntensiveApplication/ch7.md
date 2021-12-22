@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 Ch 7. 트랜잭션
 date: 2021-11-30 00:21
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 트랜잭션은 애플리케이션에서 몇 개의 읽기와 쓰기를 하나의 논리적 단위로 묶는 방법이다.

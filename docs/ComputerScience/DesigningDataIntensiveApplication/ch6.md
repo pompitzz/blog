@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 Ch 6. 파티셔닝
 date: 2021-11-09 01:41
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 ## 파티셔닝과 복제

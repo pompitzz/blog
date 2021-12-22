@@ -28,7 +28,7 @@ tags:
 
 ## Strong Consistency를 보장할 수 있는 Consistency Level
 
-> Consistency Level에 대해 궁금하시면 [카산드라 Consistency Level](http://localhost:8081/blog/Cassandra/Cassandra_Consistency_Level.html#write-consistency-levels) 게시글을 참고하세요.
+> Consistency Level에 대해 궁금하시면 [카산드라 Consistency Level](https://pompitzz.github.io/blog/Cassandra/Cassandra_Consistency_Level.html#write-consistency-levels) 게시글을 참고하세요.
 
 **카산드라 Ring Cluster 구성은 아래와 같다고 가정한다.**
 ![single_dc_cluster](./Cassandra_Eventual_And_Strong_Consistency/single_dc_cluster.png)

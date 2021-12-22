@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 Ch 1. 신뢰할 수 있고 확장 가능하며 유지보수하기 쉬운 애플리케이션
 date: 2021-09-23 23:29
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 ### 데이터 중심 애플리케이션?

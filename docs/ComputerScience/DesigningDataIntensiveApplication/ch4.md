@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 ch 4. 부호화와 발전
 date: 2021-09-23 23:29
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 ## Chapter 4. 부호화와 발전

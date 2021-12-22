@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 Ch 5. 복제
 date: 2021-10-04 18:06
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 ## 분산 데이터

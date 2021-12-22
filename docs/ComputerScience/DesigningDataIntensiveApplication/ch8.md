@@ -2,10 +2,6 @@
 title: 데이터 중심 애플리케이션 설계 Ch 8. 분산 시스템의 골칫거리
 date: 2021-12-16 22:23
 sub: true
-img: 
-    - data-intensive.jpg
-tags: 
-    - Design
 ---
 
 ## 결함과 부분 장애
