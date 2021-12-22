@@ -67,7 +67,7 @@ export default {
   methods: {
     move() {
       if (this.routing) {
-        const path = this.tagName === 'ALL' ? '/' : `/tag/${this.tagName}.html`;
+        const path = this.tagName === 'ALL' ? '/' : `/TAG/${this.tagName}.html`;
         this.$router.push(path).catch(ignored);
       }
     },
