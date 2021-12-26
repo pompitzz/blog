@@ -1,6 +1,6 @@
 ---
-title: 디자인 패턴(구조 패턴)
-date: 2021-08-28 16:36
+title: 디자인 패턴(행동 패턴)
+date: 2021-12-21 01:17
 img: 
     - structural_design_pattern.png
 tags:
