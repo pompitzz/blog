@@ -12,7 +12,7 @@ tags:
 
 Property 파일을 유연하게 변경하기 위해 java code 기반으로 PropertySource를 알아보려고 한다.
 
-## ApplicationContextInitializer
+## 방법 1.ApplicationContextInitializer
 `ApplicationContextInitializer`를 통해 PropertySource를 추가할 수 있다.
 
 ```java
@@ -45,7 +45,7 @@ public static void main(String[] args) {
     }
 ```
 
-## EnvironmentPostProcessor(Spring Boot only)
+## 방법 2.EnvironmentPostProcessor(Spring Boot only)
 스프링 부트에서는 스프링 부트 자체적으로 제공하는 `EnvironmentPostProcessor`를 통해 PropertySource를 추가할 수 있다.
 
 ```java
@@ -79,7 +79,7 @@ org.springframework.boot.env.EnvironmentPostProcessor=com.example.demo.PropertyS
 ```
 
 
-## BeanFactoryPostProcessor
+## 방법 3.BeanFactoryPostProcessor
 빈 초기화 전 한번만 수행되는 `BeanFactoryPostProcessor`를 통해 PropertySource를 추가할 수 있다.
 
 > @PropertySource 또한 `BeanFactoryPostProcessor`를 확장한 BeanDefinitionRegistryPostProcessor 구현체인 ConfigurationClassPostProcessor에서 추가된다.  

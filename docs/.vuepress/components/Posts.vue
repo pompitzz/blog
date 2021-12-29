@@ -12,28 +12,29 @@
             class="post-card shadow border cursor-pointer hover:shadow-xl"
             @click="$router.push(post.path)"
         >
-
-          <div
-              v-if="hasImage(post.frontmatter)"
-              class="post-card-img-wrapper shadow-md"
-          >
-            <img
-                :src="'/blog/img/' + post.frontmatter.img[0]"
-                alt=""
-                class="post-card-img"
-            />
-          </div>
-          <div class="post-card-title">{{ post.frontmatter.title }}</div>
-          <div class="post-card-date">{{ post.frontmatter.date }}</div>
-          <div class="text-center py-1.5">
-            <Tag
-                v-for="(tagName, index) in getTags(post)"
-                :key="index"
-                :tagName="tagName"
-                class="mr-2"
-                routing
-                small
-            />
+          <div class="tooltip" :title="post.frontmatter.title">
+            <div
+                v-if="hasImage(post.frontmatter)"
+                class="post-card-img-wrapper shadow-md"
+            >
+              <img
+                  :src="'/blog/img/' + post.frontmatter.img[0]"
+                  alt=""
+                  class="post-card-img"
+              />
+            </div>
+            <div class="post-card-title">{{ post.frontmatter.title }}</div>
+            <div class="post-card-date">{{ post.frontmatter.date }}</div>
+            <div class="text-center py-1.5">
+              <Tag
+                  v-for="(tagName, index) in getTags(post)"
+                  :key="index"
+                  :tagName="tagName"
+                  class="mr-2"
+                  routing
+                  small
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -61,7 +62,6 @@ export default {
   },
   computed: {
     showPosts() {
-      this.posts.forEach(p => console.log(p.frontmatter.title));
       return this.posts
           .filter(({ frontmatter }) => !!frontmatter)
           .filter(({ frontmatter }) => !frontmatter.sub)
