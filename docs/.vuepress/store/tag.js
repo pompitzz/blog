@@ -12,6 +12,7 @@ function getTagStore() {
     tagStore.put(new Tag('Cassandra', '#2c88b2'));
     tagStore.put(new Tag('Network', '#41b3b6'));
     tagStore.put(new Tag('Design', '#21ac09'));
+    tagStore.put(new Tag('Redis', '#cd5d57'));
     // tagStore.put('JavaScript', new    Tag('JavaScript', '#b9ad86'));
     // tagStore.put('Gradle', new Tag('Gradle', '#046231'));
     return tagStore;
