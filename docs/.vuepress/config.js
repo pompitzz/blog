@@ -18,19 +18,23 @@ module.exports = {
         },
     },
     plugins: [
-        [
-            'sitemap',
+        ['sitemap',
             {
                 hostname: 'https://pompitzz.github.io/blog',
                 exclude: ['/404.html'],
             },
         ],
-        [
-            '@vuepress/google-analytics',
+        ['@vuepress/google-analytics',
             {
                 'ga': 'UA-194466545-1',
             },
         ],
+        ['@vuepress/medium-zoom',
+            {
+                selector: '.theme-default-content img',
+            },
+        ],
+        '@vuepress/back-to-top'
     ],
     postcss: {
         plugins: [
