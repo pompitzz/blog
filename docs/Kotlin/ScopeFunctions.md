@@ -18,13 +18,13 @@ tags:
 
 
 ## Functions
-| Function | Object reference | Return value | Is extension function
-|:---:|:---:|:---:|:---:|
-| let | it | Lambda result | O |
-| run | this | Lambda result | O |
-| with | this | Lambda result | X |
-| apply | this | Context object | O |
-| also  | it | Context object | O |
+| Function | Object reference |  Return value  | Is extension function |
+|:--------:|:----------------:|:--------------:|:---------------------:|
+|   let    |        it        | Lambda result  |           O           |
+|   run    |       this       | Lambda result  |           O           |
+|   with   |       this       | Lambda result  |           X           |
+|  apply   |       this       | Context object |           O           |
+|   also   |        it        | Context object |           O           |
 
 ### let
 - 컨텍스트 객체 참조 방식: `it`
