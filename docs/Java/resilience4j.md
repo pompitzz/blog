@@ -22,7 +22,7 @@ tags:
 - CircuitBreaker는 호출 결과를 저장하고 집계하기 위해서 sliding window를 사용합니다. sliding window는 count-based와 time-based가 있습니다.
 - count-based는 마지막 N개의 호출 결과를 집계하고, time-based는 지정된 N 시간만큼의 호출 결과를 집계합니다.
 
-### sliding window
+### Sliding window
 
 #### 1. Count-based sliding window
 
@@ -40,25 +40,24 @@ tags:
 - 모든 bucket은 특정 epoch second에 발생한 모든 호출 결과를 집계합니다.
     - head bucket은 현재 epoch second의 모든 호출 결과를 저장하고 있고 다른 bucket들은 이전 seconds의 모든 호출 결과를 저장하고 있습니다.
     - 각 bucket의 호출 결과들을 `tuples`이라고 합니다.
-- total aggregation이 업데이트되고 차감되는 방식은 count-based와 동일합니다. 그러므로 스냅샵을 가져오는 시간 복잡도 또한 동일합니다.
+- total aggregation이 업데이트되고 차감되는 방식은 count-based와 동일합니다. 그러므로 스냅샷 가져오는 시간 복잡도 또한 동일합니다.
 - N개의 bucket을 가지고 해당 bucket에 tuples이 존재하므로 공간복잡도는 조금 다를 수 있습니다.
     - 하지만 tuples은 개별적으로 저장되지 않게 구성되어 있으므로 무시할 수 있어 거의 O(N)으로 봐도 무방합니다.
 - bucket은 실패한 호출 수, 느린 호출 수, 총 호출 수를 저장하기 위한 3개의 integer와 전체 기간을 저장하기 위한 1개의 long으로 구성됩니다.
 
 ### Failure rate and slow call rate thresholds
 
-- CircuitBreaker의 상태는 failure rate가 configurable threshold 값보다 크거나 같을 때 `CLOSED`에서 `OPEN`으로 변경됩니다.
+- CircuitBreaker의 상태는 `failure rate`가 `configurable threshold(failureRateThreshold)` 값보다 크거나 같을 때 `CLOSED`에서 `OPEN`으로 변경됩니다.
 - 기존적으로 모든 예외는 실패로 카운트됩니다.
     - 특정 예외를 정의하면 지정된 예외만 실패로 카운트됩니다.
-- CircuitBreaker의 상태는 slow call rate가 configurable threshold 값보다 크거나 같을 때 `CLOSED`에서 `OPEN`으로 변경됩니다.
+- CircuitBreaker의 상태는 `slow call rate`가 `configurable threshold(slowCallRateThreshold)` 값보다 크거나 같을 때 `CLOSED`에서 `OPEN`으로 변경됩니다.
     - 이 방식은 외부 시스템이 실제로 다운되기 전에 부하를 줄이는데 도움을 줍니다.
 - failure rate와 slow call rate을 계산하기 위해선 최소한의 호출 기록이 저장되어야 합니다.
-    - 모든 호출이 실패하더라도 최소 호출 수가 기록되지 않으면 CircuitBreaker는 동작하지 않습니다.
-- CircuitBreaker는 상태가 `OPEN`일 때 `CallNotPermittedException`로 호출을 거부합니다.
-    - 대기 시간이 지난 후에 `OPEN`에서 `HALF_OPEN`으로 변경되고 설정된 수 만큼 외부 시스템에 호출이 다시 가능해집니다.
+    - 모든 호출이 실패하더라도 `최소 호출 수(minimumNumberOfCalls)`가 기록되지 않으면 CircuitBreaker는 동작하지 않습니다.
+- CircuitBreaker는 상태가 `OPEN`일 때 CallNotPermittedException로 호출을 거부합니다.
+    - 대기 시간이 지난 후(waitDurationInOpenState)에 `OPEN`에서 `HALF_OPEN`으로 변경되고 설정된 수(permittedNumberOfCallsInHalfOpenState) 만큼 외부 시스템에 호출이 다시 가능해집니다.
     - 만약 여전히 외부 시스템이 failure rate or slow call rate가 threshold값보다 크거나 같다면 `OPEN` 상태가 되고 그렇지 않으면 `CLOSED` 상태가 됩니다.
-- CircuitBreaker의 두개의 special states는 `DISABLED(always allow access)` and `FORCED_OPEN(always deny access)`로 구성되어 있고 해당
-  상태에서는 이벤트가 생성되지 않고 메트릭이 기록되지 않습니다.
+- CircuitBreaker의 두개의 special states는 `DISABLED(always allow access)` and `FORCED_OPEN(always deny access)`로 구성되어 있고 해당 상태에서는 이벤트가 생성되지 않고 메트릭이 기록되지 않습니다.
 
 **CircuitBreaker는 thread-safe하다.**
 
@@ -78,158 +77,158 @@ tags:
 
 ![circuitbreadker-flow](./resilience4j/circuitbreadker-flow-with-3threds.png)
 
-## 학습 테스트
-
-- CircuitBreaker가 예상한대로 잘 동작하는지 몇가지 학습 테스트를 작성해보겠습니다.
+## CircuitBreakerConfig Examples
+```java
+CircuitBreakerConfig.custom()
+                    .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
+                    .slidingWindowSize(100) // 최대 100개의 호출을 기록하여 집계
+                    .minimumNumberOfCalls(10) // 최소 10번은 호출되어야 CircuitBreaker가 작동
+                    .failureRateThreshold(30) // 기록된 호출 중 30%가 실패하면 circuit open
+                    .recordExceptions(RuntimeException.class) // RunTimeException만 기록
+                    .ignoreExceptions(NullPointerException.class) // NullPointerException은 무시
+                    .waitDurationInOpenState(Duration.ofSeconds(30)) // circuit이 open되면 30초 동안 유지 후 half-open으로 전환
+                    .build();
+```
+- 호출 수가 minimumNumberOfCalls(10)에 도달한 순간 부터 failureRate를 계산하여 circuit을 전환할 지 판단하고 slidingWindowSize만큼의 호출 수만 기록하여 집계.
 
 ```java
-public class SimpleCaller {
+CircuitBreakerConfig.custom()
+                    .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.TIME_BASED)
+                    .slidingWindowSize(10) // 최근 10초 동안 발생한 호출을 기록하여 집계
+                    .minimumNumberOfCalls(50) // 최소 50번은 호출되어야 CircuitBreaker가 작동
+                    .failureRateThreshold(30) // 기록된 호출 중 30%가 실패하면 circuit open
+                    .slowCallRateThreshold(20) // 기록된 호출 중 20%가 slow call이면 circuit open
+                    .slowCallDurationThreshold(Duration.ofSeconds(3)) // 호출이 3초 이상 걸리면 slow call
+                    .build();
+```
+- TIME_BASED의 경우 slidingWindowSize초 동안 발생한 호출을 기록하여 집계하기 때문에 위 예시에서 만약 10초 동안 발생하는 호출 수가 minimumNumberOfCalls(50)보다 작다면 minimumNumberOfCalls가 만족되지 않아 모든 호출이 실패해도 circuit은 열리지 않음.
+
+## 학습 테스트
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class CircuitBreakerTest {
+
+  public static class SimpleCaller {
     public String getHello() {
-        return "hello";
+      return "hello";
     }
 
     public String throwNPE() {
-        throw new NullPointerException();
+      throw new NullPointerException();
+    }
+  }
+
+  private final SimpleCaller simpleCaller = Mockito.spy(SimpleCaller.class);
+  private final CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+          .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
+          .slidingWindowSize(100) // 최대 100개의 호출을 기록하여 failureRate를 계산
+          .minimumNumberOfCalls(10) // 최소 10번은 호출되어야 CircuitBreaker가 작동
+          .failureRateThreshold(30) // failure rate는 30%로 설정
+          .build();
+  private final CircuitBreaker circuitBreaker = CircuitBreaker.of("custom", circuitBreakerConfig);
+
+  @Test
+  @DisplayName("CircuitBreaker는 호출 수가 minimumNumberOfCalls가 넘은 경우에만 동작해야 한다.")
+  void minimumNumberOfCallsTest() throws Exception {
+    // when & then
+    int minimumCallSize = 10;
+    for (int i = 0; i < minimumCallSize; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
+      } catch (Exception e) {
+        assertThat(e)
+                .as("minimumCallSize 까지는 NPE 발생")
+                .isInstanceOf(NullPointerException.class);
+      }
     }
 
-    public String throwIRE() {
-        throw new IllegalArgumentException();
-    }
-}
-
-@ExtendWith(MockitoExtension.class)
-public class CircuitBreakerTest {
-    private final SimpleCaller simpleCaller = Mockito.spy(SimpleCaller.class);
-    private static final CircuitBreakerConfig CIRCUIT_BREAKER_CONFIG = CircuitBreakerConfig.custom()
-            .minimumNumberOfCalls(10) // 최소 10번은 호출되어야 CircuitBreaker가 작동
-            .failureRateThreshold(30) // failure rate는 30%로 설정
-            .build();
-    private CircuitBreaker circuitBreaker;
-
-    @BeforeEach
-    void init() {
-        circuitBreaker = CircuitBreaker.of("custom", CIRCUIT_BREAKER_CONFIG);
-    }
-}
-```
-
-### minimumNumberOfCalls 테스트
-
-```java
-@ExtendWith(MockitoExtension.class)
-public class CircuitBreakerTest {
-    @Test
-    @DisplayName("CircuitBreaker는 호출 수가 minimumNumberOfCalls가 넘은 경우에만 동작해야 한다.")
-    void minimumNumberOfCallsTest() throws Exception {
-        // when & then
-        int minimumCallSize = 10;
-        for (int i = 0; i < minimumCallSize; i++) {
-            try {
-                CIRCUIT_BREAKER.decorateSupplier(simpleCaller::throwNPE).get();
-            } catch (Exception e) {
-                assertThat(e)
-                        .as("minimumCallSize 까지는 NPE 발생")
-                        .isInstanceOf(NullPointerException.class);
-            }
-        }
-
-        for (int i = 0; i < 5; i++) {
-            try {
-                CIRCUIT_BREAKER.decorateSupplier(simpleCaller::throwNPE).get();
-            } catch (Exception e) {
-                assertThat(e)
-                        .as("CircuitBreaker가 작동되어 CallNotPermittedException 발생")
-                        .isInstanceOf(CallNotPermittedException.class);
-            }
-        }
-
-        // circuit breaker가 작동되어 operator.throwNPE()는 10번만 호출되어야 한다.
-        verify(simpleCaller, times(10)).throwNPE();
-    }
-}
-```
-
-- 호출 수가 설정된 minimumNumberOfCalls보다 작은 경우엔 circuitBreaker가 동작하지 않는 것을 확인할 수 있습니다.
-
-### failureRateThreshold 테스트
-
-```java
-@ExtendWith(MockitoExtension.class)
-public class CircuitBreakerTest {
-    @Test
-    @DisplayName("CircuitBreaker는 failureRate가 failureRateThreshold와 같아지면 다음 호출들을 차단해야 한다.")
-    void when_failureRate_same_with_failureRateThreshold() throws Exception {
-        // given
-        int normalCallSize = 14;
-        int exceptionCallSize = 6;
-
-        // when & then
-        for (int i = 0; i < normalCallSize; i++) {
-            circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
-        }
-
-        for (int i = 0; i < exceptionCallSize; i++) {
-            try {
-                circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
-            } catch (Exception e) {
-                assertThat(e)
-                        .as("failureRateThreshold가 되기 전까진 NPE 발생")
-                        .isInstanceOf(NullPointerException.class);
-            }
-        }
-
-        for (int i = 0; i < normalCallSize; i++) {
-            try {
-                circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
-                fail("호출이 차단되므로 예외가 발생해야 한다.");
-            } catch (Exception e) {
-                assertThat(e)
-                        .as("failureRateThreshold가 되어서 CallNotPermittedException 발생")
-                        .isInstanceOf(CallNotPermittedException.class);
-            }
-        }
-
-        verify(simpleCaller, times(normalCallSize)).getHello();
-        verify(simpleCaller, times(exceptionCallSize)).throwNPE();
+    for (int i = 0; i < 5; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
+      } catch (Exception e) {
+        assertThat(e)
+                .as("CircuitBreaker가 작동되어 CallNotPermittedException 발생")
+                .isInstanceOf(CallNotPermittedException.class);
+      }
     }
 
-    @Test
-    @DisplayName("CircuitBreaker는 failureRate가 failureRateThreshold보다 작으면 다음 호출들을 차단하지 않아야 한다.")
-    void when_failureRate_lower_than_failureRateThreshold() throws Exception {
-        // given
-        int normalCallSize = 15;
-        int exceptionCallSize = 5;
+    // circuit breaker가 작동되어 operator.throwNPE()는 10번만 호출되어야 한다.
+    verify(simpleCaller, times(10)).throwNPE();
+  }
 
-        // when & then
-        for (int i = 0; i < normalCallSize; i++) {
-            circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
-        }
+  @Test
+  @DisplayName("CircuitBreaker는 failureRate가 failureRateThreshold와 같아지면 다음 호출들을 차단해야 한다.")
+  void when_failureRate_same_with_failureRateThreshold() throws Exception {
+    // given
+    int normalCallSize = 14;
+    int exceptionCallSize = 6;
 
-        for (int i = 0; i < exceptionCallSize; i++) {
-            try {
-                circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
-            } catch (Exception e) {
-                assertThat(e)
-                        .as("failureRateThreshold가 되기 전까진 NPE 발생")
-                        .isInstanceOf(NullPointerException.class);
-            }
-        }
-
-        for (int i = 0; i < normalCallSize; i++) {
-            try {
-                circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
-            } catch (Exception e) {
-                fail("호출이 차단되지 않으므로 예외가 발생하면 안된다.");
-            }
-        }
-
-        verify(simpleCaller, times(2 * normalCallSize)).getHello();
-        verify(simpleCaller, times(exceptionCallSize)).throwNPE();
+    // when & then
+    for (int i = 0; i < normalCallSize; i++) {
+      circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
     }
+
+    for (int i = 0; i < exceptionCallSize; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
+      } catch (Exception e) {
+        assertThat(e)
+                .as("failureRateThreshold가 되기 전까진 NPE 발생")
+                .isInstanceOf(NullPointerException.class);
+      }
+    }
+
+    for (int i = 0; i < normalCallSize; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
+        fail("호출이 차단되므로 예외가 발생해야 한다.");
+      } catch (Exception e) {
+        assertThat(e)
+                .as("failureRateThreshold가 되어서 CallNotPermittedException 발생")
+                .isInstanceOf(CallNotPermittedException.class);
+      }
+    }
+
+    verify(simpleCaller, times(normalCallSize)).getHello();
+    verify(simpleCaller, times(exceptionCallSize)).throwNPE();
+  }
+
+  @Test
+  @DisplayName("CircuitBreaker는 failureRate가 failureRateThreshold보다 작으면 다음 호출들을 차단하지 않아야 한다.")
+  void when_failureRate_lower_than_failureRateThreshold() throws Exception {
+    // given
+    int normalCallSize = 15;
+    int exceptionCallSize = 5;
+
+    // when & then
+    for (int i = 0; i < normalCallSize; i++) {
+      circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
+    }
+
+    for (int i = 0; i < exceptionCallSize; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::throwNPE).get();
+      } catch (Exception e) {
+        assertThat(e)
+                .as("failureRateThreshold가 되기 전까진 NPE 발생")
+                .isInstanceOf(NullPointerException.class);
+      }
+    }
+
+    for (int i = 0; i < normalCallSize; i++) {
+      try {
+        circuitBreaker.decorateSupplier(simpleCaller::getHello).get();
+      } catch (Exception e) {
+        fail("호출이 차단되지 않으므로 예외가 발생하면 안된다.");
+      }
+    }
+
+    verify(simpleCaller, times(2 * normalCallSize)).getHello();
+    verify(simpleCaller, times(exceptionCallSize)).throwNPE();
+  }
 }
 ```
-
-- failureRate가 failureRateThreshold보다 작은 경우엔 circuitBreaker가 호출을 차단하지 않고 같아진 이후에만 호출을 차단하는 것을 확인할 수 있습니다.
 
 ## 참고 자료
 [resilience4j docs](https://resilience4j.readme.io/docs/circuitbreaker)
