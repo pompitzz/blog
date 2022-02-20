@@ -1,5 +1,5 @@
 ---
-title: Redis(PubSub)로 로컬 캐시 동기화하기
+title: Redis(Pub/Sub)로 로컬 캐시 동기화하기
 date: 2021-12-30 21:00
 img: 
     - redis.png

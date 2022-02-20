@@ -1,9 +1,10 @@
 ---
-title: Circuit Breaker Pattern, resilience4j Circuit Breaker
+title: Circuit Breaker 패턴, resilience4j Circuit Breaker
 date: 2021-04-06 22:09 
 img:
-  - java.png 
+  - circuit_breaker.png 
 tags:
+  - Design
   - Java
 ---
 
