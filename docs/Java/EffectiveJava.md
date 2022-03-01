@@ -64,10 +64,20 @@ public class Elvis {
     private Elvis() {}
     public static Elvis getInstance() { return INSTANCE; }
 }
+
+// #3 지연 초기화 홀더 클래스 이용(ITEM 82)
+// - getInstance가 호출될 때 Holder 클래스가 초기화되어 지연 초기화가 가능해진다. 
+public class Elvis {
+    private static class Holder {
+        static final Elvis INSTANCE = new Elvis();
+    }
+    private Elvis() {}
+    public static Elvis getInstance() { return Holder.INSTANCE; }
+}
 ```
 - 정적 팩터리 방식은 원할 때 클라이언트 변경없이 싱글턴을 반환하지 않도록 수정이 가능하다. 이런 장점이 필요 없다면 public가 간결하다.
 
-> 직렬화나 리플렉션에 의해 싱글턴 보장이 되지 않을 수 있는데 실무에서 이를 고려해야하는 경우는 아직 보지 못했다.
+> 생성자 방식은 직렬화나 리플렉션에 의해 싱글턴 보장이 되지 않을 수 있는데 실무에서 이를 고려해야하는 경우는 아직 보지 못했다.
 
 #### enum 방식
 ```java
