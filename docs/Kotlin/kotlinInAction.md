@@ -751,7 +751,7 @@ fun main() {
           .forEach { println(it) }
 
 
-  // 확장함수와 무한 시퀀스를 활용하여 부모 파일이 hidden일 때 까지 계속 탐색하도록 함수를 만듬
+  // 확장함수와 무한 시퀀스를 활용하여 부모 파일이 hidden일 때까지 계속 탐색하도록 함수를 만듬
   fun File.isInsideHiddenDirectory() =
           generateSequence(this) { it.parentFile }
                   // hidden file을 찾으면 멈춘다.
@@ -879,7 +879,7 @@ fun print(employee: Employee) {
 }
 ```
 
-- 어떤 값이 null일 떄 그 값대신 사용할 기본 값을 지정할 수 있다.
+- 어떤 값이 null일 때 그 값대신 사용할 기본 값을 지정할 수 있다.
 - `val t: String = str ?: "Default`
   
 
@@ -898,7 +898,7 @@ fun findAddressCity(any: Any): String {
 
 ### null 아님 단언: !!
 
-- !!는 null이 아님을 확신할 떄 사용하는 것으로 NPE를 감수할 수 있을 때 사용한다.
+- !!는 null이 아님을 확신할 때 사용하는 것으로 NPE를 감수할 수 있을 때 사용한다.
 
 ### let 함수
 
@@ -1269,7 +1269,7 @@ operator fun ClosedRange<LocalDate>.iterator(): Iterator<LocalDate> =
         }
 
 fun main() {
-  // iterator 메서드를 확장 함수로 정의할 수 있기 떄문에 자바 문자열에 대한 for 루프가 가능해진다.
+  // iterator 메서드를 확장 함수로 정의할 수 있기 때문에 자바 문자열에 대한 for 루프가 가능해진다.
   for (c in "asd") {
     println(c)
   }
@@ -1890,7 +1890,7 @@ fun main() {
 ### 변성(variance): 제네릭과 하위 타입
 - 변성(공변성, 무공변성, 반공변성)은 제네릭 타입의 기저 타입은 동일하나 타입 파라미터가 다를 때 서로 어떤 관계를 가지는지에 대한 개념으로 제네릭을 제대로 활용하기 위해 꼭 필요한 개념이다.
   - **공변성**: `Red`가 `Color`의 하위 타입일 때 `Bag<Red>`는 `Bag<Color>`의 하위 타입이다. 
-  - **반공변성**: `Red`가 `Color`의 하위 타입일 떄 `Bag<Color>`는 `Bag<Red>`의 하위 타입이다.
+  - **반공변성**: `Red`가 `Color`의 하위 타입일 때 `Bag<Color>`는 `Bag<Red>`의 하위 타입이다.
   - **무공변성**: `Red`가 `Color`의 하위 타입이더라도 `Bag<Red>`와 `Bag<Color>`는 아무런 관계가 없다.
 
 #### 변성이 있는 이유

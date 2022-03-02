@@ -13,28 +13,28 @@ Circuit Breaker 패턴은 애플리케이션이 실패할 가능성이 있는 �
 
 ### Circuit Breaker가 필요한 이유
 - 분산 환경에서 외부 서비스에 대한 호출은 다양한 원인(네트워크, 타임아웃, 리소스 부족 등)으로 인해 짧은 시간 동안 일시적으로 실패할 수 있다. 일시적인 실패의 경우 보통 재시도를 통해 해결할 수 있다.
-- 하지만, **예상치 못한 결함으로 인해 서비스가 중단되어 복구가 오래걸리는 경우 호출을 재시도 하거나 해당 서비스를 계속해서 호출하도록 둔다면 해당 호출들은 타임아웃이 발생할 때 까지 리소스를 점유하게 되어 시스템의 다른 부분에 영향을 줄 가능성이 있다.**
+- 하지만, **예상치 못한 결함으로 인해 서비스가 중단되어 복구가 오래걸리는 경우 호출을 재시도 하거나 해당 서비스를 계속해서 호출하도록 둔다면 해당 호출들은 타임아웃이 발생할 때까지 리소스를 점유하게 되어 시스템의 다른 부분에 영향을 줄 가능성이 있다.**
   - 이 경우 서비스가 복구되어 호출이 성공할 가능성이 있기 전까지는 호출을 하지 않고 실패로 처리하고 특정 시간이 지난 후에 다시 외부 서비스가 정상 동작하는지 판단하는 것이 필요하다.
 
 ### Circuit Breaker의 3가지 상태
-- Circuit Breaker는 애플리케이션과 외부 요청에 대한 프록시 역할을 하며 3가지 상태(Closed, Open, Half-Open)를 기반으로 한 상태 머신으로 구성된다.
+Circuit Breaker는 애플리케이션과 외부 요청에 대한 프록시 역할을 하며 `3가지 상태(Closed, Open, Half-Open)`를 기반으로 한 상태 머신으로 구성된다.
 
-#### Closed
+#### # Closed
 - 애플리케이션의 요청이 정상적으로 라우팅되는 상태
 - CircuitBreaker 프록시는 설정된 기간동안 실패들을 집계하여 설정된 값에 따라 Open 상태로 전환할 지 모니터링 한다.   
 
-#### Open
+#### # Open
 - 애플리케이션의 요청이 라우팅되지 않고 CircuitBreaker에서 즉시 실패시켜 예외를 반환하는 상태
-- 설정된 기간동안 Open 상태에 머물러 있다가 Half-Open 상태로 전환하여 요청들이 판단할 수 있도록 한다.
+- 설정된 기간동안 Open 상태에 머물러 있다가 Half-Open 상태로 전환한다.
 
-#### Half-Open
+#### # Half-Open
 - 애플리케이션의 요청 중 일부분만 라우팅하여 Open 상태로 머무를 지 Closed 상태로 전환해도 되는지 판단하는 상태
   - 요청들이 성공한다면 결함이 복구되었다고 가정하고 Closed로 전환한다.
-  - 요청들이 실패하여 결함이 여전히 존재한다고 판단되면 Open상태로 전환한다.
+  - 요청들이 실패하여 결함이 여전히 존재한다고 판단되면 다시 Open상태로 전환한다.
 - Half-Open 상태는 복구된 서비스에 갑자기 많은 요청이 들어오는 것을 방지하는데 유용하다. 
 
 ### 고려 사항
-#### Exception Hanlding
+#### Exception Handling
 - circuit이 열려 예외가 발생했을 때 해당 예외를 어떻게 핸들링 할지 고려가 필요
 - 애플리케이션에 따라 다르겠지만 대체 가능한 다른 서비스를 호출하거나, 기본값을 제공하는 등의 방식을 취할 수 있다.
 
@@ -51,7 +51,7 @@ Circuit Breaker 패턴은 애플리케이션이 실패할 가능성이 있는 �
 
 ![CircuitBreaker](./resilience4j/circuit-breaker.jpeg)
 
-- CircuitBreaker는 3개의 normal states(`CLOSE`, `OPEN` and `HALF_OPEN`)과 두개의 special states(`DISABLED` and `FORCED_OPEN`)을
+- CircuitBreaker는 3개의 normal states(`CLOSE`, `OPEN`, `HALF_OPEN`)과 두개의 special states(`DISABLED`, `FORCED_OPEN`)을
   가지는 유한 상태 머신으로 구현된다.
 - CircuitBreaker는 호출 결과를 저장하고 집계하기 위해서 sliding window를 사용하고 sliding window는 count-based와 time-based가 있다.
 - count-based는 마지막 N개의 호출 결과를 집계하고, time-based는 지정된 N초만큼의 호출 결과를 집계한다.

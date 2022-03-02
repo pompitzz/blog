@@ -169,7 +169,7 @@ class MockingTest extends Specification {
     }
 }
 ```
-- mocking 구문은 when 앞으로 이동되기 떄문에 given block에 변수를 명시하면 에러가 발생하지 않습니다.
+- mocking 구문은 when 앞으로 이동되기 때문에 given block에 변수를 명시하면 에러가 발생하지 않습니다.
 
 ## stubbing과 mocking은 동시에 명시하자
 ### mockito style로 테스트 작성 시 에러 발생
@@ -190,7 +190,7 @@ class MockingTest extends Specification {
     }
 }
 ```
-- 흔히 mockio에서 테스트 코드를 작성할 때 처럼 given 절에 stubbing, then 절에 mocking 관련 코드를 넣게 되면 spock에선 테스트가 실패합니다.
+- 흔히 mockio에서 테스트 코드를 작성할 때처럼 given 절에 stubbing, then 절에 mocking 관련 코드를 넣게 되면 spock에선 테스트가 실패합니다.
 - **그 이유는 mocking 구문을 when block 앞으로 이동시킬 때 동일한 대상으로 지정된 stubbing 구문은 정상 적용되지 않기 때문입니다.**
     - 즉 RuntimeException을 던지는 stubbing은 적용되지 않아 테스트가 실패합니다.
 - 아래와 같이 stubbing, mocking을 동시에 명시하면 문제는 해결됩니다. 

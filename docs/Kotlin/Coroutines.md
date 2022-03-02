@@ -31,13 +31,13 @@ fun main() {
 // Hello
 // World!
 ```
-- `runBlocking`의 이름이 의미하는 바는 runBlocking 내부의 코루틴들의 실행이 종료 될 때 까지 현재 스레드가(위 기준 메인 스레드) 차단된다는 것을 의미한다.
+- `runBlocking`의 이름이 의미하는 바는 runBlocking 내부의 코루틴들의 실행이 종료 될 때까지 현재 스레드가(위 기준 메인 스레드) 차단된다는 것을 의미한다.
     - 해당 메서드는 대부분 최상위 애플리케이션에서 코루틴 시작을 위한 어댑터로 사용되거나 테스트로 사용된다.
     
 ### Structured concurrency
 - 코루틴은 structred concurrency 정책을 따르기 때문에 새로운 코루틴은 오직 `CoroutineScope` 내부에서만 실행될 수 있다.
 - structred concurrency는 수많은 코루틴이 실행될 때 해당 코루틴들이 손실되거나 누출되지 않음을 보장한다.
-    - 외부 스코프는 내부의 모든 코루틴이 완료될 때 까지 완료될 수 없다.
+    - 외부 스코프는 내부의 모든 코루틴이 완료될 때까지 완료될 수 없다.
     
 
 ### Suspending function
@@ -56,7 +56,7 @@ private suspend fun doWorld() {
     println("World!")
 }
 ```
-- suspend function은 일반 함수 처럼 코루틴 내부에서 사용될 수 있는 함수로 `delay`와 같은 추가적인 기능을 제공한다.
+- suspend function은 일반 함수처럼 코루틴 내부에서 사용될 수 있는 함수로 `delay`와 같은 추가적인 기능을 제공한다.
 
 ### Scope builder
 ```kotlin

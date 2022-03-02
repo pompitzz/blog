@@ -78,7 +78,7 @@ export default {
       if (this.isSupportSidbarToggle()) {
         return this.openIndexMap[index];
       }
-      console.log(item.path, this.$route.path, item.path === this.$route.path);
+      // console.log(item.path, this.$route.path, item.path === this.$route.path);
       return this.$route.path.startsWith(item.path);
     },
     isSupportSidbarToggle() {

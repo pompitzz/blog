@@ -20,10 +20,10 @@ tags:
 - 항상 최신 상태의 데이터를 반환해야 하므로 많은 수의 node에게 의존한다. 그러므로 Eventual Consistency를 보장하는 시스템에 비해 `Availability은 낮고 Latency는 높다`
 
 ### 요약
-|  | Availability | Latency | return latest data
-|---|:---:|---:|---:|
-| Eventual Consistency | 높음 | 낮음 | 보장 X |
-| Strong Consistency | 낮음 | 높음 | 보장 O |
+|                      | Availability | Latency | return latest data |
+|----------------------|:------------:|--------:|-------------------:|
+| Eventual Consistency |      높음      |      낮음 |               보장 X |
+| Strong Consistency   |      낮음      |      높음 |               보장 O |
 
 
 ## Strong Consistency를 보장할 수 있는 Consistency Level
@@ -88,8 +88,15 @@ tags:
 5. coordinator node는 응답받은 두 개의 데이터의 timestamp를 비교하여 stale data를 가진 5번 node가 latest data를 가질 수 있도록 read repair 수행 ([Detail Docs](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/operations/opsRepairNodesReadRepair.html))
 6. client에게 latest data를 반환
 
-> 실제로는 하나의 node에게 direct read request를 보내고 나머지 node에겐 digest request를 보냅니다. 자세한 내용이 궁금하시면 공식 문서([How are read requests accomplished?
-](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlClientRequestsRead.html))를 참고하세요.
+> 실제로는 하나의 node에게 direct read request를 보내고 나머지 node에겐 digest request를 보냅니다.
+> 
+> 자세한 내용이 궁금하시면 공식 문서([How are read requests accomplished?](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlClientRequestsRead.html))를 참고하세요.
+
+## Strong Consistency를 보장할 수 없다?
+`Write: QUORUM, Read: QUORUM`에서 위 예시처럼 Write 요청이 완료된 후 Read 요청이 들어오는게 아니라 Write 요청 도중에 Read 요청이 들어온다면 Strong Consistency를 보장할 수 없게 된다.
+
+그리고 카산드라는 `최종 쓰기 승리(LWW)` 기법으로 충돌을 해결하기 때문에 시간에 의존한다. 즉, 동일 키에 쓰기 요청이 동시에 들어온다면 가장 최신의 쓰기로 저장된다. 분산 시스템에서 노드간의 시간은 신뢰할 수 없기 때문에 Strong Consistency를 보장할 수 없다고 보는 것이 안전하다.
+- 참고: [선형성 시스템 구축하기](https://pompitzz.github.io/blog/ComputerScience/DesigningDataIntensiveApplication/ch9.html#%E1%84%89%E1%85%A5%E1%86%AB%E1%84%92%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A5%E1%86%BC-%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7-%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8%E1%84%92%E1%85%A1%E1%84%80%E1%85%B5), [신뢰성 없는 시계](https://pompitzz.github.io/blog/ComputerScience/DesigningDataIntensiveApplication/ch8.html#%E1%84%89%E1%85%B5%E1%86%AB%E1%84%85%E1%85%AC%E1%84%89%E1%85%A5%E1%86%BC-%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%82%E1%85%B3%E1%86%AB-%E1%84%89%E1%85%B5%E1%84%80%E1%85%A8)
 
 ## 참고 자료
 - [How are consistent read and write operations handled?(Datastax)](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlAboutDataConsistency.html)

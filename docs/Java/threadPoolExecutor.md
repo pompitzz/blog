@@ -41,7 +41,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - handler (생략 가능)
     - 스레드 풀이 가득차 더 이상 작업을 수용할 수 없을 때 사용되는 핸들러를 정의합니다.
 
-> 스레드 풀의 스레드 개수의 증가 절차는 `corePoolSize 증가 -> workQueue가 가득찰 때 까지 queue에 추가 -> maximumPoolSize 증가`입니다.
+> 스레드 풀의 스레드 개수의 증가 절차는 `corePoolSize 증가 -> workQueue가 가득찰 때까지 queue에 추가 -> maximumPoolSize 증가`입니다.
  
 ### Executors 팩토리를 활용하여 ThreadPoolExecutor 생성하기
 - Java에서 제공하는 Executors 팩토리에는 ThreadPoolExecutor를 이용한 팩토리 메서드들을 제공합니다.
@@ -71,7 +71,7 @@ private Runnable getTask() {
     };
 }
 
-// threadPool를 종료하고 모든 작업이 끝날 때 까지 기다린다.
+// threadPool를 종료하고 모든 작업이 끝날 때까지 기다린다.
 private void shutDownAndWaitUntilTerminated(ExecutorService executorService) {
     try {
         executorService.shutdown();
