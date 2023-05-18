@@ -13,7 +13,8 @@ jobs:
 
       - name: install and build
         run: |
-          yarn install
+          export NODE_OPTIONS=--openssl-legacy-provider
+          yarn install 
           yarn build
 
       - name: push to ph-pages
