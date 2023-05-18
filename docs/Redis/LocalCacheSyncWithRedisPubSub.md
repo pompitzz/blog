@@ -300,7 +300,9 @@ public ItemServiceWithPubSub(ItemRepository repository, RedisClient client) {
 
 ### 레디스 클러스터에서 Pub/Sub는 어떻게 동작할까?
 - 각 레디스 서버들은 channel별 subscriber들의 정보를 가지고 있고 특정 channel에 메시지가 publish되면 요청을 받은 레디스 서버는 모든 노드에게 동일한 메시지를 publish하기 때문에 **레디스 클러스터에서 Pub/Sub는 아무 노드에서나 subsribe, publish를 해도 동일하게 동작한다.**
-- 자세한 내용은 [Redis Cluster 에서의 Pub/Sub은 어떻게 동작할까?](https://charsyam.wordpress.com/2016/03/21/%EC%9E%85-%EA%B0%9C%EB%B0%9C-redis-cluster-%EC%97%90%EC%84%9C%EC%9D%98-pubsub%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%A0%EA%B9%8C/)를 참고하자.
+  - 자세한 내용은 [Redis Cluster 에서의 Pub/Sub은 어떻게 동작할까?](https://charsyam.wordpress.com/2016/03/21/%EC%9E%85-%EA%B0%9C%EB%B0%9C-redis-cluster-%EC%97%90%EC%84%9C%EC%9D%98-pubsub%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%A0%EA%B9%8C/)를 참고하자.
+- 해당 특성때문에 레디스 클러스터 모드에서 샤드 수가 많은 경우 성능 이슈가 발생할 수 있어([참고](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/BestPractices.PubSub.html)) 수평확장이 어려울 수 있다.
+- 그래서 레디스 7이후 부터는 샤드별로 Pub/Sub 채널을 분리하는 [Sharded Pub/Sub](https://redis.io/docs/manual/pubsub/#sharded-pubsub)가 도입되었다. 
 
 ### 패턴 매칭
 - `Redis Pub/Sub`는 패턴 매칭 기반으로 subscribe, publish 하는 기능도 제공한다. 자세한 내용은 [공식 문서](https://redis.io/topics/pubsub)를 참고하자.
