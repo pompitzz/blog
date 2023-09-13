@@ -19,7 +19,7 @@ RestTemplate restTemplate = new RestTemplateBuilder()
 - 이름만으로도 `ConnectionTimeout`은 커넥션을 맺을 때 사용되고 `ReadTimeout`은 데이터를 읽을 때 사용되는 것으로 충분히 유추할 수 있다. 
 - 내부적으로 이 타임아웃 값들이 어디서 어떻게 사용되는지 살펴보자.
 
-### ClientHttpRequestFactory 선택
+## ClientHttpRequestFactory 선택
 - `RestTemplateBuilder.build` 시점에 실제 HTTP 통신을 위한 HTTP Client 구현체를 선택하게 된다.
 - 스프링 부트에서는 기본적으로 3개의 구현체를 기반으로 선택해준다.
 - 구현체 선택 규칙은 `ClientHttpRequestFactories.java`에 정의되어 있다.
@@ -44,12 +44,12 @@ public static ClientHttpRequestFactory get(ClientHttpRequestFactorySettings sett
 
 필요하다면 ClientHttpRequestFactory를 직접 구현해서 새로운 Http Client 구현체를 사용할 수 있다.
 
-### 모든 HTTP Client 구현체들은 결국 Socket을 사용한다.
+## 모든 HTTP Client 구현체들은 결국 Socket을 사용한다.
 - 세 구현체 모두 최종적으로 JDK가 제공하는 `java.net.Socket` 클래스를 사용한다. 
   - 해당 클래스는 네트워크 통신을 위해 제공하는 클라이언트 소켓 구현체이다.
 - 그러므로 `RestTemplateBuilder`에서 설정한 Timeout 설정 값들은 `Socket`에서 사용된다.
 
-### ConnectionTimeout은 socket.connect에서 사용된다.
+## ConnectionTimeout은 socket.connect에서 사용된다.
 ```java
 socket.connect(new InetSocketAddress(server, port), connectTimeout);
 ```
@@ -58,7 +58,7 @@ socket.connect(new InetSocketAddress(server, port), connectTimeout);
 - 커넥션을 맺기 위해 `Socket` 인스턴스에서 `socket.connect` 함수를 호출하게 되는데 이때 설정한 `ConnectionTimeout` 값을 사용하게 된다.
 - 만약 커넥션을 맺는 시간이 `ConnectionTimeout`을 초과하게 되면 `SocketTimeoutExcpetion(Connect timed out)`이 발생한다.
 
-### ReadTimeout은 socket.setSoTimeout에서 사용된다.
+## ReadTimeout은 socket.setSoTimeout에서 사용된다.
 ```java
 socket.setSoTimeout(readTimeout);
 ```
@@ -66,7 +66,7 @@ socket.setSoTimeout(readTimeout);
 - 서버가 데이터를 반환하면 해당 데이터는 `Socket` 내부의 `SocketInputStream.read()`를 통해서 바이트 형태로 읽을 수 있다.
 - 각 HTTP Client 구현체들은 요청을 보내고 응답 데이터를 읽기 위해 `SocketInputStream.read()`를 호출하게 되는데 `ReadTimeout`이 지날 때 동안 서버가 응답을 하지 않아 `SocketInputStream`에 아무런 데이터도 쌓이지 않는다면 `SocketTimeoutException(Read timed out)`이 발생한다.
 
-### 각 구현체별 Stack Trace 살펴보기
+## 각 구현체별 Stack Trace 살펴보기
 - 실제 `RestTemplate`을 통해 각각의 Timeout 에러를 발생시켜서 출력되는 stack trace를 살펴보면 모든 구현체가 최종적으로 `Socket`을 사용하는 것을 쉽게 알 수 있다.
 - `ConnectionTimeout`의 경우 'Connect timed out' 예외가 발생하고 세 구현체 모두 `java.net.Socket.connect(Socket.java:633)`에서 stack trace가 찍히는 걸 볼 수 있다.
 - `ReadTimeout`의 경우 'Read timed out' 예외가 발생하고 세 구현체 모두 `java.net.Socket$SocketInputStream.read(Socket.java:966)`에서 stack trace가 찍히는 걸 볼 수 있다.
@@ -84,7 +84,7 @@ public static void main(String[] args) {
 }
 ```
 
-**Apache Http Client 구현체 사용**
+### Apache Http Client 구현체 사용
 - Apache Http Client를 추가하면 자동으로 Apache Http Client가 사용된다. 
 - `implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'`
 
@@ -115,7 +115,7 @@ Caused by: java.net.SocketTimeoutException: Read timed out
 	at org.apache.hc.core5.http.impl.io.SessionInputBufferImpl.readLine(SessionInputBufferImpl.java:280)
 ```
 
-**OkHttp Client 구현체 사용**
+### OkHttp Client 구현체 사용
 - OkHttp Client를 사용하기 위해선 Apache Http Client 라이브러리는 제거해야 한다.
 - `implementation 'com.squareup.okhttp3:okhttp:4.11.0'`
 
@@ -148,7 +148,7 @@ Caused by: java.net.SocketTimeoutException: Read timed out
 	at okio.AsyncTimeout$source$1.read(AsyncTimeout.kt:125)
 ```
 
-**java.net.HttpURLConnection 구현체 사용**
+### java.net.HttpURLConnection 구현체 사용
 - Apache Http Client, OkHttp Client 라이브러리를 모두 제거하면 JDK의 HttpURLConnection를 사용하게 된다. 
 ```
 // Connect timed out
