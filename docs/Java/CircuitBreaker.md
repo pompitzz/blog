@@ -1,5 +1,5 @@
 ---
-title: Circuit Breaker 패턴, resilience4j Circuit Breaker
+title: Circuit Breaker 패턴, resilience4j Circuit Breaker 살펴보기
 date: 2021-04-06 22:09 
 img:
   - circuit_breaker.png 
