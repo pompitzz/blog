@@ -61,12 +61,15 @@ class TimingsListener implements TaskExecutionListener, BuildListener {
     @Override
     void buildFinished(BuildResult buildResult) {
         println "Task timings:"
-        timings.sort((a, b) -> b[0] - a[0])
+        long total = 0
+        timings.sort { a, b -> b[0] - a[0] }
         for (timing in timings) {
+            total += timing[0]
             if (timing[0] > 0) {
                 printf "%7sms %s\n", timing
             }
         }
+        println "Total: ${total}ms"
     }
 }
 
