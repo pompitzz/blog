@@ -45,7 +45,9 @@ module.exports = {
 };
 
 function navConfigs() {
-    return [];
+    return [
+        { text: 'GitHub', link: 'https://github.com/pompitzz' }
+    ];
 }
 
 function headConfig() {
