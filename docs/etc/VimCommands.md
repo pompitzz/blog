@@ -80,3 +80,6 @@ tags:
 | /keyword1\|keyword2 | OR 검색     |
 | :set ic             | 대소문자 구분 X |
 | :set noic           | 대소문자 구분 O |
+
+## 참고 자료
+- [인프런 - 리눅스 커맨드라인 툴](https://www.inflearn.com/course/%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%BB%A4%EB%A7%A8%EB%93%9C%EB%9D%BC%EC%9D%B8-%ED%88%B4)

@@ -7,12 +7,12 @@ tags:
     - Gradle
 ---
 
-#### Dependency Tree 출력
+## Dependency Tree 출력
 ```gradle
 ./gradlew dependencies >> ~/temp.txt
 ```
 
-#### 태스크 실행 전후 로그 추가하기
+## 태스크 실행 전후 로그 추가하기
 ```groovy
 gradle.taskGraph.beforeTask { Task task ->
     println "### beforeTask $task"
@@ -23,7 +23,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 }
 ```
 
-#### 태스크 실행 전후 로그 추가 및 시간 측정
+## 태스크 실행 전후 로그 추가 및 시간 측정
 ```groovy
 class TimingsListener implements TaskExecutionListener, BuildListener {
 
@@ -75,3 +75,7 @@ class TimingsListener implements TaskExecutionListener, BuildListener {
 
 gradle.addListener new TimingsListener()
 ```
+
+## 참고 자료
+- [gradle user guide](https://docs.gradle.org/current/userguide/userguide.html)
+- [stackoverflow - Track execution time per task in gradle script?](https://stackoverflow.com/questions/13031538/track-execution-time-per-task-in-gradle-script)

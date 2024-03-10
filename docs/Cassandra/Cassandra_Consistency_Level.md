@@ -87,4 +87,4 @@ tags:
 - SERIAL과 동일하나 local dc로 제한한다.
 
 ## 참고 자료
-[datastax docs](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html)
+- [datastax docs](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html)
