@@ -71,6 +71,9 @@ test {
 
 ### 기반 클래스 정의
 ```java
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 @Getter
 @AllArgsConstructor
 public class Item {
@@ -82,6 +85,12 @@ public class Item {
         this.price = newPrice;
     }
 }
+```
+
+```java
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemRepository {
     private final Map<Long, Item> store = new ConcurrentHashMap<>();
@@ -100,6 +109,12 @@ public class ItemRepository {
 
 ### 캐시가 동기화가 되지 않을 때(without Redis Pub/Sub) 
 ```java
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
+import java.time.Duration;
+import java.util.Optional;
+
 public class ItemService {
     private final Cache<Long, Item> cache;
     private final ItemRepository repository;
@@ -141,29 +156,38 @@ public class ItemService {
 
 #### 테스트
 ```java
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ItemServiceTest {
-    @Test
-    @DisplayName("Item 가격이 수정될 때 캐시 만료 시간 전 까진 Item을 수정한 서버에서만 수정된 가격이 제공된다.")
-    void localCacheInvalidationTest() throws Exception {
-        ItemRepository repository = new ItemRepository();
-        ItemService serviceForServer1 = new ItemService(repository);
-        ItemService serviceForServer2 = new ItemService(repository);
-        ItemService serviceForServer3 = new ItemService(repository);
+  @Test
+  @DisplayName("Item 가격이 수정될 때 캐시 만료 시간 전 까진 Item을 수정한 서버에서만 수정된 가격이 제공된다.")
+  void localCacheInvalidationTest() throws Exception {
+    ItemRepository repository = new ItemRepository();
+    ItemService serviceForServer1 = new ItemService(repository);
+    ItemService serviceForServer2 = new ItemService(repository);
+    ItemService serviceForServer3 = new ItemService(repository);
 
-        Item item1 = new Item(1L, "item1", 5000);
-        serviceForServer1.addItem(item1);
-        serviceForServer1.updateItemPrice(1L, 3000); // update item price in server1
+    Item item1 = new Item(1L, "item1", 5000);
+    serviceForServer1.addItem(item1);
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server3)
 
-        assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // not updated price
-        assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // not updated price
+    serviceForServer1.updateItemPrice(1L, 3000); // update item price in server1
 
-        Thread.sleep(2000); // wait for cache invalidation
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // not updated price(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // not updated price(server3)
 
-        assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-    }
+    Thread.sleep(2000); // wait for cache invalidation
+
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server3)
+  }
 }
 ```
 - server1에서 가격을 수정하고 모든 서버에서 가격을 확인하면 **server1에서만 수정된 가격이 제공된다.**
@@ -175,6 +199,16 @@ class ItemServiceTest {
 **모든 서버는 `item-cache-invalidation` channel을 구독하는 `Subscriber`이면서 또한 아이템 가격이 수정될 때 해당 channel에 메시지를 보내는 `Publisher`가 된다.**
 
 ```java
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.pubsub.RedisPubSubAdapter;
+import io.lettuce.core.pubsub.api.sync.RedisPubSubCommands;
+
+import java.time.Duration;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 public class ItemServiceWithPubSub {
 
     public static final String CHANNEL = "item-cache-invalidation";
@@ -243,31 +277,41 @@ docker run --rm -p 6379:6379 redis
 
 #### 테스트
 ```java
+import io.lettuce.core.RedisClient;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ItemServiceWithPubSubTest {
-    @Test
-    @DisplayName("Item 가격이 수정되면 모든 서버에서 수정된 가격이 제공된다.")
-    void localCacheInvalidationTest() throws Exception {
-        ItemRepository repository = new ItemRepository();
-        RedisClient client = RedisClient.create("redis://localhost");
-        ItemServiceWithPubSub serviceForServer1 = new ItemServiceWithPubSub(repository, client);
-        ItemServiceWithPubSub serviceForServer2 = new ItemServiceWithPubSub(repository, client);
-        ItemServiceWithPubSub serviceForServer3 = new ItemServiceWithPubSub(repository, client);
+  @Test
+  @DisplayName("Item 가격이 수정되면 모든 서버에서 수정된 가격이 제공된다.")
+  void localCacheInvalidationTest() throws Exception {
+    ItemRepository repository = new ItemRepository();
+    RedisClient client = RedisClient.create("redis://localhost");
+    ItemServiceWithPubSub serviceForServer1 = new ItemServiceWithPubSub(repository, client);
+    ItemServiceWithPubSub serviceForServer2 = new ItemServiceWithPubSub(repository, client);
+    ItemServiceWithPubSub serviceForServer3 = new ItemServiceWithPubSub(repository, client);
 
-        Item item1 = new Item(1L, "item1", 5000);
+    Item item1 = new Item(1L, "item1", 5000);
 
-        serviceForServer1.addItem(item1);
-        serviceForServer1.updateItemPrice(1L, 3000);
-        Thread.sleep(10); // wait for redis
+    serviceForServer1.addItem(item1);
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server3)
 
-        assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
+    serviceForServer1.updateItemPrice(1L, 3000);
+    Thread.sleep(10); // wait for redis pub/sub
 
-        Thread.sleep(2000); // wait for cache invalidation
-        assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-        assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price
-    }
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server3)
+
+    Thread.sleep(2000); // wait for cache invalidation
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(3000); // updated price(server3)
+  }
 }
 ```
 - 아이템 가격을 수정하고 모든 서버에서 아이템을 조회하면 즉시 수정된 가격이 제공되는 것을 확인 할 수 있다.   
