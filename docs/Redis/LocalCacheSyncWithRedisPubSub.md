@@ -172,9 +172,9 @@ class ItemServiceTest {
 
     Item item1 = new Item(1L, "item1", 5000);
     serviceForServer1.addItem(item1);
-    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server1)
-    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server2)
-    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server3)
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server3)
 
     serviceForServer1.updateItemPrice(1L, 3000); // update item price in server1
 
@@ -296,9 +296,9 @@ class ItemServiceWithPubSubTest {
     Item item1 = new Item(1L, "item1", 5000);
 
     serviceForServer1.addItem(item1);
-    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server1)
-    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server2)
-    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item(server3)
+    assertThat(serviceForServer1.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server1)
+    assertThat(serviceForServer2.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server2)
+    assertThat(serviceForServer3.getItem(item1.getId()).getPrice()).isEqualTo(5000); // check item & store item to local cache(server3)
 
     serviceForServer1.updateItemPrice(1L, 3000);
     Thread.sleep(10); // wait for redis pub/sub
